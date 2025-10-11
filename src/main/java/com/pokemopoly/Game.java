@@ -2,6 +2,9 @@ package com.pokemopoly;
 
 import com.pokemopoly.board.Board;
 import com.pokemopoly.cards.*;
+import com.pokemopoly.cards.items.Revive;
+import com.pokemopoly.cards.pokemon.Ryu;
+import com.pokemopoly.cards.pokemon.Ryu2;
 import com.pokemopoly.player.Hand;
 import com.pokemopoly.player.Player;
 import com.pokemopoly.player.ProfessionType;
@@ -129,8 +132,7 @@ public class Game {
         // Example Deck
         // todo
         Deck<ItemCard> itemDeck = new Deck<>();
-        itemDeck.addCard(new ItemCard("I001", "Potion", "Restore 20 HP"));
-        itemDeck.addCard(new ItemCard("I002", "Poké Ball", "Catch Pokémon easier"));
+        itemDeck.addCard(new Revive());
 
         Deck<EventCard> eventDeck = new Deck<>();
         eventDeck.addCard(new EventCard("E001", "You found 100 coins!", "My description"));
@@ -139,10 +141,16 @@ public class Game {
         Deck<QuestCard> questDeck = new Deck<>();
         questDeck.addCard(new QuestCard("Q001", "Catch 3 Pokémon", "Do it"));
 
-        Deck<PokemonCard> pokemonDeck = new Deck<>();
-        pokemonDeck.addCard(new PokemonCard("P001", "Pikachu", "I'm Pikachu!"));
+        Deck<PokemonCard> bluePokemonDeck = new Deck<>();
+        bluePokemonDeck.addCard(new Ryu());
+        bluePokemonDeck.addCard(new Ryu2());
 
-        deckManager = new DeckManager(itemDeck, eventDeck, questDeck, pokemonDeck);
+        Deck<PokemonCard> greenPokemonDeck = new Deck<>();
+        Deck<PokemonCard> purplePokemonDeck = new Deck<>();
+        Deck<PokemonCard> redPokemonDeck = new Deck<>();
+        Deck<PokemonCard> crownPokemonDeck = new Deck<>();
+
+        deckManager = new DeckManager(itemDeck, eventDeck, questDeck, bluePokemonDeck, greenPokemonDeck, purplePokemonDeck, redPokemonDeck, crownPokemonDeck);
         deckManager.shuffleAll();
     }
 

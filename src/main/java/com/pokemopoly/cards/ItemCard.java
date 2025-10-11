@@ -1,9 +1,11 @@
 package com.pokemopoly.cards;
 
-public class ItemCard implements Card {
-    private String id;
-    private String name;
-    private String description;
+import com.pokemopoly.Game;
+
+public abstract class ItemCard implements Card {
+    private final String id;
+    private final String name;
+    private final String description;
 
     public ItemCard(String id, String name, String description) {
         this.id = id;
@@ -18,5 +20,7 @@ public class ItemCard implements Card {
     public String getDescription() {
         return description;
     }
+
+    abstract public void activate(Game game);
 
 }

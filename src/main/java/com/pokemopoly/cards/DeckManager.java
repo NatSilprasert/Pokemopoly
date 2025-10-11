@@ -5,13 +5,30 @@ public class DeckManager {
     private Deck<ItemCard> itemDeck;
     private Deck<EventCard> eventDeck;
     private Deck<QuestCard> questDeck;
-    private Deck<PokemonCard> pokemonDeck;
+    private Deck<PokemonCard> bluePokemonDeck;
+    private Deck<PokemonCard> greenPokemonDeck;
+    private Deck<PokemonCard> purplePokemonDeck;
+    private Deck<PokemonCard> redPokemonDeck;
+    private Deck<PokemonCard> crownPokemonDeck;
 
-    public DeckManager(Deck<ItemCard> itemDeck, Deck<EventCard> eventDeck, Deck<QuestCard> questDeck, Deck<PokemonCard> pokemonDeck) {
+    public DeckManager(
+            Deck<ItemCard> itemDeck,
+            Deck<EventCard> eventDeck,
+            Deck<QuestCard> questDeck,
+            Deck<PokemonCard> bluePokemonDeck,
+            Deck<PokemonCard> greenPokemonDeck,
+            Deck<PokemonCard> purplePokemonDeck,
+            Deck<PokemonCard> redPokemonDeck,
+            Deck<PokemonCard> crownPokemonDeck
+    ) {
         this.itemDeck = itemDeck;
         this.eventDeck = eventDeck;
         this.questDeck = questDeck;
-        this.pokemonDeck = pokemonDeck;
+        this.bluePokemonDeck = bluePokemonDeck;
+        this.greenPokemonDeck = greenPokemonDeck;
+        this.purplePokemonDeck = purplePokemonDeck;
+        this.redPokemonDeck = redPokemonDeck;
+        this.crownPokemonDeck = crownPokemonDeck;
     }
 
     public ItemCard drawItem() {
@@ -26,8 +43,24 @@ public class DeckManager {
         return questDeck.draw();
     }
 
-    public PokemonCard drawPokemon() {
-        return pokemonDeck.draw();
+    public PokemonCard drawBluePokemon() {
+        return bluePokemonDeck.draw();
+    }
+
+    public PokemonCard drawGreenPokemon() {
+        return greenPokemonDeck.draw();
+    }
+
+    public PokemonCard drawPurplePokemon() {
+        return purplePokemonDeck.draw();
+    }
+
+    public PokemonCard drawRedPokemon() {
+        return redPokemonDeck.draw();
+    }
+
+    public PokemonCard drawCrownPokemon() {
+        return crownPokemonDeck.draw();
     }
 
     public Deck<ItemCard> getItemDeck() {
@@ -42,14 +75,34 @@ public class DeckManager {
         return questDeck;
     }
 
-    public Deck<PokemonCard> getPokemonDeck() {
-        return pokemonDeck;
+    public Deck<PokemonCard> getBluePokemonDeck() {
+        return bluePokemonDeck;
+    }
+
+    public Deck<PokemonCard> getGreenPokemonDeck() {
+        return greenPokemonDeck;
+    }
+
+    public Deck<PokemonCard> getPurplePokemonDeck() {
+        return purplePokemonDeck;
+    }
+
+    public Deck<PokemonCard> getRedPokemonDeck() {
+        return redPokemonDeck;
+    }
+
+    public Deck<PokemonCard> getCrownPokemonDeck() {
+        return crownPokemonDeck;
     }
 
     public void shuffleAll() {
         itemDeck.shuffle();
         eventDeck.shuffle();
         questDeck.shuffle();
-        pokemonDeck.shuffle();
+        bluePokemonDeck.shuffle();
+        greenPokemonDeck.shuffle();
+        purplePokemonDeck.shuffle();
+        redPokemonDeck.shuffle();
+        crownPokemonDeck.shuffle();
     }
 }
