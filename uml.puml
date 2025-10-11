@@ -1,0 +1,226 @@
+@startuml
+class com.pokemopoly.board.tile.VillianTile {
++ void onLand(Player,Game)
+}
+
+class com.pokemopoly.Main {
++ {static} void main(String[])
+}
+
+class com.pokemopoly.cards.QuestCard {
+- String id
+- String name
+- String description
++ String getName()
++ String getDescription()
+}
+
+
+class com.pokemopoly.board.tile.DaycareTile {
++ void onLand(Player,Game)
+}
+
+class com.pokemopoly.player.Player {
+- String name
+- ProfessionType profession
+- Hand hand
+- List<PokemonCard> team
+- int MAX_POKEMON
+- int position
+- int coin
++ void move(int)
++ void addPokemon(PokemonCard)
++ void removePokemon(PokemonCard)
++ String getName()
++ void setName(String)
++ ProfessionType getProfession()
++ void setProfession(ProfessionType)
++ int getPosition()
++ void setPosition(int)
++ void setTeam(List<PokemonCard>)
++ int getCoin()
++ void setCoin(int)
++ List<PokemonCard> getTeam()
++ Hand getHand()
++ int getMaxPokemon()
+}
+
+
+class com.pokemopoly.pokemon.Pokemon {
+}
+class com.pokemopoly.Game {
+- Board board
+- DeckManager deckManager
+- List<Player> players
+- int turn
++ int rollDice()
++ DeckManager getDeckManager()
++ void start()
+- void setUpDeckManager()
+- void setupPlayers()
+}
+
+
+class com.pokemopoly.board.tile.EventTile {
++ void onLand(Player,Game)
+}
+
+abstract class com.pokemopoly.board.Tile {
+# String name
+# int index
++ String getName()
++ int getIndex()
++ {abstract}void onLand(Player,Game)
+}
+
+
+interface com.pokemopoly.cards.Card {
+}
+class com.pokemopoly.cards.DeckManager {
+- Deck<ItemCard> itemDeck
+- Deck<EventCard> eventDeck
+- Deck<QuestCard> questDeck
+- Deck<PokemonCard> pokemonDeck
++ ItemCard drawItem()
++ EventCard drawEvent()
++ QuestCard drawQuest()
++ PokemonCard drawPokemon()
++ Deck<ItemCard> getItemDeck()
++ Deck<EventCard> getEventDeck()
++ Deck<QuestCard> getQuestDeck()
++ Deck<PokemonCard> getPokemonDeck()
++ void shuffleAll()
+}
+
+
+class com.pokemopoly.pokemon.PokemonSpecies {
+}
+class com.pokemopoly.pokemon.Move {
+}
+enum com.pokemopoly.player.ProfessionType {
++  TRAINER
++  FISHER
++  ROCKET
++  SCIENTIST
+}
+
+enum com.pokemopoly.board.GrassColor {
++  GREEN
++  BLUE
++  PURPLE
++  RED
++  CROWN
+- int catchRate
++ int getCatchRate()
+}
+
+
+class com.pokemopoly.board.tile.CaveTile {
++ void onLand(Player,Game)
+}
+
+class com.pokemopoly.board.tile.QuestTile {
++ void onLand(Player,Game)
+}
+
+class com.pokemopoly.Battle {
+}
+class com.pokemopoly.player.Hand {
+- List<ItemCard> items
+- int capacity
++ boolean add(ItemCard)
++ boolean remove(ItemCard)
++ List<ItemCard> getItems()
++ int getCapacity()
++ boolean isFull()
++ void setCapacity(int)
+}
+
+
+class com.pokemopoly.board.tile.GymTile {
++ void onLand(Player,Game)
+}
+
+class com.pokemopoly.cards.Deck {
+- List<T> cards
++ void addCard(T)
++ void shuffle()
++ T draw()
++ void discard(T)
++ boolean isEmpty()
++ int size()
+}
+
+
+class com.pokemopoly.cards.EventCard {
+- String id
+- String name
+- String description
++ String getName()
++ String getDescription()
+}
+
+
+class com.pokemopoly.cards.PokemonCard {
+- String id
+- String name
+- String description
++ String getName()
++ String getDescription()
+}
+
+
+class com.pokemopoly.pokemon.StatusEffect {
+}
+class com.pokemopoly.cards.ItemCard {
+- String id
+- String name
+- String description
++ String getName()
++ String getDescription()
+}
+
+
+class com.pokemopoly.board.tile.StartTile {
++ void onLand(Player,Game)
+}
+
+class com.pokemopoly.board.tile.GlassTile {
+- int catchRate
+- GrassColor color
++ void onLand(Player,Game)
++ int getCatchRate()
++ GrassColor getColor()
+}
+
+
+class com.pokemopoly.board.Board {
+- List<Tile> tiles
++ Tile getTileAt(int)
++ void movePlayer(Player,int,Game)
++ int getSize()
+}
+
+
+class com.pokemopoly.board.tile.CityTile {
++ void onLand(Player,Game)
+}
+
+class com.pokemopoly.Shop {
+}
+
+
+com.pokemopoly.board.Tile <|-- com.pokemopoly.board.tile.VillianTile
+com.pokemopoly.cards.Card <|.. com.pokemopoly.cards.QuestCard
+com.pokemopoly.board.Tile <|-- com.pokemopoly.board.tile.DaycareTile
+com.pokemopoly.board.Tile <|-- com.pokemopoly.board.tile.EventTile
+com.pokemopoly.board.Tile <|-- com.pokemopoly.board.tile.CaveTile
+com.pokemopoly.board.Tile <|-- com.pokemopoly.board.tile.QuestTile
+com.pokemopoly.board.Tile <|-- com.pokemopoly.board.tile.GymTile
+com.pokemopoly.cards.Card <|.. com.pokemopoly.cards.EventCard
+com.pokemopoly.cards.Card <|.. com.pokemopoly.cards.PokemonCard
+com.pokemopoly.cards.Card <|.. com.pokemopoly.cards.ItemCard
+com.pokemopoly.board.Tile <|-- com.pokemopoly.board.tile.StartTile
+com.pokemopoly.board.Tile <|-- com.pokemopoly.board.tile.GlassTile
+com.pokemopoly.board.Tile <|-- com.pokemopoly.board.tile.CityTile
+@enduml
