@@ -10,6 +10,7 @@ public abstract class PokemonCard implements Card {
     private int power;
     private boolean isAlive = true;
 
+
     public PokemonCard(String id, String name, String description, int hp, int power, int price) {
         this.id = id;
         this.name = name;
