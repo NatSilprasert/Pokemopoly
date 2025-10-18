@@ -52,4 +52,16 @@ public abstract class PokemonCard implements Card {
     public void setAlive(boolean alive) {
         isAlive = alive;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setHp(int hp) {
+        this.hp = Math.max(hp, 0);
+    }
+
+    public void setPower(int power) {
+        this.power = Math.max(power, 0);
+    }
 }
