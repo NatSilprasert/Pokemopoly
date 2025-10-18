@@ -49,7 +49,7 @@ public abstract class Tile {
                 scanner.nextLine();
 
                 Player opponent = playersOnLand.get(opponentIdx - 1);
-                Battle battle = new Battle(player, opponent);
+                Battle battle = new Battle(game, player, opponent, false);
 
                 return;
             }
