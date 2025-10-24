@@ -1,5 +1,7 @@
 package com.pokemopoly.cards;
 
+import com.pokemopoly.player.Player;
+
 public abstract class PokemonCard implements Card {
     private final String id;
     private final String name;
@@ -9,6 +11,8 @@ public abstract class PokemonCard implements Card {
     private int hp;
     private int power;
     private boolean isAlive = true;
+    private Player owner;
+    private boolean burned = false;
 
 
     public PokemonCard(String id, String name, String description, int hp, int power, int price) {
@@ -52,4 +56,28 @@ public abstract class PokemonCard implements Card {
     public void setAlive(boolean alive) {
         isAlive = alive;
     }
+
+    public Player getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
+    }
+
+    public boolean isBurned() {
+        return burned;
+    }
+
+    public void setBurned(boolean burned) {
+        this.burned = burned;
+    }
+
+    public void setHp(int hp) {
+        this.hp = Math.max(0, hp);
+        if (this.hp == 0) {
+            this.isAlive = false;
+            System.out.println(name + " has fainted!");
+        }
+    } //Edit 10/23/68
 }

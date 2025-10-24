@@ -20,6 +20,7 @@ public class Player {
     private int redBall = 4;
     private int greatBall = 0;
     private int hyperBall = 0;
+    private boolean skipTurn = false;
 
 
     public Player(String name, ProfessionType profession) {
@@ -134,4 +135,13 @@ public class Player {
     public void setHyperBall(int hyperBall) {
         this.hyperBall = hyperBall;
     }
+
+
+    public boolean isSkipTurn() {
+        return skipTurn;
+    }
+
+    public void setSkipTurn(boolean skipTurn) {
+        this.skipTurn = skipTurn;
+    } //Edit 10/23/68
 }

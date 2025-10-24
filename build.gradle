@@ -1,12 +1,13 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group = 'com.pokemopoly'
 version = '1.0-SNAPSHOT'
 
 application {
-    mainClass = 'com.pokemopoly.Main'
+    mainClass = 'com.pokemopoly.Main.java'
 }
 
 repositories {

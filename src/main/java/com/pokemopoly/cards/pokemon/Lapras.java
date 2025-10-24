@@ -18,4 +18,5 @@ public class Lapras extends PokemonCard {
         );
 
     }
+    //Create 10/13/68
 }
