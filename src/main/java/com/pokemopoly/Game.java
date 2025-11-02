@@ -5,6 +5,7 @@ import com.pokemopoly.cards.*;
 import com.pokemopoly.cards.items.Revive;
 import com.pokemopoly.cards.pokemon.Ryu;
 import com.pokemopoly.cards.pokemon.Ryu2;
+import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 import com.pokemopoly.player.Hand;
 import com.pokemopoly.player.Player;
 import com.pokemopoly.player.ProfessionType;
@@ -39,9 +40,27 @@ public class Game {
         setUpDeckManager();
 
         System.out.println("--- Game Start ---");
+
         while (turn <= players.size() * 10) {
             Player currentPlayer = players.get(turn % players.size());
+
+            if (currentPlayer.isSkipTurn()) {
+                System.out.println("💤 " + currentPlayer.getName() + " is asleep and skips this turn!");
+                currentPlayer.setSkipTurn(false); // wake up after skipping one turn
+                turn++;
+                continue;
+            } //Edit 10/23/68
+
             System.out.println("\n🎲 It's " + currentPlayer.getName() + "'s turn!");
+
+            // 🔥 Burn damage phase
+            for (PokemonCard pokemon : currentPlayer.getTeam()) {
+                if (pokemon.isBurned() && pokemon.isAlive()) {
+                    pokemon.setHp(pokemon.getHp() - 2);
+                    System.out.println("🔥 " + pokemon.getName() + " is burned and takes 2 damage! (HP: "
+                            + pokemon.getHp() + "/" + pokemon.getMaxHp() + ")");
+                }
+            } //Edit 10/23/68
 
             Scanner scanner = new Scanner(System.in);
 
@@ -108,7 +127,14 @@ public class Game {
                 // todo
             }
             else if (choice == 2) {
-                // todo
+                // Example: choose a Pokémon with a PreRollAbility
+                // (You may later add a proper selection system)
+                for (PokemonCard p : currentPlayer.getTeam()) {
+                    if (p instanceof PreRollAbility ability) {
+                        ability.usePreRollPassive(this);
+                        break;
+                    }
+                } // Edit 10/24/68
             }
             else if (choice == 3) {
                 // todo
@@ -176,5 +202,21 @@ public class Game {
             players.add(new Player(name, type));
         }
 
+    }
+
+    private void catchPokemon() {
+
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
+    public Board getBoard() {
+        return board; //Edit 10/24/68
     }
 }
