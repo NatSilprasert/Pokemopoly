@@ -12,6 +12,7 @@ public class CaveTile extends Tile {
 
     public void onLand(Player player, Game game) {
         System.out.println(player.getName() + " landed on " + name + "!");
-        // todo
+        System.out.println(player.getName() + " is trapped in the cave and must wait for the next turn!");
+        player.setSkipTurn(true);
     }
 }
