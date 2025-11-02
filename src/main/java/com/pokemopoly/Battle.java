@@ -4,12 +4,14 @@ import com.pokemopoly.board.Tile;
 import com.pokemopoly.cards.PokemonCard;
 import com.pokemopoly.cards.pokemon.Meowth;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
+import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
 import com.pokemopoly.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Battle {
     private Game game;
@@ -130,6 +132,48 @@ public class Battle {
                 }
                 else if (Objects.equals("Gym 2's Leader", defender.getName())) {
                     attacker.setBadges2();
+                }
+                else if (Objects.equals("Villain", defender.getName())) {
+                    List<PokemonCard> evolvablePokemons = attacker.getTeam().stream()
+                            .filter(p -> p instanceof Evolvable)
+                            .toList();
+
+                    if (!evolvablePokemons.isEmpty()) {
+                        System.out.println("Choose pokemon to evolve!");
+                        for (int i = 0; i < evolvablePokemons.size(); i++) {
+                            System.out.println((i + 1) + ". " + evolvablePokemons.get(i).getName());
+                        }
+                    }
+
+                    Scanner scanner = new Scanner(System.in);
+                    int choice = -1;
+
+                    while (true) {
+                        if (scanner.hasNextInt()) {
+                            choice = scanner.nextInt();
+                            if (choice >= 1 && choice <= evolvablePokemons.size()) {
+                                break;
+                            } else {
+                                System.out.println("❌ Invalid number. Please select between 1 and " + evolvablePokemons.size() + "!");
+                            }
+                        } else {
+                            System.out.println("❌ Please enter a valid number!");
+                            scanner.next();
+                        }
+                    }
+
+                    PokemonCard selected = evolvablePokemons.get(choice - 1);
+                    System.out.println("You chose " + selected.getName() + " to evolve!");
+
+                    Evolvable evolvable = (Evolvable) selected;
+                    PokemonCard evolvedPokemon = evolvable.evolve();
+
+                    int index = attacker.getTeam().indexOf(selected);
+                    if (index != -1) {
+                        attacker.getTeam().set(index, evolvedPokemon);
+                    }
+
+                    System.out.println("It has evolved to " + selected.getName() + "!");
                 }
             }
             // player vs player rewards

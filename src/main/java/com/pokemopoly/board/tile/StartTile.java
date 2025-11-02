@@ -12,6 +12,7 @@ public class StartTile extends Tile {
 
     public void onLand(Player player, Game game) {
         System.out.println(player.getName() + " landed on " + name + "!");
-        // todo
+
+
     }
 }
