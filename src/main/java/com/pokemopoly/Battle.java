@@ -2,10 +2,13 @@ package com.pokemopoly;
 
 import com.pokemopoly.board.Tile;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.pokemon.Meowth;
+import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
 import com.pokemopoly.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Battle {
@@ -15,6 +18,8 @@ public class Battle {
     private PokemonCard playerPokemon;
     private PokemonCard opponentPokemon;
     private boolean bot;
+    private int playerOriginalPower;
+    private int opponentOriginalPower;
 
     public Battle(Game game, Player p1, Player p2, boolean isBot) {
         this.game = game;
@@ -23,76 +28,56 @@ public class Battle {
         this.bot = isBot;
     }
 
-    public Player start() {
+    public void start() {
         Scanner scanner = new Scanner(System.in);
+        boolean isWin = false;
+
         System.out.println("Battle started!");
         playerPokemon = selectPokemon(player, scanner);
+
         if (bot) {
-            // 1 Player Battle
+            // Player vs Bot
             opponentPokemon = opponent.getTeam().getFirst();
-            while (true) {
+
+            if (playerPokemon instanceof BattleAbility ability1) {
+                ability1.useBattlePassive(this);
+            }
+            if (opponentPokemon instanceof BattleAbility ability2) {
+                ability2.useBattlePassive(this);
+            }
+
+            while (!isWin) {
                 int playerRoll = game.rollDice();
                 int opponentRoll = game.rollDice();
 
                 if (playerRoll > opponentRoll) {
-                    System.out.println(player.getName() + "'s attack " + opponent.getName() + "!");
-
-                    int damage = playerPokemon.getPower();
-                    // todo check for additional damage
-
-                    opponentPokemon.setHp(opponentPokemon.getHp() - damage);
-                    if (opponentPokemon.getHp() <= 0) {
-                        System.out.println(player.getName() + " win!");
-                        // todo rewards
-                        break;
-                    }
-                } else if (opponentRoll > playerRoll) {
-                    System.out.println(opponent.getName() + "'s attack " + player.getName() + "!");
-
-                    int damage = opponentPokemon.getPower();
-                    // todo check for additional damage
-
-                    playerPokemon.setHp(playerPokemon.getHp() - damage);
-                    if (playerPokemon.getHp() <= 0) {
-                        System.out.println(opponent.getName() + " win!");
-                        // todo rewards
-                        break;
-                    }
+                    isWin = attack(opponent, player, opponentPokemon, playerPokemon);
+                }
+                else if (opponentRoll > playerRoll) {
+                    isWin = attack(opponent, player, opponentPokemon, playerPokemon);
                 }
             }
         }
         else {
-            // 2 Players Battle
+            // Player vs Player
             opponentPokemon = selectPokemon(opponent, scanner);
-            while (true) {
+
+            if (playerPokemon instanceof BattleAbility ability1) {
+                ability1.useBattlePassive(this);
+            }
+            if (opponentPokemon instanceof BattleAbility ability2) {
+                ability2.useBattlePassive(this);
+            }
+
+            while (!isWin) {
                 int playerRoll = game.rollDice();
                 int opponentRoll = game.rollDice();
 
                 if (playerRoll > opponentRoll) {
-                    System.out.println(player.getName() + "'s attack " + opponent.getName() + "!");
-
-                    int damage = playerPokemon.getPower();
-                    // todo check for additional damage
-
-                    opponentPokemon.setHp(opponentPokemon.getHp() - damage);
-                    if (opponentPokemon.getHp() <= 0) {
-                        System.out.println(player.getName() + " win!");
-                        // todo rewards
-                        break;
-                    }
+                    isWin = attack(opponent, player, opponentPokemon, playerPokemon);
                 }
                 else if (opponentRoll > playerRoll) {
-                    System.out.println(opponent.getName() + "'s attack " + player.getName() + "!");
-
-                    int damage = opponentPokemon.getPower();
-                    // todo check for additional damage
-
-                    playerPokemon.setHp(playerPokemon.getHp() - damage);
-                    if (playerPokemon.getHp() <= 0) {
-                        System.out.println(opponent.getName() + " win!");
-                        // todo rewards
-                        break;
-                    }
+                    isWin = attack(opponent, player, opponentPokemon, playerPokemon);
                 }
             }
         }
@@ -112,4 +97,50 @@ public class Battle {
         return playerPokemon.get(choice - 1);
     }
 
+    private void resetPokemonPowers() {
+        playerPokemon.setPower(playerPokemon.getMaxPower());
+        opponentPokemon.setPower(opponentPokemon.getMaxPower());
+        System.out.println("🔁 Both Pokémon's power have been restored to their original values.");
+    }
+
+    public PokemonCard getOpponentPokemon(PokemonCard pokemon) {
+        if (pokemon == playerPokemon) {
+            return opponentPokemon;
+        } else if (pokemon == opponentPokemon) {
+            return playerPokemon;
+        }
+        return null;
+    }
+
+    public boolean attack(Player attacker, Player defender, PokemonCard attackerPokemon, PokemonCard defenderPokemon) {
+        System.out.println(attacker.getName() + "'s attack " + defender.getName() + "!");
+
+        int damage = attackerPokemon.getPower();
+        // todo check for additional damage
+
+        defenderPokemon.setHp(defenderPokemon.getHp() - damage);
+        if (defenderPokemon.getHp() <= 0) {
+            System.out.println(attacker.getName() + " win!");
+
+            // player vs bot rewards
+            if (bot && attacker == player) {
+                attacker.setCoin(attacker.getCoin() + 5);
+                if (Objects.equals("Gym 1's Leader", defender.getName())) {
+                    attacker.setBadges1();
+                }
+                else if (Objects.equals("Gym 2's Leader", defender.getName())) {
+                    attacker.setBadges2();
+                }
+            }
+            // player vs player rewards
+            else {
+                attacker.setCoin(attacker.getCoin() + 3);
+            }
+
+            resetPokemonPowers();
+            return true;
+        }
+
+        return false;
+    }
 }

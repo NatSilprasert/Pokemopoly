@@ -30,30 +30,6 @@ public abstract class Tile {
     public abstract void onLand(Player player, Game game);
 
     public void moveIn(Player player, Game game) {
-        if (!playersOnLand.isEmpty()) {
-            Scanner scanner = new Scanner(System.in);
-
-            System.out.println("You're on the same tile with other players!");
-            System.out.println("Do you want to fight? 1) Yes 2) No");
-
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
-            if (choice == 1) {
-                System.out.println("Choose you opponent.");
-                for (int i = 0; i < playersOnLand.size(); i++) {
-                    System.out.println(i + 1 + ". " + playersOnLand.get(i).getName());
-                }
-
-                int opponentIdx = scanner.nextInt();
-                scanner.nextLine();
-
-                Player opponent = playersOnLand.get(opponentIdx - 1);
-                Battle battle = new Battle(game, player, opponent, false);
-
-                return;
-            }
-        }
         onLand(player, game);
         playersOnLand.add(player);
     }
