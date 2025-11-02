@@ -1,5 +1,6 @@
 package com.pokemopoly.board.tile;
 
+import com.pokemopoly.Battle;
 import com.pokemopoly.Game;
 import com.pokemopoly.board.GrassColor;
 import com.pokemopoly.board.Tile;
@@ -19,11 +20,48 @@ public class GlassTile extends Tile {
         this.catchRate = color.getCatchRate();
     }
 
+    @Override
+    public void moveIn(Player player, Game game) {
+        if (!playersOnLand.isEmpty()) {
+            Scanner scanner = new Scanner(System.in);
+
+            System.out.println("You're on the same tile with other players!");
+            System.out.println("Do you want to fight? 1) Yes 2) No");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            if (choice == 1) {
+                System.out.println("Choose you opponent.");
+                for (int i = 0; i < playersOnLand.size(); i++) {
+                    System.out.println(i + 1 + ". " + playersOnLand.get(i).getName());
+                }
+
+                int opponentIdx = scanner.nextInt();
+                scanner.nextLine();
+
+                Player opponent = playersOnLand.get(opponentIdx - 1);
+                Battle battle = new Battle(game, player, opponent, false);
+                battle.start();
+
+                return;
+            }
+        }
+        onLand(player, game);
+        playersOnLand.add(player);
+    }
+
     public void onLand(Player player, Game game) {
         System.out.println(player.getName() + " landed on " + name + "!");
 
         DeckManager deckManager = game.getDeckManager();
-        PokemonCard pokemonCard = deckManager.drawPokemon();
+
+        PokemonCard pokemonCard = deckManager.drawGreenPokemon();
+        if (catchRate == 3) pokemonCard = deckManager.drawBluePokemon();
+        else if (catchRate == 4) pokemonCard = deckManager.drawPurplePokemon();
+        else if (catchRate == 5) pokemonCard = deckManager.drawRedPokemon();
+        else if (catchRate == 6) pokemonCard = deckManager.drawCrownPokemon();
+
         System.out.println("Pokemon details:");
         System.out.println("Name: " + pokemonCard.getName());
         System.out.println("Description: " + pokemonCard.getDescription());
@@ -72,7 +110,6 @@ public class GlassTile extends Tile {
                     }
                     else if (choice == 2) {
                         System.out.println("You discarded the new pokemon: " + pokemonCard.getName());
-                        deckManager.getPokemonDeck().discard(pokemonCard);
                     }
 
                 } else {

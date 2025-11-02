@@ -16,10 +16,11 @@ public class Player {
     private final int MAX_POKEMON = 6;
     private int position = 0;
     private int coin = 0;
-    private int badges = 0;
     private int redBall = 4;
     private int greatBall = 0;
     private int hyperBall = 0;
+    private boolean badge1 = false;
+    private boolean badge2 = false;
     private boolean skipTurn = false;
 
 
@@ -105,12 +106,20 @@ public class Player {
         return MAX_POKEMON;
     }
 
-    public int getBadges() {
-        return badges;
+    public boolean getBadges1() {
+        return badge1;
     }
 
-    public void setBadges(int badges) {
-        this.badges = badges;
+    public void setBadges1() {
+        this.badge1 = true;
+    }
+
+    public boolean getBadges2() {
+        return badge1;
+    }
+
+    public void setBadges2() {
+        this.badge1 = true;
     }
 
     public int getRedBall() {
