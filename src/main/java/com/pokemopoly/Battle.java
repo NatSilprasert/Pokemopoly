@@ -2,6 +2,8 @@ package com.pokemopoly;
 
 import com.pokemopoly.board.Tile;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.pokemon.Meowth;
+import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
 import com.pokemopoly.player.Player;
 
 import java.util.ArrayList;
@@ -15,6 +17,8 @@ public class Battle {
     private PokemonCard playerPokemon;
     private PokemonCard opponentPokemon;
     private boolean bot;
+    private int playerOriginalPower;
+    private int opponentOriginalPower;
 
     public Battle(Game game, Player p1, Player p2, boolean isBot) {
         this.game = game;
@@ -27,9 +31,21 @@ public class Battle {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Battle started!");
         playerPokemon = selectPokemon(player, scanner);
+        playerOriginalPower = playerPokemon.getPower();
+        opponentOriginalPower = opponentPokemon.getPower();
+
         if (bot) {
             // 1 Player Battle
+
             opponentPokemon = opponent.getTeam().getFirst();
+
+            if (playerPokemon instanceof BattleAbility ability1) {
+                ability1.useBattlePassive(this);
+            }
+            if (opponentPokemon instanceof BattleAbility ability2) {
+                ability2.useBattlePassive(this);
+            }
+
             while (true) {
                 int playerRoll = game.rollDice();
                 int opponentRoll = game.rollDice();
@@ -43,6 +59,7 @@ public class Battle {
                     opponentPokemon.setHp(opponentPokemon.getHp() - damage);
                     if (opponentPokemon.getHp() <= 0) {
                         System.out.println(player.getName() + " win!");
+                        resetPokemonPowers();
                         // todo rewards
                         break;
                     }
@@ -55,6 +72,7 @@ public class Battle {
                     playerPokemon.setHp(playerPokemon.getHp() - damage);
                     if (playerPokemon.getHp() <= 0) {
                         System.out.println(opponent.getName() + " win!");
+                        resetPokemonPowers();
                         // todo rewards
                         break;
                     }
@@ -64,6 +82,14 @@ public class Battle {
         else {
             // 2 Players Battle
             opponentPokemon = selectPokemon(opponent, scanner);
+
+            if (playerPokemon instanceof BattleAbility ability1) {
+                ability1.useBattlePassive(this);
+            }
+            if (opponentPokemon instanceof BattleAbility ability2) {
+                ability2.useBattlePassive(this);
+            }
+
             while (true) {
                 int playerRoll = game.rollDice();
                 int opponentRoll = game.rollDice();
@@ -112,4 +138,18 @@ public class Battle {
         return playerPokemon.get(choice - 1);
     }
 
+    private void resetPokemonPowers() {
+        playerPokemon.setPower(playerOriginalPower);
+        opponentPokemon.setPower(opponentOriginalPower);
+        System.out.println("🔁 Both Pokémon's power have been restored to their original values.");
+    }
+
+    public PokemonCard getOpponentPokemon(PokemonCard pokemon) {
+        if (pokemon == playerPokemon) {
+            return opponentPokemon;
+        } else if (pokemon == opponentPokemon) {
+            return playerPokemon;
+        }
+        return null;
+    }
 }

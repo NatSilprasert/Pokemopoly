@@ -145,6 +145,7 @@ public class Game {
 
             // roll dice
             int n = rollDice();
+            currentPlayer.setLastRoll(n);
             System.out.println(currentPlayer.getName() + " rolled a " + n + "!");
             board.movePlayer(currentPlayer, n, this);
             currentPlayer.move(n);

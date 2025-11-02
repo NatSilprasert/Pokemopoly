@@ -17,7 +17,7 @@ public class Oddish extends PokemonCard implements Evolvable , BattleAbility {
 
     @Override
     public PokemonCard evolve() {
-        return null;
+        return new Gloom();
     }
 
     @Override
