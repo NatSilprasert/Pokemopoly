@@ -3,6 +3,8 @@ package com.pokemopoly.player;
 import com.pokemopoly.board.Board;
 import com.pokemopoly.cards.ItemCard;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.pokemon.Pikachu;
+import com.pokemopoly.cards.pokemon.Rattata;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,15 +34,23 @@ public class Player {
 
         if (profession == ProfessionType.TRAINER) {
             hand.setCapacity(6);
+            addPokemon(new Pikachu());
+            // Damage += 2
         }
         else if (profession == ProfessionType.FISHER) {
-            // todo
+            // addPokemon(new Magikarp());
+            // Steal other player's item
+            // evo 1 water pokemon after walk complete round
         }
         else if (profession == ProfessionType.ROCKET) {
-            // todo
+            addPokemon(new Rattata());
+            // Steal other player's pokemon if win the battle
+            // Steal other player's pokemon if walk land on daycare center
         }
         else if (profession == ProfessionType.SCIENTIST) {
-            // todo
+            // addPokemon(new Metamon());
+            // Damage += 1 for lightning/metal pokemon
+            // HP += ??
         }
     }
 

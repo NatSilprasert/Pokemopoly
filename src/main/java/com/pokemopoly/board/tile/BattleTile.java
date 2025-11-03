@@ -40,6 +40,7 @@ public class BattleTile extends Tile {
             boss.addPokemon(deckManager.drawPurplePokemon());
 
             Battle battle = new Battle(game, player, boss, true);
+            battle.start();
         }
 
     }

@@ -194,22 +194,31 @@ public class Game {
             int n = rollDice();
             System.out.println(currentPlayer.getName() + " rolled a " + n + "!");
 
-            // Check if walk pass daycare
-            if (currentPlayer.getPosition() < 18 && currentPlayer.getPosition() + n >= 18) {
-                DaycareTile daycareTile = (DaycareTile) board.getTileAt(18);
-                daycareTile.walkPass(currentPlayer, this);
-            }
-
-            // Check if walk pass start tile
-            if (currentPlayer.getPosition() + n >= 40) {
-                StartTile startTile = (StartTile) board.getTileAt(0);
-                startTile.walkPass(currentPlayer, this);
-            }
+            checkAdditionalConditions(currentPlayer, n);
 
             board.movePlayer(currentPlayer, n, this);
             currentPlayer.move(n);
 
             turn++;
+        }
+    }
+
+    private void checkAdditionalConditions(Player currentPlayer, int n) {
+        // Check if walk pass daycare
+        if (currentPlayer.getPosition() < 18 && currentPlayer.getPosition() + n >= 18) {
+            DaycareTile daycareTile = (DaycareTile) board.getTileAt(18);
+            daycareTile.walkPass(currentPlayer, this);
+        }
+
+        // Check if walk pass start tile
+        if (currentPlayer.getPosition() + n >= 40) {
+            StartTile startTile = (StartTile) board.getTileAt(0);
+            startTile.walkPass(currentPlayer, this);
+        }
+
+        // Check if FISHER make a full lap
+        if (currentPlayer.getProfession() == ProfessionType.FISHER && currentPlayer.getPosition() + n >= 40) {
+            // todo evo water pokemon
         }
     }
 

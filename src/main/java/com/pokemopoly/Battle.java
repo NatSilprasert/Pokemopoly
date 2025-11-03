@@ -4,6 +4,7 @@ import com.pokemopoly.cards.PokemonCard;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
 import com.pokemopoly.player.Player;
+import com.pokemopoly.player.ProfessionType;
 
 import java.util.List;
 import java.util.Objects;
@@ -114,7 +115,11 @@ public class Battle {
         System.out.println(attacker.getName() + "'s attack " + defender.getName() + "!");
 
         int damage = attackerPokemon.getPower();
-        // todo check for additional damage
+
+        // check for additional damage
+        if (attacker.getProfession() == ProfessionType.TRAINER) {
+            damage += 2;
+        }
 
         defenderPokemon.setHp(defenderPokemon.getHp() - damage);
         if (defenderPokemon.getHp() <= 0) {
