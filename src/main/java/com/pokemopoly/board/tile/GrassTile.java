@@ -10,11 +10,11 @@ import com.pokemopoly.player.Player;
 
 import java.util.Scanner;
 
-public class GlassTile extends Tile {
+public class GrassTile extends Tile {
     private int catchRate;
     private GrassColor color;
 
-    public GlassTile(String name, int index, GrassColor color) {
+    public GrassTile(String name, int index, GrassColor color) {
         super(name, index);
         this.color = color;
         this.catchRate = color.getCatchRate();

@@ -1,17 +1,13 @@
 package com.pokemopoly;
 
-import com.pokemopoly.board.Tile;
 import com.pokemopoly.cards.PokemonCard;
-import com.pokemopoly.cards.pokemon.Meowth;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
 import com.pokemopoly.player.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Battle {
     private Game game;
