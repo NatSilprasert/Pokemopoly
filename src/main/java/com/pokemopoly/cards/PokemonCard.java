@@ -7,6 +7,7 @@ public abstract class PokemonCard implements Card {
     private final String name;
     private final String description;
     private final int maxHp;
+    private final int maxPower;
     private final int price;
     private int hp;
     private int power;
@@ -23,6 +24,7 @@ public abstract class PokemonCard implements Card {
         this.hp = hp;
         this.maxHp = hp;
         this.power = power;
+        this.maxPower = power;
         this.price = price;
     }
 
@@ -44,6 +46,14 @@ public abstract class PokemonCard implements Card {
 
     public int getPower() {
         return power;
+    }
+
+    public void setPower(int power) {
+        this.power = power;
+    }
+
+    public int getMaxPower() {
+        return maxPower;
     }
 
     public int getPrice() {

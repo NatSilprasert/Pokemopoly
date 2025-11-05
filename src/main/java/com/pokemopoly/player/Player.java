@@ -3,6 +3,8 @@ package com.pokemopoly.player;
 import com.pokemopoly.board.Board;
 import com.pokemopoly.cards.ItemCard;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.pokemon.Pikachu;
+import com.pokemopoly.cards.pokemon.Rattata;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +18,11 @@ public class Player {
     private final int MAX_POKEMON = 6;
     private int position = 0;
     private int coin = 0;
-    private int badges = 0;
     private int redBall = 4;
     private int greatBall = 0;
     private int hyperBall = 0;
+    private boolean badge1 = false;
+    private boolean badge2 = false;
     private boolean skipTurn = false;
     private int lastRoll = 0;
 
@@ -31,15 +34,23 @@ public class Player {
 
         if (profession == ProfessionType.TRAINER) {
             hand.setCapacity(6);
+            addPokemon(new Pikachu());
+            // Damage += 2
         }
         else if (profession == ProfessionType.FISHER) {
-            // todo
+            // addPokemon(new Magikarp());
+            // Steal other player's item
+            // evo 1 water pokemon after walk complete round
         }
         else if (profession == ProfessionType.ROCKET) {
-            // todo
+            addPokemon(new Rattata());
+            // Steal other player's pokemon if win the battle
+            // Steal other player's pokemon if walk land on daycare center
         }
         else if (profession == ProfessionType.SCIENTIST) {
-            // todo
+            // addPokemon(new Metamon());
+            // Damage += 1 for lightning/metal pokemon
+            // HP += ??
         }
     }
 
@@ -105,12 +116,20 @@ public class Player {
         return MAX_POKEMON;
     }
 
-    public int getBadges() {
-        return badges;
+    public boolean getBadges1() {
+        return badge1;
     }
 
-    public void setBadges(int badges) {
-        this.badges = badges;
+    public void setBadges1() {
+        this.badge1 = true;
+    }
+
+    public boolean getBadges2() {
+        return badge1;
+    }
+
+    public void setBadges2() {
+        this.badge1 = true;
     }
 
     public int getRedBall() {

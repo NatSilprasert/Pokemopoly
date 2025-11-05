@@ -1,6 +1,9 @@
 package com.pokemopoly;
 
 import com.pokemopoly.board.Board;
+import com.pokemopoly.board.GrassColor;
+import com.pokemopoly.board.Tile;
+import com.pokemopoly.board.tile.*;
 import com.pokemopoly.cards.*;
 import com.pokemopoly.cards.items.Revive;
 import com.pokemopoly.cards.pokemon.Ryu;
@@ -11,6 +14,7 @@ import com.pokemopoly.player.Player;
 import com.pokemopoly.player.ProfessionType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,7 +26,50 @@ public class Game {
 
     public Game() {
         // todo setup board
-        this.board = new Board();
+        List<Tile> tiles = new ArrayList<>(Arrays.asList(
+                new StartTile("Start Tile", 0),
+                new GrassTile("Green Grass Tile", 1, GrassColor.GREEN),
+                new QuestTile("Quest Tile", 2),
+                new GrassTile("Green Grass Tile", 3, GrassColor.GREEN),
+                new GrassTile("Green Grass Tile", 4, GrassColor.GREEN),
+                new CityTile("City Tile", 5),
+                new GrassTile("Green Grass Tile", 6, GrassColor.GREEN),
+                new GrassTile("Green Grass Tile", 7, GrassColor.GREEN),
+                new EventTile("Event Tile", 8),
+                new GrassTile("Green Grass Tile", 9, GrassColor.GREEN),
+                new BattleTile("Gym 1", 10),
+                new GrassTile("Green Grass Tile", 11, GrassColor.BLUE),
+                new CaveTile("Cave Tile", 12),
+                new GrassTile("Green Grass Tile", 13, GrassColor.BLUE),
+                new GrassTile("Green Grass Tile", 14, GrassColor.BLUE),
+                new CityTile("City Tile", 15),
+                new GrassTile("Green Grass Tile", 16, GrassColor.BLUE),
+                new GrassTile("Green Grass Tile", 17, GrassColor.BLUE),
+                new DaycareTile("Daycare Tile", 18),
+                new GrassTile("Green Grass Tile", 19, GrassColor.BLUE),
+                new BattleTile("Villain", 20),
+                new GrassTile("Purple Grass Tile", 21, GrassColor.PURPLE),
+                new QuestTile("Quest Tile", 22),
+                new GrassTile("Purple Grass Tile", 23, GrassColor.PURPLE),
+                new GrassTile("Purple Grass Tile", 24, GrassColor.PURPLE),
+                new CityTile("City Tile", 25),
+                new GrassTile("Purple Grass Tile", 26, GrassColor.PURPLE),
+                new GrassTile("Purple Grass Tile", 27, GrassColor.PURPLE),
+                new EventTile("Event Tile", 28),
+                new GrassTile("Purple Grass Tile", 29, GrassColor.PURPLE),
+                new BattleTile("Gym 2", 30),
+                new GrassTile("Red Grass Tile", 31, GrassColor.RED),
+                new CaveTile("Cave Tile", 32),
+                new GrassTile("Red Grass Tile", 33, GrassColor.RED),
+                new GrassTile("Red Grass Tile", 34, GrassColor.RED),
+                new CityTile("City Tile", 35),
+                new GrassTile("Red Grass Tile", 36, GrassColor.RED),
+                new GrassTile("Red Grass Tile", 37, GrassColor.RED),
+                new GrassTile("Red Grass Tile", 38, GrassColor.RED),
+                new GrassTile("Crown Grass Tile", 39, GrassColor.CROWN)
+        ));
+
+        this.board = new Board(tiles);
         this.players = new ArrayList<>();
     }
 
@@ -147,10 +194,32 @@ public class Game {
             int n = rollDice();
             currentPlayer.setLastRoll(n);
             System.out.println(currentPlayer.getName() + " rolled a " + n + "!");
+
+            checkAdditionalConditions(currentPlayer, n);
+
             board.movePlayer(currentPlayer, n, this);
             currentPlayer.move(n);
 
             turn++;
+        }
+    }
+
+    private void checkAdditionalConditions(Player currentPlayer, int n) {
+        // Check if walk pass daycare
+        if (currentPlayer.getPosition() < 18 && currentPlayer.getPosition() + n >= 18) {
+            DaycareTile daycareTile = (DaycareTile) board.getTileAt(18);
+            daycareTile.walkPass(currentPlayer, this);
+        }
+
+        // Check if walk pass start tile
+        if (currentPlayer.getPosition() + n >= 40) {
+            StartTile startTile = (StartTile) board.getTileAt(0);
+            startTile.walkPass(currentPlayer, this);
+        }
+
+        // Check if FISHER make a full lap
+        if (currentPlayer.getProfession() == ProfessionType.FISHER && currentPlayer.getPosition() + n >= 40) {
+            // todo evo water pokemon
         }
     }
 
@@ -202,10 +271,6 @@ public class Game {
 
             players.add(new Player(name, type));
         }
-
-    }
-
-    private void catchPokemon() {
 
     }
 
