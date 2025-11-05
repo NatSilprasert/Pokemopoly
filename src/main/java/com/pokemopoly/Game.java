@@ -25,7 +25,7 @@ public class Game {
     private int turn = 0;
 
     public Game() {
-        // todo setup board
+        // setup board
         List<Tile> tiles = new ArrayList<>(Arrays.asList(
                 new StartTile("Start Tile", 0),
                 new GrassTile("Green Grass Tile", 1, GrassColor.GREEN),
