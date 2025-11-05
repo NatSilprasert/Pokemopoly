@@ -1,4 +1,4 @@
 package com.pokemopoly.cards.pokemon;
 
-public class Tentacool {
+public class Tentacool exte {
 }
