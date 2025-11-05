@@ -11,4 +11,5 @@ public class Venomoth extends PokemonCard {
                 7,
                 4);
     }
+    //Create 11/2/68
 }

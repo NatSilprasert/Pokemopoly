@@ -29,4 +29,5 @@ public class Persian extends PokemonCard implements BattleAbility {
                     + "'s power dropped from " + oldPower + " → " + newPower);
         }
     }
+    //Create 11/2/68
 }

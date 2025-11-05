@@ -15,6 +15,7 @@ public class Venonat extends PokemonCard implements Evolvable {
 
     @Override
     public PokemonCard evolve() {
-
+        return new Venomoth();
     }
+    //Create 11/2/68
 }

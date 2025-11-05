@@ -96,5 +96,6 @@ public abstract class PokemonCard implements Card {
     } //Edited 10/29/68
 
     public void setPower(int newPower) {
+
     }
 }

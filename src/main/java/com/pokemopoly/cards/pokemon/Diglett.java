@@ -33,4 +33,5 @@ public class Diglett extends PokemonCard implements Evolvable , CaptureAbility {
             System.out.println(opponent.getName() + " manages to escape because they have Poké Balls!");
         }
     }
+    //Create 11/2/68
 }

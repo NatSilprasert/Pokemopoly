@@ -46,4 +46,5 @@ public class Golduck extends PokemonCard implements PreRollAbility {
         board.movePlayer(owner, lastRoll, game);
         owner.move(lastRoll);
     }
+    //Create 11/2/68
 }

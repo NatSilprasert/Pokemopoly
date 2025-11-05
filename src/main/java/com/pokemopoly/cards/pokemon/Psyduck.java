@@ -102,4 +102,5 @@ public class Psyduck extends PokemonCard implements Evolvable , PreRollAbility {
     public PokemonCard evolve() {
         return new Golduck();
     }
+    //Create 11/2/68
 }
