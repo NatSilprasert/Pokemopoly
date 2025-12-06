@@ -16,6 +16,18 @@ public class Primeape extends PokemonCard implements BattleAbility {
 
     @Override
     public void useBattlePassive(Battle battle) {
-        //Revenge
+        // Revenge: If Primeape is attacked first → +3 power until the battle ends
+
+        PokemonCard first = battle.getFirstAttacker();
+        PokemonCard me = battle.getPokemonOf(this);
+
+        // ถ้าคนแรกที่ตี != Primeape → แปลว่า Primeape โดนก่อน
+        if (first != null && first != me) {
+
+            System.out.println("🔥 Primeape activates Revenge! +3 Power this battle!");
+
+            battle.addTemporaryPowerAdjustment(this, this.getPower());
+            this.setPower(this.getPower() + 3);
+        }
     }
 }

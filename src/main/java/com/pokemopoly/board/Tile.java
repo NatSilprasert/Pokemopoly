@@ -12,6 +12,8 @@ public abstract class Tile {
     protected String name;
     protected int index;
     protected List<Player> playersOnLand;
+    protected boolean disabled = false;
+    protected int disabledUntilTurn = -1;
 
     public Tile(String name, int index) {
         this.name = name;
@@ -37,4 +39,19 @@ public abstract class Tile {
     public void moveOut(Player player) {
         playersOnLand.remove(player);
     };
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void disable(int enableTurn) {
+        this.disabled = true;
+        this.disabledUntilTurn = enableTurn;
+    }
+
+    public void updateDisableStatus(int currentTurn) {
+        if (disabled && currentTurn >= disabledUntilTurn) {
+            disabled = false;
+        }
+    }
 }

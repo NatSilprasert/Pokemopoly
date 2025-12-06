@@ -23,6 +23,10 @@ public class Game {
     private DeckManager deckManager;
     private List<Player> players;
     private int turn = 0;
+    private boolean machampCloseCombatUsed = false;
+    private boolean dodrioAgilityUsed = false;
+    private boolean omanyteWithdrawUsed = false;
+
 
     public Game() {
         // todo setup board
@@ -87,6 +91,13 @@ public class Game {
         setUpDeckManager();
 
         System.out.println("--- Game Start ---");
+
+        // เมื่อเริ่มรอบใหม่
+        if (turn % players.size() == 0) {
+            machampCloseCombatUsed = false;
+            dodrioAgilityUsed = false;
+            omanyteWithdrawUsed = false;   // ⭐ reset Omanyte Withdraw
+        }
 
         while (turn <= players.size() * 10) {
             Player currentPlayer = players.get(turn % players.size());
@@ -193,12 +204,39 @@ public class Game {
             // roll dice
             int n = rollDice();
             currentPlayer.setLastRoll(n);
+            // ⭐ ระบบโกงลูกเต๋า Download ของ Porygon ⭐
+            if (currentPlayer.canManipulateDice()) {
+                System.out.println("📡 Porygon Download activated! Choose:");
+                System.out.println("1. +1");
+                System.out.println("2. -1");
+
+                int hack = scanner.nextInt();
+
+                if (hack == 1 && n < 6) {
+                    n++;
+                    System.out.println("🔼 Dice increased to " + n);
+                } else if (hack == 2 && n > 1) {
+                    n--;
+                    System.out.println("🔽 Dice decreased to " + n);
+                } else {
+                    System.out.println("⚠ Invalid or out of range! No change.");
+                }
+
+                // ปิด effect
+                currentPlayer.setCanManipulateDice(false);
+            }
+
             System.out.println(currentPlayer.getName() + " rolled a " + n + "!");
 
             checkAdditionalConditions(currentPlayer, n);
 
             board.movePlayer(currentPlayer, n, this);
             currentPlayer.move(n);
+
+            if (currentPlayer.isMagicGuardActive()) {
+                currentPlayer.setMagicGuardActive(false);
+                System.out.println("✨ Magic Guard on " + currentPlayer.getName() + " has worn off.");
+            }
 
             turn++;
         }
@@ -274,12 +312,62 @@ public class Game {
 
     }
 
+    public void startPlayerVsPlayerBattle(Player p1, Player p2) {
+        Battle battle = new Battle(p1, p2);
+        battle.startBattle();
+    }
+
+    public int askPlayerToChooseIndex(int min, int max, String message) {
+        Scanner sc = new Scanner(System.in);
+        int choice;
+        do {
+            System.out.print(message + " (" + min + "-" + max + "): ");
+            choice = sc.nextInt();
+        } while (choice < min || choice > max);
+        return choice;
+    }
+
     public List<Player> getPlayers() {
         return players;
     }
 
     public void setPlayers(List<Player> players) {
         this.players = players;
+    }
+
+    public Player getCurrentPlayer() {
+        return players.get(turn % players.size());
+    }
+
+    public boolean isMachampCloseCombatUsed() {
+        return machampCloseCombatUsed;
+    }
+
+    public void setMachampCloseCombatUsed(boolean used) {
+        this.machampCloseCombatUsed = used;
+    }
+
+    public boolean isDodrioAgilityUsed() {
+        return dodrioAgilityUsed;
+    }
+    public void setDodrioAgilityUsed(boolean used) {
+        this.dodrioAgilityUsed = used;
+    }
+
+    public int getTurn() {
+        return turn;
+    }
+
+    public int getTotalPlayers() {
+        return players.size();
+    }
+
+    public boolean isOmanyteWithdrawUsed() {
+        return omanyteWithdrawUsed;
+    }
+
+    public void setOmanyteWithdrawUsed(boolean used) {
+        this.omanyteWithdrawUsed = used;
     }
 
     public Board getBoard() {

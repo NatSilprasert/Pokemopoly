@@ -1,10 +1,12 @@
 package com.pokemopoly.cards.pokemon;
 
+import com.pokemopoly.Battle;
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 
-public class Poliwrath extends PokemonCard implements PreRollAbility {
+public class Poliwrath extends PokemonCard implements BattleAbility {
     public Poliwrath() {
         super("P062",
                 "Poliwrath",
@@ -15,8 +17,7 @@ public class Poliwrath extends PokemonCard implements PreRollAbility {
     }
 
     @Override
-    public void usePreRollPassive(Game game) {
-        //Dynamic Punch
-        //1/6 Change to Double Attack
+    public void useBattlePassive(Battle battle) {
+        System.out.println("🥊 Poliwrath used Dynamic Punch! If you roll a 6, you attack twice!");
     }
 }

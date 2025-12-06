@@ -19,5 +19,6 @@ public class Victreebel extends PokemonCard implements BattleAbility {
     public void useBattlePassive(Battle battle) {
         //Leech life
         //Add +2 all turn
+        //Complete
     }
 }
