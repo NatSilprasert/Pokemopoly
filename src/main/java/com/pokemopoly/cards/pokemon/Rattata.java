@@ -5,7 +5,7 @@ import com.pokemopoly.cards.PokemonCard;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
 
-public class Rattata extends PokemonCard implements Evolvable, BattleAbility {
+public class Rattata extends PokemonCard implements Evolvable {
     public Rattata() {
         super("P019",
                 "Rattata",
@@ -13,12 +13,6 @@ public class Rattata extends PokemonCard implements Evolvable, BattleAbility {
                 4,
                 4,
                 2);
-    }
-
-    @Override
-    public void useBattlePassive(Battle battle) {
-        //Wait Battle Class
-        //Quick Attack
     }
 
     @Override

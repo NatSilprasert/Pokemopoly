@@ -5,7 +5,7 @@ import com.pokemopoly.cards.PokemonCard;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 
-public class Kadabra extends PokemonCard implements Evolvable , PreRollAbility {
+public class Kadabra extends PokemonCard implements Evolvable {
     public Kadabra() {
         super("P063",
                 "Kadabra",
@@ -18,10 +18,5 @@ public class Kadabra extends PokemonCard implements Evolvable , PreRollAbility {
     @Override
     public PokemonCard evolve() {
         return new Alakazam();
-    }
-
-    @Override
-    public void usePreRollPassive(Game game) {
-        //Psychic
     }
 }

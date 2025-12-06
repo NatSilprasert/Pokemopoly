@@ -22,8 +22,8 @@ public class Oddish extends PokemonCard implements Evolvable , BattleAbility {
 
     @Override
     public void useBattlePassive(Battle battle) {
-        //Waiting Battle Class
-        //Growth
+        System.out.println("🌱 Oddish uses Growth! Attack +2 this battle!");
+        this.setPower(Math.max(this.getPower() + 2 , this.getMaxPower()));
     }
     //Create 11/2/68
 }

@@ -6,7 +6,7 @@ import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 
 import java.net.PortUnreachableException;
 
-public class Machamp extends PokemonCard implements PreRollAbility {
+public class Machamp extends PokemonCard{
     public Machamp() {
         super("P068",
                 "Machamp",
@@ -14,10 +14,5 @@ public class Machamp extends PokemonCard implements PreRollAbility {
                 13,
                 16,
                 8);
-    }
-
-    @Override
-    public void usePreRollPassive(Game game) {
-        //Close Combat
     }
 }

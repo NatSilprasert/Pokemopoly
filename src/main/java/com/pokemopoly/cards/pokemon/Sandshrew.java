@@ -5,7 +5,7 @@ import com.pokemopoly.cards.PokemonCard;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
 
-public class Sandshrew extends PokemonCard implements Evolvable , BattleAbility {
+public class Sandshrew extends PokemonCard implements Evolvable {
     public Sandshrew() {
         super("P027",
                 "Sandshrew",
@@ -13,12 +13,6 @@ public class Sandshrew extends PokemonCard implements Evolvable , BattleAbility 
                 5,
                 4,
                 2);
-    }
-
-    @Override
-    public void useBattlePassive(Battle battle) {
-        //Waiting Battle Class
-        //Sand Attack
     }
 
     @Override

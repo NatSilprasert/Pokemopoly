@@ -4,8 +4,11 @@ import com.pokemopoly.Game;
 import com.pokemopoly.cards.PokemonCard;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
+import com.pokemopoly.player.Player;
 
-public class Mankey extends PokemonCard implements Evolvable , PreRollAbility {
+import java.util.List;
+
+public class Mankey extends PokemonCard implements Evolvable {
     public Mankey() {
         super("P056",
                 "Mankey",
@@ -18,10 +21,5 @@ public class Mankey extends PokemonCard implements Evolvable , PreRollAbility {
     @Override
     public PokemonCard evolve() {
         return new Primeape();
-    }
-
-    @Override
-    public void usePreRollPassive(Game game) {
-        //Low Kick
     }
 }

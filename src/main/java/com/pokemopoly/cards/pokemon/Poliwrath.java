@@ -4,7 +4,7 @@ import com.pokemopoly.Game;
 import com.pokemopoly.cards.PokemonCard;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 
-public class Poliwrath extends PokemonCard implements PreRollAbility {
+public class Poliwrath extends PokemonCard {
     public Poliwrath() {
         super("P062",
                 "Poliwrath",
@@ -12,11 +12,5 @@ public class Poliwrath extends PokemonCard implements PreRollAbility {
                 12,
                 12,
                 6);
-    }
-
-    @Override
-    public void usePreRollPassive(Game game) {
-        //Dynamic Punch
-        //1/6 Change to Double Attack
     }
 }

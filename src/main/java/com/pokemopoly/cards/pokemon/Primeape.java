@@ -4,7 +4,7 @@ import com.pokemopoly.Battle;
 import com.pokemopoly.cards.PokemonCard;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
 
-public class Primeape extends PokemonCard implements BattleAbility {
+public class Primeape extends PokemonCard {
     public Primeape() {
         super("P057",
                 "Primeape",
@@ -12,10 +12,5 @@ public class Primeape extends PokemonCard implements BattleAbility {
                 9,
                 9,
                 4);
-    }
-
-    @Override
-    public void useBattlePassive(Battle battle) {
-        //Revenge
     }
 }
