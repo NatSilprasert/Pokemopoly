@@ -1,6 +1,8 @@
 package com.pokemopoly;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
+import com.pokemopoly.cards.TypeEffectiveness;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
 import com.pokemopoly.player.Player;
@@ -115,6 +117,14 @@ public class Battle {
         System.out.println(attacker.getName() + "'s attack " + defender.getName() + "!");
 
         int damage = attackerPokemon.getPower();
+
+        // check types
+        for (PokemonType attackType : attackerPokemon.getTypes()) {
+            for (PokemonType defenderType : defenderPokemon.getTypes()) {
+                if (TypeEffectiveness.getSuperEffective(attackType).contains(defenderType)) damage += 2;
+                if (TypeEffectiveness.getNotEffective(attackType).contains(defenderType)) damage -= 2;
+            }
+        }
 
         // check for additional damage
         if (attacker.getProfession() == ProfessionType.TRAINER) {
