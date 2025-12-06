@@ -191,15 +191,18 @@ public class Game {
             }
 
             // roll dice
-            int n = rollDice();
-            currentPlayer.setLastRoll(n);
-            System.out.println(currentPlayer.getName() + " rolled a " + n + "!");
+            if (!getCurrentPlayer().isDoNothing()) {
+                int n = rollDice();
+                currentPlayer.setLastRoll(n);
+                System.out.println(currentPlayer.getName() + " rolled a " + n + "!");
 
-            checkAdditionalConditions(currentPlayer, n);
+                checkAdditionalConditions(currentPlayer, n);
 
-            board.movePlayer(currentPlayer, n, this);
-            currentPlayer.move(n);
+                board.movePlayer(currentPlayer, n, this);
+                currentPlayer.move(n);
+            }
 
+            currentPlayer.setDoNothing(false);
             turn++;
         }
     }
@@ -276,6 +279,10 @@ public class Game {
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    public Player getCurrentPlayer() {
+        return players.get(turn % players.size());
     }
 
     public void setPlayers(List<Player> players) {
