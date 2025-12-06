@@ -2,8 +2,11 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 import com.pokemopoly.player.Player;
+
+import java.util.List;
 
 public class Fearow extends PokemonCard implements PreRollAbility {
     public Fearow() {
@@ -12,7 +15,8 @@ public class Fearow extends PokemonCard implements PreRollAbility {
                 "Fearow is a Normal/Flying type Pokémon introduced in Generation 1.",
                 11,
                 11,
-                6);
+                6,
+                List.of(PokemonType.NORMAL,PokemonType.FLYING));
     }
 
     @Override

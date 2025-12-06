@@ -2,7 +2,10 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Battle;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
+
+import java.util.List;
 
 public class Cloyster extends PokemonCard {
     public Cloyster() {
@@ -11,7 +14,8 @@ public class Cloyster extends PokemonCard {
                 "Cloyster is a Water/Ice type Pokémon introduced in Generation 1.",
                 15,
                 9,
-                8);
+                8,
+                List.of(PokemonType.WATER,PokemonType.ICE));
     }
 
 }

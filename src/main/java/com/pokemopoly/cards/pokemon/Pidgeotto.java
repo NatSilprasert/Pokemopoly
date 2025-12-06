@@ -1,7 +1,10 @@
 package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
+
+import java.util.List;
 
 public class Pidgeotto extends PokemonCard implements Evolvable {
     public Pidgeotto() {
@@ -10,7 +13,8 @@ public class Pidgeotto extends PokemonCard implements Evolvable {
                 "Pidgeotto is a Normal/Flying type Pokémon introduced in Generation 1.",
                 12,
                 6,
-                4);
+                4,
+                List.of(PokemonType.NORMAL,PokemonType.FLYING));
     }
 
     @Override

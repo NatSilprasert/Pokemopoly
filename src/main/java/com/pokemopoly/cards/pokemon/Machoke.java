@@ -1,7 +1,10 @@
 package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
+
+import java.util.List;
 
 public class Machoke extends PokemonCard implements Evolvable {
     public Machoke() {
@@ -10,7 +13,8 @@ public class Machoke extends PokemonCard implements Evolvable {
                 "Machoke is a Fighting type Pokémon introduced in Generation 1.",
                 10,
                 8,
-                4);
+                4,
+                List.of(PokemonType.FIGHTING));
     }
 
     @Override

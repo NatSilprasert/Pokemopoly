@@ -2,7 +2,10 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Battle;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
+
+import java.util.List;
 
 public class Raticate extends PokemonCard implements BattleAbility {
     public Raticate() {
@@ -11,7 +14,8 @@ public class Raticate extends PokemonCard implements BattleAbility {
                 "Raticate is a Normal type Pokémon introduced in Generation 1.",
                 8,
                 10,
-                4);
+                4,
+                List.of(PokemonType.NORMAL));
     }
 
     @Override

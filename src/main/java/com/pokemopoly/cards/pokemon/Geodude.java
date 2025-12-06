@@ -1,7 +1,10 @@
 package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
+
+import java.util.List;
 
 public class Geodude extends PokemonCard implements Evolvable {
     public Geodude() {
@@ -10,7 +13,8 @@ public class Geodude extends PokemonCard implements Evolvable {
                 "Geodude is a Rock/Ground type Pokémon introduced in Generation 1.",
                 4,
                 4,
-                2);
+                2,
+                List.of(PokemonType.ROCK,PokemonType.GROUND));
     }
     @Override
     public PokemonCard evolve() {

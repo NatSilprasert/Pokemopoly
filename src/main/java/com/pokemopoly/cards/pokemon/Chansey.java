@@ -2,7 +2,10 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
+
+import java.util.List;
 
 public class Chansey extends PokemonCard implements PreRollAbility {
     public Chansey() {
@@ -11,7 +14,8 @@ public class Chansey extends PokemonCard implements PreRollAbility {
                 "Chansey is a Normal type Pokémon introduced in Generation 1.",
                 35,
                 3,
-                6);
+                6,
+                List.of(PokemonType.NORMAL));
     }
 
     @Override

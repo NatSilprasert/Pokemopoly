@@ -2,8 +2,11 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 import com.pokemopoly.player.Player;
+
+import java.util.List;
 
 public class Dugtrio extends PokemonCard implements PreRollAbility {
     public Dugtrio() {
@@ -12,7 +15,8 @@ public class Dugtrio extends PokemonCard implements PreRollAbility {
                 "Dugtrio is a Ground type Pokémon introduced in Generation 1.",
                 10,
                 14,
-                6);
+                6,
+                List.of(PokemonType.GROUND));
     }
 
     @Override

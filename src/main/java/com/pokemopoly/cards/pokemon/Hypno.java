@@ -3,6 +3,7 @@ package com.pokemopoly.cards.pokemon;
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.ItemCard;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 import com.pokemopoly.player.Hand;
 import com.pokemopoly.player.Player;
@@ -16,7 +17,8 @@ public class Hypno extends PokemonCard implements PreRollAbility {
                 "Hypno is a Psychic type Pokémon introduced in Generation 1.",
                 9,
                 14,
-                6);
+                6,
+                List.of(PokemonType.PSYCHIC));
     }
 
     @Override

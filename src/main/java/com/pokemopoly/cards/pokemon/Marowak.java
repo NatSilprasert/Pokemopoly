@@ -1,6 +1,9 @@
 package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
+
+import java.util.List;
 
 public class Marowak extends PokemonCard {
     public Marowak() {
@@ -9,6 +12,7 @@ public class Marowak extends PokemonCard {
                 "Marowak is a Ground type Pokémon introduced in Generation 1.",
                 8,
                 10,
-                5);
+                5,
+                List.of(PokemonType.GROUND));
     }
 }

@@ -2,8 +2,11 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
+
+import java.util.List;
 
 public class Omanyte extends PokemonCard implements Evolvable , PreRollAbility {
     public Omanyte(String id, String name, String description, int hp, int power, int price) {
@@ -12,7 +15,8 @@ public class Omanyte extends PokemonCard implements Evolvable , PreRollAbility {
                 "Omanyte is a Rock/Water type Pokémon introduced in Generation 1.",
                 10,
                 3,
-                4);
+                4,
+                List.of(PokemonType.ROCK,PokemonType.WATER));
     }
 
     @Override

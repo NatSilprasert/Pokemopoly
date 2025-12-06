@@ -1,6 +1,9 @@
 package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
+
+import java.util.List;
 
 public class Exeggutor extends PokemonCard {
     public Exeggutor() {
@@ -9,6 +12,7 @@ public class Exeggutor extends PokemonCard {
                 "Exeggutor is a Grass/Psychic type Pokémon introduced in Generation 1.",
                 11,
                 13,
-                6);
+                6,
+                List.of(PokemonType.GRASS,PokemonType.PSYCHIC));
     }
 }

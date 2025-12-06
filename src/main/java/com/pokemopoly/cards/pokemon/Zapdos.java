@@ -2,7 +2,10 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Battle;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
+
+import java.util.List;
 
 public class Zapdos extends PokemonCard implements BattleAbility {
     public Zapdos() {
@@ -11,7 +14,8 @@ public class Zapdos extends PokemonCard implements BattleAbility {
                 "Zapdos is an Electric/Flying type Pokémon introduced in Generation 1.",
                 19,
                 19,
-                10);
+                10,
+                List.of(PokemonType.ELECTRIC,PokemonType.FLYING));
     }
 
     @Override

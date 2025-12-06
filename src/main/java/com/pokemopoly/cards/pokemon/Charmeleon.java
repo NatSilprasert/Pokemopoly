@@ -1,7 +1,10 @@
 package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
+
+import java.util.List;
 
 public class Charmeleon extends PokemonCard implements Evolvable {
     public Charmeleon() {
@@ -9,7 +12,8 @@ public class Charmeleon extends PokemonCard implements Evolvable {
                 "Charmeleon is a Fire type Pokémon introduced in Generation 1.",
                 11,
                 11,
-                6);
+                6,
+                List.of(PokemonType.FIRE));
     }
 
     @Override

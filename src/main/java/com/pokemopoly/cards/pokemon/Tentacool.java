@@ -2,8 +2,11 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Battle;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
+
+import java.util.List;
 
 public class Tentacool extends PokemonCard implements Evolvable {
     public Tentacool() {
@@ -12,7 +15,8 @@ public class Tentacool extends PokemonCard implements Evolvable {
                 "Tentacool is a Water/Poison type Pokémon introduced in Generation 1.",
                 5,
                 3,
-                2);
+                2,
+                List.of(PokemonType.WATER,PokemonType.POISON));
     }
 
     @Override

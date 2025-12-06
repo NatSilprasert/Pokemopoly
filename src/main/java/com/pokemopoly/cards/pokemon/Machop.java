@@ -1,7 +1,10 @@
 package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
+
+import java.util.List;
 
 public class Machop extends PokemonCard implements Evolvable {
     public Machop() {
@@ -10,7 +13,8 @@ public class Machop extends PokemonCard implements Evolvable {
                 "Machop is a Fighting type Pokémon introduced in Generation 1.",
                 5,
                 4,
-                2);
+                2,
+                List.of(PokemonType.FIGHTING));
     }
 
     @Override

@@ -1,7 +1,10 @@
 package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
+
+import java.util.List;
 
 public class Shellder extends PokemonCard implements Evolvable {
     public Shellder() {
@@ -10,7 +13,8 @@ public class Shellder extends PokemonCard implements Evolvable {
                 "Shellder is a Water type Pokémon introduced in Generation 1.",
                 8,
                 5,
-                4);
+                4,
+                List.of(PokemonType.WATER));
     }
 
     @Override

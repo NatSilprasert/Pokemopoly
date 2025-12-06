@@ -2,6 +2,7 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 import com.pokemopoly.player.Player;
 
@@ -15,7 +16,8 @@ public class Vileplume extends PokemonCard implements PreRollAbility {
                 "Vileplume is a Grass/Poison type Pokémon introduced in Generation 1.",
                 14,
                 8,
-                7);
+                7,
+                List.of(PokemonType.GRASS,PokemonType.POISON));
     }
 
     @Override

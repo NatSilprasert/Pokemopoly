@@ -2,6 +2,7 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 import com.pokemopoly.player.Player;
 
@@ -16,7 +17,8 @@ public class Parasect extends PokemonCard implements PreRollAbility {
                 "Parasect is a Bug/Grass type Pokémon introduced in Generation 1.",
                 10,
                 8,
-                4);
+                4,
+                List.of(PokemonType.BUG,PokemonType.GRASS));
     }
 
     @Override

@@ -2,8 +2,11 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 import com.pokemopoly.player.Player;
+
+import java.util.List;
 
 public class Pidgeot extends PokemonCard implements PreRollAbility {
 
@@ -13,7 +16,8 @@ public class Pidgeot extends PokemonCard implements PreRollAbility {
                 "Pidgeot is a Normal/Flying type Pokémon introduced in Generation 1.",
                 14,
                 14,
-                8);
+                8,
+                List.of(PokemonType.NORMAL,PokemonType.FLYING));
     } //Edit 10/29/68
 
     @Override

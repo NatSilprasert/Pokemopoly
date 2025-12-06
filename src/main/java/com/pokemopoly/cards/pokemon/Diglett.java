@@ -1,9 +1,12 @@
 package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.CaptureAbility;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
 import com.pokemopoly.player.Player;
+
+import java.util.List;
 
 public class Diglett extends PokemonCard implements Evolvable , CaptureAbility {
     public Diglett() {
@@ -12,7 +15,8 @@ public class Diglett extends PokemonCard implements Evolvable , CaptureAbility {
                 "Diglett is a Ground type Pokémon introduced in Generation 1.",
                 5,
                 4,
-                2);
+                2,
+                List.of(PokemonType.GROUND));
     }
 
     @Override

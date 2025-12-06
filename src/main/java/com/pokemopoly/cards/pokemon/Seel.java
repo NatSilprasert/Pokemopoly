@@ -1,7 +1,10 @@
 package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
+
+import java.util.List;
 
 public class Seel extends PokemonCard implements Evolvable {
     public Seel() {
@@ -10,7 +13,8 @@ public class Seel extends PokemonCard implements Evolvable {
                 "Seel is a Water type Pokémon introduced in Generation 1.",
                 6,
                 5,
-                4);
+                4,
+                List.of(PokemonType.WATER));
     }
 
     @Override

@@ -2,7 +2,10 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Battle;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
+
+import java.util.List;
 
 public class Moltres extends PokemonCard implements BattleAbility {
 
@@ -12,7 +15,8 @@ public class Moltres extends PokemonCard implements BattleAbility {
                 "Moltres is a Fire/Flying type Pokémon introduced in Generation 1.",
                 20,
                 18,
-                10);
+                10,
+                List.of(PokemonType.FIRE,PokemonType.FLYING));
     }
 
     @Override

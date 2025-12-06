@@ -1,6 +1,9 @@
 package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
+
+import java.util.List;
 
 public class Seaking extends PokemonCard {
     public Seaking() {
@@ -9,6 +12,7 @@ public class Seaking extends PokemonCard {
                 "Seaking is a Water type Pokémon introduced in Generation 1.",
                 11,
                 10,
-                5);
+                5,
+                List.of(PokemonType.WATER));
     }
 }

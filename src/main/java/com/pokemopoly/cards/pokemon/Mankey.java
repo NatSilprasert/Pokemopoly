@@ -2,6 +2,7 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 import com.pokemopoly.player.Player;
@@ -15,7 +16,8 @@ public class Mankey extends PokemonCard implements Evolvable {
                 "Mankey is a Fighting type Pokémon introduced in Generation 1.",
                 5,
                 4,
-                2);
+                2,
+                List.of(PokemonType.FIGHTING));
     }
 
     @Override

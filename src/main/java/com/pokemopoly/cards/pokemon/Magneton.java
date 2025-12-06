@@ -3,6 +3,7 @@ package com.pokemopoly.cards.pokemon;
 import com.pokemopoly.Battle;
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 import com.pokemopoly.player.Player;
@@ -14,10 +15,11 @@ public class Magneton extends PokemonCard implements PreRollAbility {
     public Magneton() {
         super("P082",
                 "Magneton",
-                "Magneton is an Electric/Steel type Pokémon introduced in Generation 1.",
+                "Magneton is an Electric type Pokémon introduced in Generation 1.",
                 10,
                 10,
-                6);
+                6,
+                List.of(PokemonType.ELECTRIC));
     }
 
     @Override

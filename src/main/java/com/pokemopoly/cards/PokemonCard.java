@@ -2,22 +2,26 @@ package com.pokemopoly.cards;
 
 import com.pokemopoly.player.Player;
 
+import java.util.List;
+
 public abstract class PokemonCard implements Card {
     private final String id;
     private final String name;
     private final String description;
+    private final List<PokemonType> types;
+    private Player owner;
+
     private final int maxHp;
     private final int maxPower;
     private final int price;
     private int hp;
     private int power;
-    private boolean isAlive = true;
-    private Player owner;
+
     private boolean burned = false;
-    private boolean paralyzed = false; //Edited 10/29/68
+    private boolean paralyzed = false;
+    private boolean isAlive = true;
 
-
-    public PokemonCard(String id, String name, String description, int hp, int power, int price) {
+    public PokemonCard(String id, String name, String description, int hp, int power, int price, List<PokemonType> types) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -26,6 +30,7 @@ public abstract class PokemonCard implements Card {
         this.power = power;
         this.maxPower = power;
         this.price = price;
+        this.types = types;
     }
 
     public String getName() {
@@ -34,6 +39,10 @@ public abstract class PokemonCard implements Card {
 
     public String getDescription() {
         return description;
+    }
+
+    public List<PokemonType> getTypes() {
+        return types;
     }
 
     public int getHp() {
@@ -90,7 +99,7 @@ public abstract class PokemonCard implements Card {
             this.isAlive = false;
             System.out.println(name + " has fainted!");
         }
-    } //Edit 10/23/68
+    }
 
     public boolean isParalyzed() {
         return paralyzed;
@@ -103,5 +112,5 @@ public abstract class PokemonCard implements Card {
         } else {
             System.out.println(name + " is no longer paralyzed.");
         }
-    } //Edited 10/29/68
+    }
 }

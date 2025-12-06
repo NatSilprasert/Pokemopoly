@@ -2,7 +2,10 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Battle;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
+
+import java.util.List;
 
 public class Primeape extends PokemonCard {
     public Primeape() {
@@ -11,6 +14,7 @@ public class Primeape extends PokemonCard {
                 "Primeape is a Fighting type Pokémon introduced in Generation 1.",
                 9,
                 9,
-                4);
+                4,
+                List.of(PokemonType.FIGHTING));
     }
 }
