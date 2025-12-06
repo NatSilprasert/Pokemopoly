@@ -1,7 +1,10 @@
 package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
+
+import java.util.List;
 
 public class Bulbasaur extends PokemonCard implements Evolvable {
 
@@ -12,7 +15,8 @@ public class Bulbasaur extends PokemonCard implements Evolvable {
                 "Bulbasaur is a Grass/Poison type Pokémon introduced in Generation 1.",
                 8,
                 5,
-                3
+                3,
+                List.of(PokemonType.GRASS,PokemonType.POISON)
         );
     }
 

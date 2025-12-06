@@ -2,7 +2,10 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Battle;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
+
+import java.util.List;
 
 public class Arcanine extends PokemonCard implements BattleAbility {
     public Arcanine() {
@@ -11,7 +14,8 @@ public class Arcanine extends PokemonCard implements BattleAbility {
                 "Arcanine is a Fire type Pokémon introduced in Generation 1.",
                 14,
                 15,
-                8);
+                8,
+                List.of(PokemonType.FIRE));
     }
 
     @Override

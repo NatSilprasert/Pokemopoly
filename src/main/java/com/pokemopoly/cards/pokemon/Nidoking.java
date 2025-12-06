@@ -1,6 +1,9 @@
 package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
+
+import java.util.List;
 
 public class Nidoking extends PokemonCard {
     public Nidoking() {
@@ -9,7 +12,8 @@ public class Nidoking extends PokemonCard {
                 "Nidoking is a Poison/Ground type Pokémon introduced in Generation 1.",
                 12,
                 11,
-                6);
+                6,
+                List.of(PokemonType.POISON,PokemonType.GROUND));
     }
     //Create 10/29/68
 }

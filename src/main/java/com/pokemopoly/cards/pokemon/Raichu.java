@@ -2,6 +2,7 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 import com.pokemopoly.player.Player;
 
@@ -15,7 +16,8 @@ public class Raichu extends PokemonCard implements PreRollAbility {
                 "Raichu is an Electric type Pokémon introduced in Generation 1.",
                 12,
                 12,
-                6);
+                6,
+                List.of(PokemonType.ELECTRIC));
     }
 
     @Override

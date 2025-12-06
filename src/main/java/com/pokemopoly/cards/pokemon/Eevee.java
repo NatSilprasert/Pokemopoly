@@ -1,8 +1,10 @@
 package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
 
+import java.util.List;
 import java.util.Random;
 
 public class Eevee extends PokemonCard implements Evolvable {
@@ -12,7 +14,8 @@ public class Eevee extends PokemonCard implements Evolvable {
                 "Eevee is a Normal type Pokémon introduced in Generation 1.",
                 4,
                 4,
-                3);
+                3,
+                List.of(PokemonType.NORMAL));
     }
 
     @Override

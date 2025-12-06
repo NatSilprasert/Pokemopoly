@@ -2,6 +2,7 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 import com.pokemopoly.player.Player;
@@ -14,10 +15,11 @@ public class Jigglypuff extends PokemonCard implements Evolvable , PreRollAbilit
     public Jigglypuff() {
         super("P039",
                 "Jigglypuff",
-                "Jigglypuff is a Normal/Fairy type Pokémon introduced in Generation 1.",
+                "Jigglypuff is a Normal type Pokémon introduced in Generation 1.",
                 5,
                 3,
-                2);
+                2,
+                List.of(PokemonType.NORMAL));
     }
 
     @Override

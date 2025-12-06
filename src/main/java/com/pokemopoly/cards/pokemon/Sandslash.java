@@ -1,6 +1,9 @@
 package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
+
+import java.util.List;
 
 public class Sandslash extends PokemonCard {
     public Sandslash() {
@@ -9,7 +12,8 @@ public class Sandslash extends PokemonCard {
                 "Sandslash is a Ground type Pokémon introduced in Generation 1.",
                 10,
                 7,
-                5);
+                5,
+                List.of(PokemonType.GROUND));
     }
     //Create 10/29/68
 }

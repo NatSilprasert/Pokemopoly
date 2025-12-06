@@ -2,8 +2,10 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Venusaur extends PokemonCard implements PreRollAbility {
@@ -14,8 +16,8 @@ public class Venusaur extends PokemonCard implements PreRollAbility {
                 "Venusaur is a Grass/Poison type Pokémon introduced in Generation 1.",
                 16,
                 15,
-                8
-        );
+                8,
+                List.of(PokemonType.GRASS,PokemonType.POISON));
     }
 
     @Override

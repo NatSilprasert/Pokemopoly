@@ -1,7 +1,10 @@
 package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
+
+import java.util.List;
 
 public class Paras extends PokemonCard implements Evolvable {
     public Paras() {
@@ -10,7 +13,8 @@ public class Paras extends PokemonCard implements Evolvable {
                 "Paras is a Bug/Grass type Pokémon introduced in Generation 1.",
                 4,
                 2,
-                2);
+                2,
+                List.of(PokemonType.BUG,PokemonType.GRASS));
     }
 
     @Override

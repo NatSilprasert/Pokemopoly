@@ -3,6 +3,7 @@ package com.pokemopoly.cards.pokemon;
 import com.pokemopoly.Game;
 import com.pokemopoly.board.Board;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 import com.pokemopoly.player.Player;
 
@@ -16,7 +17,9 @@ public class Golduck extends PokemonCard implements PreRollAbility {
                 "Golduck is a Water type Pokémon introduced in Generation 1.",
                 11,
                 12,
-                6);
+                6,
+                List.of(PokemonType.WATER));
+
     }
 
     @Override

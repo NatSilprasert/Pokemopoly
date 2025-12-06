@@ -2,8 +2,11 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Battle;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
+
+import java.util.List;
 
 public class Kakuna extends PokemonCard implements Evolvable, BattleAbility {
     public Kakuna() {
@@ -12,7 +15,8 @@ public class Kakuna extends PokemonCard implements Evolvable, BattleAbility {
                 "Kakuna is a Bug/Poison type Pokémon introduced in Generation 1.",
                 10,
                 2,
-                2);
+                2,
+                List.of(PokemonType.BUG,PokemonType.POISON));
     }
 
     @Override

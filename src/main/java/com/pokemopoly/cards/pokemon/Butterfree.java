@@ -2,6 +2,7 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 import com.pokemopoly.player.Player;
 
@@ -16,8 +17,8 @@ public class Butterfree extends PokemonCard implements PreRollAbility {
                 "Butterfree is a Bug/Flying type Pokémon introduced in Generation 1.",
                 12,
                 7,
-                6
-        );
+                6,
+                List.of(PokemonType.BUG,PokemonType.FLYING));
     }
 
     @Override

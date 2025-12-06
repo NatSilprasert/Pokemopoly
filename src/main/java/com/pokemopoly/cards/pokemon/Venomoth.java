@@ -1,6 +1,9 @@
 package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
+
+import java.util.List;
 
 public class Venomoth extends PokemonCard {
     public Venomoth() {
@@ -9,7 +12,8 @@ public class Venomoth extends PokemonCard {
                 "Venomoth is a Bug/Poison type Pokémon introduced in Generation 1.",
                 11,
                 7,
-                4);
+                4,
+                List.of(PokemonType.BUG,PokemonType.POISON));
     }
     //Create 11/2/68
 }

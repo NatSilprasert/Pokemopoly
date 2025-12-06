@@ -2,7 +2,10 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Battle;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
+
+import java.util.List;
 
 public class Ditto extends PokemonCard implements BattleAbility {
 
@@ -12,7 +15,8 @@ public class Ditto extends PokemonCard implements BattleAbility {
                 "Ditto is a Normal type Pokémon introduced in Generation 1.",
                 1,
                 1,
-                3);
+                3,
+                List.of(PokemonType.NORMAL));
     }
 
     @Override

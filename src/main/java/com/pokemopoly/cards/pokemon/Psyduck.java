@@ -2,6 +2,7 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 import com.pokemopoly.player.Hand;
@@ -17,7 +18,8 @@ public class Psyduck extends PokemonCard implements Evolvable , PreRollAbility {
                 "Psyduck is a Water type Pokémon introduced in Generation 1.",
                 6,
                 3,
-                2);
+                2,
+                List.of(PokemonType.WATER));
     }
 
     @Override

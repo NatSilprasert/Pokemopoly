@@ -1,6 +1,9 @@
 package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
+
+import java.util.List;
 
 public class Beedrill extends PokemonCard {
     public Beedrill() {
@@ -9,7 +12,8 @@ public class Beedrill extends PokemonCard {
                 "Beedrill is a Bug/Flying type Pokémon introduced in Generation 1.",
                 11,
                 10,
-                6);
+                6,
+                List.of(PokemonType.BUG,PokemonType.FLYING));
     }
     //Create 10/23/68
 }

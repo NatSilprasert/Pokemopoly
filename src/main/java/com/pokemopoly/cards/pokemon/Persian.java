@@ -2,7 +2,10 @@ package com.pokemopoly.cards.pokemon;
 
 import com.pokemopoly.Battle;
 import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
+
+import java.util.List;
 
 public class Persian extends PokemonCard implements BattleAbility {
     public Persian() {
@@ -11,7 +14,8 @@ public class Persian extends PokemonCard implements BattleAbility {
                 "Persian is a Normal type Pokémon introduced in Generation 1.",
                 11,
                 13,
-                6);
+                6,
+                List.of(PokemonType.NORMAL));
     }
 
     @Override
