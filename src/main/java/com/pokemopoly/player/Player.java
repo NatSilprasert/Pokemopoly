@@ -25,6 +25,8 @@ public class Player {
     private boolean badge2 = false;
     private boolean skipTurn = false;
     private int lastRoll = 0;
+    private boolean magicGuardActive = false;
+    private boolean canManipulateDice = false;
 
     public Player(String name, ProfessionType profession) {
         setName(name);
@@ -171,5 +173,22 @@ public class Player {
     public void setLastRoll(int lastRoll) {
         this.lastRoll = lastRoll;
     }
+
+    public boolean isMagicGuardActive() {
+        return magicGuardActive;
+    }
+
+    public void setMagicGuardActive(boolean magicGuardActive) {
+        this.magicGuardActive = magicGuardActive;
+    }
+
+    public boolean canManipulateDice() {
+        return canManipulateDice;
+    }
+
+    public void setCanManipulateDice(boolean canManipulateDice) {
+        this.canManipulateDice = canManipulateDice;
+    }
+
     // Edited 11/2/68
 }

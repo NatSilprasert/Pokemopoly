@@ -1,0 +1,39 @@
+package com.pokemopoly.cards.pokemon;
+
+import com.pokemopoly.Battle;
+import com.pokemopoly.cards.PokemonCard;
+import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
+
+public class Mr_Mime extends PokemonCard implements BattleAbility {
+
+    public Mr_Mime() {
+        super("P122",
+                "Mr. Mime",
+                "Mr. Mime is a Psychic/Fairy type Pokémon introduced in Generation 1.",
+                8,
+                9,
+                4);
+    }
+
+    @Override
+    public void useBattlePassive(Battle battle) {
+        // Mimic : Copy opponent's attack power if it's higher
+        PokemonCard opponent = battle.getOpponentPokemon(this);
+
+        if (opponent == null) return;
+
+        int myPower = this.getPower();
+        int opponentPower = opponent.getPower();
+
+        if (opponentPower > myPower) {
+            System.out.println("✨ Mr. Mime uses Mimic! Copying opponent's attack power ("
+                    + opponentPower + ")!");
+
+            // เก็บค่าพลังเดิมก่อนแก้ไข
+            battle.addTemporaryPowerAdjustment(this, myPower);
+
+            // ก็อปพลังโจมตี
+            this.setPower(opponentPower);
+        }
+    }
+}

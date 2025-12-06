@@ -38,4 +38,13 @@ public class Deck<T extends Card> {
     public int size() {
         return cards.size();
     }
+
+    public T peek(int index) {
+        if (index < 0 || index >= cards.size()) return null;
+        return cards.get(index);
+    }
+
+    public boolean remove(T card) {
+        return cards.remove(card);
+    }
 }

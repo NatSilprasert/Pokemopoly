@@ -16,8 +16,9 @@ public class Arbok extends PokemonCard implements BattleAbility {
 
     @Override
     public void useBattlePassive(Battle battle) {
-        //Waiting Battle Class
-        //Unnerve
+        // Unnerve Ability: No one can use any Item cards this battle
+        System.out.println("🐍 Arbok used **Unnerve**! Items cannot be used in this battle!");
+        battle.disableItemsForThisBattle();
     }
     //Create 10/29/68
 }

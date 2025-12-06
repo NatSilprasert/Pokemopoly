@@ -17,8 +17,15 @@ public class Sandshrew extends PokemonCard implements Evolvable , BattleAbility 
 
     @Override
     public void useBattlePassive(Battle battle) {
-        //Waiting Battle Class
-        //Sand Attack
+        PokemonCard enemy = battle.getOpponentPokemon(this);
+        if (enemy == null) return;
+        if (battle.hasClearBody(enemy)) {
+            System.out.println("❌ Clear Body prevented the power reduction on " + enemy.getName());
+            return; // ห้ามลด
+        }
+
+        System.out.println("🟫 Sandshrew used Sand Attack! Opponent has 20% chance to miss.");
+        battle.setSandAttackActive(true);
     }
 
     @Override

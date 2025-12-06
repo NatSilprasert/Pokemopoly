@@ -3,7 +3,8 @@ package com.pokemopoly.cards.pokemon;
 import com.pokemopoly.cards.PokemonCard;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
 
-public class NidoranFemale extends PokemonCard implements Evolvable {
+public class
+NidoranFemale extends PokemonCard implements Evolvable {
     public NidoranFemale() {
         super("P029",
                 "Nidoran♀",
