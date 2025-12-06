@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class Pokedex extends ItemCard {
     public Pokedex() {
-        super("Ixxx", "Pokedex", "Look at all item cards in another player's hand.");
+        super("I030", "Pokedex", "Look at all item cards in another player's hand.");
     }
 
     @Override

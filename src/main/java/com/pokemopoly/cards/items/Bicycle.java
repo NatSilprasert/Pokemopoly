@@ -8,7 +8,7 @@ public class Bicycle extends ItemCard {
 
     public Bicycle() {
         super("I022", "Bicycle",
-                "Move forward 6 tiles. You cannot roll dice or catch Pokémon this turn.");
+                "Roll Twice.");
     }
 
     @Override
