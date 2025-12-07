@@ -16,6 +16,7 @@ public class Player {
     private ProfessionType profession;
     private final Hand hand;
     private List<PokemonCard> team;
+    private boolean doNothing = false;
 
     private final int MAX_POKEMON = 6;
     private int position = 0;
@@ -186,6 +187,14 @@ public class Player {
 
     public void setLastRoll(int lastRoll) {
         this.lastRoll = lastRoll;
+    }
+
+    public boolean isDoNothing() {
+        return doNothing;
+    }
+
+    public void setDoNothing(boolean doNothing) {
+        this.doNothing = doNothing;
     }
     // Edited 11/2/68
 }
