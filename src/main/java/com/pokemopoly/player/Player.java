@@ -5,6 +5,7 @@ import com.pokemopoly.cards.ItemCard;
 import com.pokemopoly.cards.PokemonCard;
 import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.pokemon.Ditto;
+import com.pokemopoly.cards.pokemon.Magikarp;
 import com.pokemopoly.cards.pokemon.Pikachu;
 import com.pokemopoly.cards.pokemon.Rattata;
 
