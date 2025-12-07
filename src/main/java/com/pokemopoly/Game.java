@@ -6,8 +6,6 @@ import com.pokemopoly.board.Tile;
 import com.pokemopoly.board.tile.*;
 import com.pokemopoly.cards.*;
 import com.pokemopoly.cards.items.Revive;
-import com.pokemopoly.cards.pokemon.Ryu;
-import com.pokemopoly.cards.pokemon.Ryu2;
 import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 import com.pokemopoly.player.Hand;
 import com.pokemopoly.player.Player;
@@ -238,9 +236,6 @@ public class Game {
         questDeck.addCard(new QuestCard("Q001", "Catch 3 Pokémon", "Do it"));
 
         Deck<PokemonCard> bluePokemonDeck = new Deck<>();
-        bluePokemonDeck.addCard(new Ryu());
-        bluePokemonDeck.addCard(new Ryu2());
-
         Deck<PokemonCard> greenPokemonDeck = new Deck<>();
         Deck<PokemonCard> purplePokemonDeck = new Deck<>();
         Deck<PokemonCard> redPokemonDeck = new Deck<>();
@@ -288,6 +283,6 @@ public class Game {
     }
 
     public Board getBoard() {
-        return board; //Edit 10/24/68
+        return board;
     }
 }

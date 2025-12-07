@@ -41,8 +41,5 @@ public class Magikarp extends PokemonCard implements Evolvable , PreRollAbility 
 
         // Move player on board
         board.movePlayer(owner, 1, game);
-
-        // Update position on Player
-        owner.move(1);
     }
 }
