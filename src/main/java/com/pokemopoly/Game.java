@@ -147,8 +147,7 @@ public class Game {
                             System.out.println("Invalid selection. Please try again!");
                         }
                     }
-                }
-                else if (choice == 2) {
+                } else if (choice == 2) {
                     System.out.println("You discarded the new item card: " + itemCard.getName());
                     deckManager.getItemDeck().discard(itemCard);
                 }
@@ -168,10 +167,9 @@ public class Game {
             int choice = scanner.nextInt();
             scanner.nextLine(); // consume newline
 
-            if  (choice == 1) {
+            if (choice == 1) {
                 // todo
-            }
-            else if (choice == 2) {
+            } else if (choice == 2) {
                 // Example: choose a Pokémon with a PreRollAbility
                 // (You may later add a proper selection system)
                 for (PokemonCard p : currentPlayer.getTeam()) {
@@ -180,11 +178,9 @@ public class Game {
                         break;
                     }
                 }
-            }
-            else if (choice == 3) {
+            } else if (choice == 3) {
                 // todo
-            }
-            else if (choice == 4) {
+            } else if (choice == 4) {
                 System.out.println(currentPlayer.getName() + " not use ability.");
             }
 
@@ -196,7 +192,8 @@ public class Game {
 
                 checkAdditionalConditions(currentPlayer, n);
 
-            board.movePlayer(currentPlayer, n, this);
+                board.movePlayer(currentPlayer, n, this);
+            }
 
             currentPlayer.setDoNothing(false);
             turn++;
@@ -214,11 +211,6 @@ public class Game {
         if (currentPlayer.getPosition() + n >= 40) {
             StartTile startTile = (StartTile) board.getTileAt(0);
             startTile.walkPass(currentPlayer, this);
-        }
-
-        // Check if FISHER make a full lap
-        if (currentPlayer.getProfession() == ProfessionType.FISHER && currentPlayer.getPosition() + n >= 40) {
-            // todo evo water pokemon
         }
     }
 

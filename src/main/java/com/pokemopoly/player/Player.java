@@ -197,5 +197,4 @@ public class Player {
     public void setDoNothing(boolean doNothing) {
         this.doNothing = doNothing;
     }
-    // Edited 11/2/68
 }
