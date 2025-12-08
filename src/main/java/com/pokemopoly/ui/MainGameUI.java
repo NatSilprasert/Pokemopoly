@@ -4,6 +4,9 @@ import com.pokemopoly.Game;
 import com.pokemopoly.board.Board;
 import com.pokemopoly.player.Player;
 import com.pokemopoly.player.ProfessionType;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +38,61 @@ public class MainGameUI {
             Color.RED, Color.DODGERBLUE, Color.GOLD, Color.LIMEGREEN
     };
 
-    // ตำแหน่ง Start บน board
-    private final double startX = 615;   // ปรับทีหลัง
-    private final double startY = 515;   // ปรับทีหลัง
-
     // เก็บ ImageView ของผู้เล่น
     private final List<ImageView> playerIcons = new ArrayList<>();
+
+    // Tile Position
+    private final double[][] boardPositions = new double[40][2];
+
+    private void initBoardPositions() {
+        // bottom row (0 → 9)
+        boardPositions[0] = new double[]{615, 515};  // Start
+        boardPositions[1] = new double[]{562, 515};
+        boardPositions[2] = new double[]{518, 515};
+        boardPositions[3] = new double[]{475, 515};
+        boardPositions[4] = new double[]{431, 515};
+        boardPositions[5] = new double[]{387, 515};
+        boardPositions[6] = new double[]{342, 515};
+        boardPositions[7] = new double[]{299, 515};
+        boardPositions[8] = new double[]{253, 515};
+        boardPositions[9] = new double[]{211, 515};
+
+        // left column (10 → 19)
+        boardPositions[10] = new double[]{156, 515};
+        boardPositions[11] = new double[]{156, 460};
+        boardPositions[12] = new double[]{156, 418};
+        boardPositions[13] = new double[]{156, 373};
+        boardPositions[14] = new double[]{156, 330};
+        boardPositions[15] = new double[]{156, 286};
+        boardPositions[16] = new double[]{156, 242};
+        boardPositions[17] = new double[]{156, 197};
+        boardPositions[18] = new double[]{156, 154};
+        boardPositions[19] = new double[]{156, 110};
+
+        // top row (20 → 29)
+        boardPositions[20] = new double[]{156, 52};
+        boardPositions[21] = new double[]{211, 52};
+        boardPositions[22] = new double[]{253, 52};
+        boardPositions[23] = new double[]{299, 52};
+        boardPositions[24] = new double[]{342, 52};
+        boardPositions[25] = new double[]{387, 52};
+        boardPositions[26] = new double[]{431, 52};
+        boardPositions[27] = new double[]{475, 52};
+        boardPositions[28] = new double[]{518, 52};
+        boardPositions[29] = new double[]{562, 52};
+
+        // right column (30 → 39)
+        boardPositions[30] = new double[]{615, 52};
+        boardPositions[31] = new double[]{615, 110};
+        boardPositions[32] = new double[]{615, 154};
+        boardPositions[33] = new double[]{615, 197};
+        boardPositions[34] = new double[]{615, 242};
+        boardPositions[35] = new double[]{615, 286};
+        boardPositions[36] = new double[]{615, 330};
+        boardPositions[37] = new double[]{615, 373};
+        boardPositions[38] = new double[]{615, 418};
+        boardPositions[39] = new double[]{615, 460};
+    }
 
     private void startGame() {
         Player first = game.getCurrentPlayer();
@@ -49,6 +102,7 @@ public class MainGameUI {
     public MainGameUI(Game game, Stage stage) {
         this.game = game;
         this.stage = stage;
+        initBoardPositions();
 
         /* =======================
          *  โหลดรูปกระดาน
@@ -124,6 +178,9 @@ public class MainGameUI {
                             "-fx-border-radius: 3;" +
                             "-fx-background-radius: 3;"
             );
+
+            double startX = boardPositions[0][0];
+            double startY = boardPositions[0][1];
 
             // ซ้อนกันในแนวตั้ง (player 1 อยู่บนสุด)
             iconWrapper.setLayoutX(startX);
@@ -241,20 +298,58 @@ public class MainGameUI {
 
             // Logic game
             Player currentPlayer = game.getCurrentPlayer();
-            Board board = game.getBoard();
+//            Board board = game.getBoard();
+//
+//            if (!currentPlayer.isDoNothing()) {
+//                currentPlayer.setLastRoll(n);
+//                game.checkAdditionalConditions(currentPlayer, n);
+//                board.movePlayer(currentPlayer, n, game);
+//            }
+//
+//            currentPlayer.setDoNothing(false);
+//            game.setTurn(game.getTurn() + 1);
 
-            if (!currentPlayer.isDoNothing()) {
-                currentPlayer.setLastRoll(n);
-                game.checkAdditionalConditions(currentPlayer, n);
-                board.movePlayer(currentPlayer, n, game);
+            try {
+                movePlayerIcon(currentPlayer, 22);
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-
-            currentPlayer.setDoNothing(false);
-            game.setTurn(game.getTurn() + 1);
         });
 
         // แสดง overlay ลูกเต๋า
         root.getChildren().add(diceUIHolder[0].getView());
         StackPane.setAlignment(diceUIHolder[0].getView(), Pos.CENTER);
+    }
+
+    public void movePlayerIcon(Player p, int tileIndex) {
+        int idx = game.getPlayers().indexOf(p);
+        StackPane wrapper = (StackPane) playerLayer.getChildren().get(idx);
+
+        double targetX = boardPositions[tileIndex][0];
+        double targetY = boardPositions[tileIndex][1];
+
+        double startX = wrapper.getLayoutX();
+        double startY = wrapper.getLayoutY();
+
+        // ทำ animation 300ms
+        Duration duration = Duration.millis(300);
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(wrapper.layoutXProperty(), startX),
+                        new KeyValue(wrapper.layoutYProperty(), startY)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(wrapper.layoutXProperty(), targetX),
+                        new KeyValue(wrapper.layoutYProperty(), targetY)
+                )
+        );
+
+        timeline.setCycleCount(1);
+        timeline.play();
+
+        timeline.setOnFinished(e -> {
+            System.out.println("Moved to: " + wrapper.getLayoutX() + ", " + wrapper.getLayoutY());
+        });
     }
 }

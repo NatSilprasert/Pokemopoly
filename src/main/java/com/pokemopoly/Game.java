@@ -71,6 +71,8 @@ public class Game {
 
         this.board = new Board(tiles);
         this.players = new ArrayList<>();
+
+        setUpDeckManager();
     }
 
     public int rollDice() {
