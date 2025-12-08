@@ -25,8 +25,10 @@ public class PlayerSetupUI {
     private int currentIndex = 1;
 
     private ProfessionType selectedProfession = null;
+    private boolean hasName = false;
 
     // UI Components
+    private final java.util.List<VBox> professionCards = new java.util.ArrayList<>();
     private final Label stepLabel;
     private final TextField nameField;
     private final Button confirmButton;
@@ -44,6 +46,26 @@ public class PlayerSetupUI {
         nameField.setPromptText("Enter name...");
         nameField.setMaxWidth(250);
 
+        nameField.textProperty().addListener((obs, oldVal, newVal) -> {
+            hasName = !newVal.trim().isEmpty();
+
+            // เปิดหรือปิดการเลือกอาชีพ
+            for (VBox card : professionCards) {
+                card.setDisable(!hasName);
+                card.setOpacity(hasName ? 1.0 : 0.4);
+            }
+
+            // ถ้าลบชื่อจนว่าง ต้องล้างการเลือก profession
+            if (!hasName) {
+                selectedProfession = null;
+                for (VBox card : professionCards) {
+                    card.setStyle("-fx-border-color: black; -fx-border-width: 2;");
+                }
+            }
+
+            validateForm();
+        });
+
         HBox professionRow = createProfessionSelector();
 
         confirmButton = new Button("Confirm");
@@ -53,9 +75,9 @@ public class PlayerSetupUI {
 
         VBox root = new VBox(30, stepLabel, nameField, professionRow, confirmButton);
         root.setAlignment(Pos.CENTER);
-        root.setPadding(new Insets(200));
+        root.setPadding(new Insets(0));
 
-        scene = new Scene(root, 1024, 1024);
+        scene = new Scene(root, 800, 600);
         scene.getStylesheets().add(
                 getClass().getResource("/global.css").toExternalForm()
         );
@@ -71,15 +93,15 @@ public class PlayerSetupUI {
         ImageView img = new ImageView(
                 new Image(getClass().getResourceAsStream(imgPath))
         );
-        img.setFitWidth(160);
-        img.setFitHeight(160);
+        img.setFitWidth(120);
+        img.setFitHeight(120);
 
         Label name = new Label(type.toString());
         name.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
         Label ability = new Label(abilityText);
         ability.setWrapText(true);
-        ability.setMaxWidth(140);
+        ability.setMaxWidth(160);
         ability.setStyle("-fx-font-size: 14px;");
 
         VBox card = new VBox(10, img, name, ability);
@@ -90,8 +112,15 @@ public class PlayerSetupUI {
                         "-fx-background-radius: 10;"
         );
 
-        card.setOnMouseClicked(e -> selectProfession(type, card));
+        card.setDisable(true);
 
+        card.setOnMouseClicked(e -> {
+            if (!card.isDisable()) {
+                selectProfession(type, card);
+            }
+        });
+
+        professionCards.add(card);
         return card;
     }
 
@@ -158,8 +187,7 @@ public class PlayerSetupUI {
             currentIndex++;
             resetForm();
         } else {
-            // ไปหน้าเกมจริง
-            // stage.setScene(new MainGameUI(game, stage).getScene());
+            stage.setScene(new MainGameUI(game, stage).getScene());
         }
     }
 
@@ -175,6 +203,11 @@ public class PlayerSetupUI {
 
         for (javafx.scene.Node n : row.getChildren()) {
             n.setStyle("-fx-border-color: black; -fx-border-width: 2;");
+        }
+
+        for (VBox card : professionCards) {
+            card.setDisable(true);
+            card.setOpacity(0.4);
         }
     }
 }

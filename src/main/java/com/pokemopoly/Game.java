@@ -119,7 +119,7 @@ public class Game {
 
             int choice = scanner.nextInt();
             scanner.nextLine(); // consume newline
-            
+
             if (choice == 1) {
                 if (!currentPlayer.getTeam().isEmpty()) {
                     boolean check = false;
@@ -183,7 +183,7 @@ public class Game {
         }
     }
 
-    private void checkAdditionalConditions(Player currentPlayer, int n) {
+    public void checkAdditionalConditions(Player currentPlayer, int n) {
         // Check if walk pass daycare
         if (currentPlayer.getPosition() < 18 && currentPlayer.getPosition() + n >= 18) {
             DaycareTile daycareTile = (DaycareTile) board.getTileAt(18);
@@ -432,6 +432,14 @@ public class Game {
             players.add(new Player(name, type));
         }
 
+    }
+
+    public int getTurn() {
+        return turn;
+    }
+
+    public void setTurn(int turn) {
+        this.turn = turn;
     }
 
     public List<Player> getPlayers() {

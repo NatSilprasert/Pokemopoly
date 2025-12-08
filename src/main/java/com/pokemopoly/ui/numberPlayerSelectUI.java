@@ -46,7 +46,7 @@ public class NumberPlayerSelectUI {
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(40));
 
-        scene = new Scene(root, 1024, 1024);
+        scene = new Scene(root, 800, 600);
         scene.getStylesheets().add(
                 getClass().getResource("/global.css").toExternalForm()
         );
