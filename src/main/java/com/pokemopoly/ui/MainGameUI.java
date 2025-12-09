@@ -29,16 +29,15 @@ public class MainGameUI {
     private final Stage stage;
     private final Scene scene;
 
-    // ชั้น UI สำหรับ player icons
+    // Player icons layer
     private StackPane root;
     private Pane playerLayer = new Pane();
 
-    // สีกรอบผู้เล่น
+    // Border color
     private final Color[] playerColors = {
             Color.RED, Color.DODGERBLUE, Color.GOLD, Color.LIMEGREEN
     };
-
-    // เก็บ ImageView ของผู้เล่น
+    // Player Icon
     private final List<ImageView> playerIcons = new ArrayList<>();
 
     // Tile Position
@@ -102,11 +101,7 @@ public class MainGameUI {
     public MainGameUI(Game game, Stage stage) {
         this.game = game;
         this.stage = stage;
-        initBoardPositions();
 
-        /* =======================
-         *  โหลดรูปกระดาน
-         * ======================= */
         Image boardImage = new Image(
                 getClass().getResource("/main_board.png").toExternalForm()
         );
@@ -119,28 +114,22 @@ public class MainGameUI {
         StackPane boardLayer = new StackPane(boardView);
         boardLayer.setAlignment(Pos.CENTER);
 
-
-        /* =======================
-         *  Player icons
-         * ======================= */
+        // Setup basic requirement
+        initBoardPositions();
         initPlayerIcons();
 
-
-        /* =======================
-         *  Overlay: Turn UI
-         * ======================= */
+        // create overlay
         VBox turnOverlay = createTurnOverlay();
-        turnOverlay.setVisible(false);  // แสดงเฉพาะตอนเริ่มตา
+        turnOverlay.setVisible(false);
 
 
-        /* =======================
-         *  Stack ทุกชั้น
-         * ======================= */
+        // set scene
         root = new StackPane(boardLayer, playerLayer, turnOverlay);
         root.setAlignment(Pos.CENTER);
 
         this.scene = new Scene(root, 800, 600);
 
+        // Import css stylesheets
         if (getClass().getResource("/global.css") != null) {
             this.scene.getStylesheets().add(
                     getClass().getResource("/global.css").toExternalForm()
@@ -154,9 +143,6 @@ public class MainGameUI {
         return scene;
     }
 
-    /* ===========================================================
-     * 1) สร้าง icon ผู้เล่น + วางที่จุด Start
-     * =========================================================== */
     private void initPlayerIcons() {
         for (int i = 0; i < game.getPlayers().size(); i++) {
             Player p = game.getPlayers().get(i);
@@ -168,9 +154,9 @@ public class MainGameUI {
             iv.setFitWidth(24);
             iv.setFitHeight(24);
 
-            // ห่อด้วย StackPane (Region) -> ใส่ border ได้
+            // create wrapper for border
             StackPane iconWrapper = new StackPane(iv);
-            iconWrapper.setPrefSize(14, 14); // ให้มีพื้นที่ border รอบรูป
+            iconWrapper.setPrefSize(14, 14);
 
             iconWrapper.setStyle(
                     "-fx-border-color: " + toWebColor(playerColors[i]) + ";" +
@@ -182,12 +168,12 @@ public class MainGameUI {
             double startX = boardPositions[0][0];
             double startY = boardPositions[0][1];
 
-            // ซ้อนกันในแนวตั้ง (player 1 อยู่บนสุด)
+            // set players position
             iconWrapper.setLayoutX(startX);
-            iconWrapper.setLayoutY(startY - (i * 20)); // ซ้อนขึ้นด้านบน
+            iconWrapper.setLayoutY(startY - (i * 20));
 
             playerLayer.getChildren().add(iconWrapper);
-            playerIcons.add(iv); // ถ้าต้องเก็บ wrapper ให้เปลี่ยนเป็น iconWrapper
+            playerIcons.add(iv);
         }
     }
 
@@ -208,9 +194,6 @@ public class MainGameUI {
     }
 
 
-    /* ===========================================================
-     * 2) Overlay ตอนเริ่มเทิร์น
-     * =========================================================== */
     private VBox createTurnOverlay() {
 
         VBox box = new VBox(20);
@@ -231,15 +214,15 @@ public class MainGameUI {
         btnItem.setPrefWidth(220);
         btnSkip.setPrefWidth(220);
 
-        // เมื่อคลิกปุ่ม → เรียก logic ใน Game
+        // Game logic
         btnPokemon.setOnAction(e -> {
-            // TODO: เรียกเมธอดใน Game เช่น game.usePokemonSkill(currentPlayer)
+            // TODO
             hideTurnOverlay(box);
             startDiceRoll();
         });
 
         btnItem.setOnAction(e -> {
-            // TODO: เรียก game.useItemSkill(...)
+            // TODO
             hideTurnOverlay(box);
             startDiceRoll();
         });
@@ -256,16 +239,13 @@ public class MainGameUI {
     }
 
 
-    /* ===========================================================
-     * 3) แสดง overlay ตอนเริ่มตาผู้เล่น
-     * =========================================================== */
     public void showTurnOverlay(Player p) {
         VBox overlay = (VBox) ((StackPane) scene.getRoot()).getChildren().get(2);
 
         Text txt = (Text) overlay.getChildren().get(0);
         txt.setText(p.getName() + "'s Turn!");
 
-        // เปลี่ยนสี overlay ตามผู้เล่น
+        // change color for each player
         int idx = game.getPlayers().indexOf(p);
         Color c = playerColors[idx];
 
@@ -283,40 +263,28 @@ public class MainGameUI {
         overlay.setVisible(false);
     }
 
-
-    /* ===========================================================
-     * 4) หลังเลือก option → ทอยลูกเต๋า
-     * =========================================================== */
     private void startDiceRoll() {
 
         final RollDiceUI[] diceUIHolder = new RollDiceUI[1];
 
         diceUIHolder[0] = new RollDiceUI((n) -> {
 
-            // เอา overlay ออก
             root.getChildren().remove(diceUIHolder[0].getView());
 
-            // Logic game
             Player currentPlayer = game.getCurrentPlayer();
-//            Board board = game.getBoard();
-//
-//            if (!currentPlayer.isDoNothing()) {
-//                currentPlayer.setLastRoll(n);
-//                game.checkAdditionalConditions(currentPlayer, n);
-//                board.movePlayer(currentPlayer, n, game);
-//            }
-//
-//            currentPlayer.setDoNothing(false);
-//            game.setTurn(game.getTurn() + 1);
+            Board board = game.getBoard();
 
-            try {
-                movePlayerIcon(currentPlayer, 22);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            if (!currentPlayer.isDoNothing()) {
+                currentPlayer.setLastRoll(n);
+                game.checkAdditionalConditions(currentPlayer, n);
+                board.movePlayer(currentPlayer, n, game);
             }
+
+            currentPlayer.setDoNothing(false);
+
+            movePlayerIcon(currentPlayer, currentPlayer.getPosition());
         });
 
-        // แสดง overlay ลูกเต๋า
         root.getChildren().add(diceUIHolder[0].getView());
         StackPane.setAlignment(diceUIHolder[0].getView(), Pos.CENTER);
     }
@@ -331,8 +299,8 @@ public class MainGameUI {
         double startX = wrapper.getLayoutX();
         double startY = wrapper.getLayoutY();
 
-        // ทำ animation 300ms
-        Duration duration = Duration.millis(300);
+        // move animation 500ms
+        Duration duration = Duration.millis(500);
 
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.ZERO,
@@ -350,6 +318,15 @@ public class MainGameUI {
 
         timeline.setOnFinished(e -> {
             System.out.println("Moved to: " + wrapper.getLayoutX() + ", " + wrapper.getLayoutY());
+            nextTurn();
         });
+    }
+
+    private void nextTurn() {
+        game.nextPlayer();
+
+        Player next = game.getCurrentPlayer();
+
+        Platform.runLater(() -> showTurnOverlay(next));
     }
 }

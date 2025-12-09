@@ -444,6 +444,10 @@ public class Game {
         this.turn = turn;
     }
 
+    public void nextPlayer() {
+        turn = (turn + 1) % players.size();
+    }
+
     public List<Player> getPlayers() {
         return players;
     }
