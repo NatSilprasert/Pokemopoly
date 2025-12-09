@@ -19,8 +19,8 @@ import javafx.scene.text.TextFlow;
 
 public class PokemonCardUI extends StackPane {
 
-    private static final double CARD_WIDTH = 300;
-    private static final double CARD_HEIGHT = 450;
+    private double CARD_WIDTH = 300;
+    private double CARD_HEIGHT = 450;
 
     // โหลดฟอนต์ (ถ้ามีไฟล์ .ttf ให้เปลี่ยน path ตรงนี้)
     // ถ้าไม่มีจะใช้ Monospaced เพื่อให้ดูเป็น Pixel
@@ -202,5 +202,115 @@ public class PokemonCardUI extends StackPane {
             case CROWN: return Color.web("#f5d742"); // สีทอง
             default: return Color.GRAY;
         }
+    }
+
+    public void setSize(int ratio) {
+        if (ratio <= 0) return;
+
+        this.setPrefSize(CARD_WIDTH / ratio, CARD_HEIGHT / ratio);
+        this.setMaxSize(CARD_WIDTH / ratio, CARD_HEIGHT / ratio);
+
+        // borderRect
+        if (!getChildren().isEmpty() && getChildren().get(0) instanceof Rectangle borderRect) {
+            borderRect.setWidth(CARD_WIDTH / ratio);
+            borderRect.setHeight(CARD_HEIGHT / ratio);
+        }
+
+        // innerContent
+        if (getChildren().size() > 1 && getChildren().get(1) instanceof VBox innerContent) {
+
+            double borderWidth = 8.0 / ratio;
+            innerContent.setMaxSize(
+                    (CARD_WIDTH - borderWidth * 2) / ratio,
+                    (CARD_HEIGHT - borderWidth * 2) / ratio
+            );
+            innerContent.setSpacing(8.0 / ratio);
+            innerContent.setPadding(new Insets(10 / ratio));
+
+            for (var node : innerContent.getChildren()) {
+
+                // ✔ Label inside StackPane
+                if (node instanceof StackPane sp && !sp.getChildren().isEmpty()
+                        && sp.getChildren().get(0) instanceof Label lbl) {
+
+                    Font oldFont = lbl.getFont();
+                    lbl.setFont(Font.font(
+                            oldFont.getFamily(),
+                            oldFont.getSize() / ratio      // ❗ไม่ยุ่งกับ FontWeight
+                    ));
+
+                    sp.setPadding(scaleInsets(sp.getPadding(), ratio));
+                }
+
+                // ✔ VBox inside
+                else if (node instanceof VBox vb) {
+                    vb.setSpacing(vb.getSpacing() / ratio);
+                    vb.setPadding(scaleInsets(vb.getPadding(), ratio));
+
+                    for (var child : vb.getChildren()) {
+                        if (child instanceof Label lbl) {
+                            Font oldFont = lbl.getFont();
+                            lbl.setFont(Font.font(
+                                    oldFont.getFamily(),
+                                    oldFont.getSize() / ratio   // ❗เฉพาะลด size
+                            ));
+                        }
+                    }
+                }
+
+                // ✔ Image
+                else if (node instanceof ImageView imgView) {
+                    imgView.setFitHeight(imgView.getFitHeight() / ratio);
+                    imgView.setFitWidth(imgView.getFitWidth() / ratio);
+                }
+
+                // ✔ HBox
+                else if (node instanceof HBox hbox) {
+                    hbox.setSpacing(hbox.getSpacing() / ratio);
+                    hbox.setPadding(scaleInsets(hbox.getPadding(), ratio));
+
+                    for (var child : hbox.getChildren()) {
+
+                        if (child instanceof Label lbl) {
+                            Font oldFont = lbl.getFont();
+                            lbl.setFont(Font.font(
+                                    oldFont.getFamily(),
+                                    oldFont.getSize() / ratio   // ❗ไม่แตะน้ำหนักฟอนต์
+                            ));
+                        }
+
+                        else if (child instanceof TextFlow tf) {
+                            tf.getChildren().forEach(txt -> {
+                                if (txt instanceof Text t) {
+                                    Font oldFont = t.getFont();
+                                    t.setFont(Font.font(
+                                            oldFont.getFamily(),
+                                            oldFont.getSize() / ratio
+                                    ));
+                                }
+                            });
+                        }
+
+                        else if (child instanceof Circle circle) {
+                            circle.setRadius(circle.getRadius() / ratio);
+                        }
+                    }
+                }
+
+                // generic StackPane
+                else if (node instanceof StackPane sp) {
+                    sp.setPadding(scaleInsets(sp.getPadding(), ratio));
+                }
+            }
+        }
+    }
+
+    private Insets scaleInsets(Insets in, int ratio) {
+        return new Insets(
+                in.getTop() / ratio,
+                in.getRight() / ratio,
+                in.getBottom() / ratio,
+                in.getLeft() / ratio
+        );
     }
 }

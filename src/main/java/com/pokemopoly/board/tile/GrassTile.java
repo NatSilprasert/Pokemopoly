@@ -1,125 +1,302 @@
 package com.pokemopoly.board.tile;
 
-import com.pokemopoly.Battle;
 import com.pokemopoly.Game;
+import com.pokemopoly.ui.RollDiceUI;
 import com.pokemopoly.board.GrassColor;
 import com.pokemopoly.board.Tile;
 import com.pokemopoly.cards.DeckManager;
 import com.pokemopoly.cards.PokemonCard;
 import com.pokemopoly.player.Player;
-
-import java.util.Scanner;
+import com.pokemopoly.ui.cards.PokemonCardUI;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class GrassTile extends Tile {
-    private int catchRate;
-    private GrassColor color;
 
-    public GrassTile(String name, int index, GrassColor color) {
+    private final StackPane rootPane;
+    private final Consumer<Void> endTurnCallback;
+    private final GrassColor color;
+    private final int catchRate;
+
+    public GrassTile(String name, int index, GrassColor color, StackPane rootPane, Consumer<Void> endTurnCallback) {
         super(name, index);
         this.color = color;
         this.catchRate = color.getCatchRate();
+        this.rootPane = rootPane;
+        this.endTurnCallback = endTurnCallback;
     }
 
     @Override
     public void moveIn(Player player, Game game) {
-        if (!playersOnLand.isEmpty()) {
-            Scanner scanner = new Scanner(System.in);
-
-            System.out.println("You're on the same tile with other players!");
-            System.out.println("Do you want to fight? 1) Yes 2) No");
-
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-
-            if (choice == 1) {
-                System.out.println("Choose you opponent.");
-                for (int i = 0; i < playersOnLand.size(); i++) {
-                    System.out.println(i + 1 + ". " + playersOnLand.get(i).getName());
-                }
-
-                int opponentIdx = scanner.nextInt();
-                scanner.nextLine();
-
-                Player opponent = playersOnLand.get(opponentIdx - 1);
-                Battle battle = new Battle(game, player, opponent, false);
-                battle.start();
-
-                return;
-            }
-        }
         onLand(player, game);
         playersOnLand.add(player);
     }
 
     public void onLand(Player player, Game game) {
-        System.out.println(player.getName() + " landed on " + name + "!");
+        if (player.isTeamFull() & endTurnCallback != null) {
+            endTurnCallback.accept(null);
+            return;
+        }
 
         DeckManager deckManager = game.getDeckManager();
+        PokemonCard pokemonCard;
 
-        PokemonCard pokemonCard = deckManager.drawGreenPokemon();
-        if (catchRate == 3) pokemonCard = deckManager.drawBluePokemon();
-        else if (catchRate == 4) pokemonCard = deckManager.drawPurplePokemon();
-        else if (catchRate == 5) pokemonCard = deckManager.drawRedPokemon();
-        else if (catchRate == 6) pokemonCard = deckManager.drawCrownPokemon();
+        switch (catchRate) {
+            case 3 -> pokemonCard = deckManager.drawBluePokemon();
+            case 4 -> pokemonCard = deckManager.drawPurplePokemon();
+            case 5 -> pokemonCard = deckManager.drawRedPokemon();
+            case 6 -> pokemonCard = deckManager.drawCrownPokemon();
+            default -> pokemonCard = deckManager.drawGreenPokemon();
+        }
 
-        System.out.println("Pokemon details:");
-        System.out.println("Name: " + pokemonCard.getName());
-        System.out.println("Description: " + pokemonCard.getDescription());
+        showCatchOverlay(player, pokemonCard, game);
+    }
 
-        System.out.println("Do you want to try to catch a Pokémon? (y/n)");
+    private void showCatchOverlay(Player player, PokemonCard pokemonCard, Game game) {
+        VBox overlay = new VBox(10);
+        overlay.setAlignment(Pos.CENTER);
+        overlay.setStyle("-fx-background-color: rgba(0,0,0,0.85); -fx-padding: 20;");
+        overlay.setMaxWidth(800);
 
-        Scanner scanner = new Scanner(System.in);
-        String strChoice = scanner.nextLine();
+        Label title = new Label("A wild Pokémon appeared!");
+        title.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
 
-        if (strChoice.equalsIgnoreCase("y")) {
-            int dice = game.rollDice();
-            System.out.println("You rolled: " + dice);
-            if (dice > catchRate) {
-                System.out.println("🎉 You caught a new Pokémon!");
-                // Add new pokemon
-                if (player.getTeam().size() == player.getMaxPokemon()) {
-                    System.out.println("Your team is full!");
-                    System.out.println("Do you want to:");
-                    System.out.println("1. Replace an existing pokemon");
-                    System.out.println("2. Discard the new pokemon");
+        PokemonCardUI pokemonUI = new PokemonCardUI(pokemonCard);
+        overlay.getChildren().addAll(title, pokemonUI);
 
-                    int choice = scanner.nextInt();
-                    scanner.nextLine(); // consume newline
+        HBox btnBox = new HBox(10);
+        btnBox.setAlignment(Pos.CENTER);
 
-                    if (choice == 1) {
-                        System.out.println("Your current team:");
-                        for (int i = 0; i < player.getTeam().size(); i++) {
-                            PokemonCard p = player.getTeam().get(i);
-                            System.out.println((i + 1) + ". " + p.getName() + " - " + p.getDescription());
-                        }
+        Button catchBtn = new Button("Catch");
+        Button ignoreBtn = new Button("Ignore");
 
-                        while (true) {
-                            System.out.print("Select the item to replace (1-" + player.getTeam().size() + "): ");
-                            int index = scanner.nextInt() - 1;
+        catchBtn.setOnAction(e -> {
+            rootPane.getChildren().remove(overlay);
+            showBallSelectionOverlay(player, pokemonCard, catchRate);
+        });
 
-                            if (index >= 0 && index < player.getTeam().size()) {
-                                PokemonCard removed = player.getTeam().remove(index);
-                                System.out.println("Removed: " + removed.getName());
-                                player.addPokemon(pokemonCard);
-                                System.out.println("Added: " + pokemonCard.getName());
-                                break;
-                            } else {
-                                System.out.println("Invalid selection. Please try again!");
-                            }
-                        }
-                    }
-                    else if (choice == 2) {
-                        System.out.println("You discarded the new pokemon: " + pokemonCard.getName());
-                    }
+        ignoreBtn.setOnAction(e -> {
+            rootPane.getChildren().remove(overlay);
+            if (endTurnCallback != null) endTurnCallback.accept(null);
+        });
+
+        btnBox.getChildren().addAll(catchBtn, ignoreBtn);
+        overlay.getChildren().add(btnBox);
+
+        rootPane.getChildren().add(overlay);
+        StackPane.setAlignment(overlay, Pos.CENTER);
+    }
+
+    private void showBallSelectionOverlay(Player player, PokemonCard pokemonCard, int baseCatchRate) {
+        VBox overlay = new VBox(20); // spacing เพิ่ม
+        overlay.setAlignment(Pos.CENTER);
+        overlay.setStyle("-fx-background-color: rgba(0,0,0,0.85); -fx-padding: 30;");
+        overlay.setMaxWidth(900);
+
+        Label title = new Label("Select a Pokéball:");
+        title.setStyle("-fx-text-fill: white; -fx-font-size: 20px;");
+
+        Label catchRateLabel = new Label("Catch rate needed: " + baseCatchRate);
+        catchRateLabel.setStyle("-fx-text-fill: yellow; -fx-font-size: 18px;");
+
+        HBox ballBox = new HBox(30); // spacing เพิ่ม
+        ballBox.setAlignment(Pos.CENTER);
+
+        final int[] effectiveCatchRate = {baseCatchRate};
+        final int[] selectedBallType = {-1}; // 0=Red,1=Great,2=Hyper
+        final Button[] selectedBtn = {null}; // เก็บปุ่มที่เลือก
+
+        // ปุ่มลูกบอล
+        Button redBallBtn = createBallSelectionButton(player, "pokeball.png", 0, ballBox, catchRateLabel, effectiveCatchRate, selectedBallType, selectedBtn, baseCatchRate);
+        Button greatBallBtn = createBallSelectionButton(player, "greatball.png", 1, ballBox, catchRateLabel, effectiveCatchRate, selectedBallType, selectedBtn, baseCatchRate);
+        Button hyperBallBtn = createBallSelectionButton(player, "ultraball.png", 2, ballBox, catchRateLabel, effectiveCatchRate, selectedBallType, selectedBtn, baseCatchRate);
+
+        ballBox.getChildren().addAll(redBallBtn, greatBallBtn, hyperBallBtn);
+
+        Button confirmBtn = new Button("Confirm");
+        confirmBtn.setStyle("-fx-font-size: 16px; -fx-padding: 10 20 10 20;");
+        confirmBtn.setOnAction(e -> {
+            if (selectedBallType[0] == -1) {
+                catchRateLabel.setText("⚠ Please select a Pokéball first!");
+                return;
+            }
+
+            // ลดจำนวนบอลลง 1
+            switch (selectedBallType[0]) {
+                case 0 -> player.setRedBall(player.getRedBall() - 1);
+                case 1 -> player.setGreatBall(player.getGreatBall() - 1);
+                case 2 -> player.setHyperBall(player.getHyperBall() - 1);
+            }
+
+            rootPane.getChildren().remove(overlay);
+
+            final RollDiceUI[] diceUIHolder = new RollDiceUI[1];
+
+            diceUIHolder[0] = new RollDiceUI((dice) -> {
+
+                RollDiceUI diceUI = diceUIHolder[0]; // ดึง instance
+
+                System.out.println("Rolled: " + dice + ", Needed: " + effectiveCatchRate[0]);
+
+                if (dice >= effectiveCatchRate[0]) {
+
+                    rootPane.getChildren().remove(diceUI.getView());
+                    showCaughtOverlay(player, pokemonCard);
 
                 } else {
-                    player.addPokemon(pokemonCard);
-                    System.out.println(pokemonCard.getName() + " has been added to your hand!");
+
+                    rootPane.getChildren().remove(diceUI.getView());
+
+                    // ❗ แทนที่จะกลับไปเลือกบอลทันที → ให้ขึ้นตัวเลือกใหม่
+                    showBreakFreeOverlay(player, pokemonCard, baseCatchRate);
                 }
-            } else {
-                System.out.println("😢 The Pokémon ran away...");
-            }
+            });
+
+            rootPane.getChildren().add(diceUIHolder[0].getView());
+        });
+
+        overlay.getChildren().addAll(title, catchRateLabel, ballBox, confirmBtn);
+
+        // กรณีไม่มีบอล
+        if (player.getRedBall() + player.getGreatBall() + player.getHyperBall() <= 0) {
+            Label noBallLabel = new Label("No Pokéballs available!");
+            noBallLabel.setStyle("-fx-text-fill: red; -fx-font-size: 16px;");
+            Button okBtn = new Button("OK");
+            okBtn.setStyle("-fx-font-size: 16px;");
+            okBtn.setOnAction(e -> {
+                rootPane.getChildren().remove(overlay);
+                if (endTurnCallback != null) endTurnCallback.accept(null);
+            });
+            overlay.getChildren().clear();
+            overlay.getChildren().addAll(noBallLabel, okBtn);
         }
+
+        rootPane.getChildren().add(overlay);
+        StackPane.setAlignment(overlay, Pos.CENTER);
+    }
+
+    private Button createBallSelectionButton(Player player, String imagePath, int typeModifier,
+                                             HBox ballBox, Label catchRateLabel,
+                                             int[] effectiveCatchRate, int[] selectedBallType,
+                                             Button[] selectedBtn, int baseCatchRate) {
+        int ballCount;
+        switch (typeModifier) {
+            case 0 -> ballCount = player.getRedBall();
+            case 1 -> ballCount = player.getGreatBall();
+            case 2 -> ballCount = player.getHyperBall();
+            default -> ballCount = 0;
+        }
+
+        VBox box = new VBox(5);
+        box.setAlignment(Pos.CENTER);
+        ImageView ballImg = new ImageView(new Image(getClass().getResourceAsStream("/shop/" + imagePath)));
+        ballImg.setFitWidth(70); // ขยาย
+        ballImg.setFitHeight(70);
+
+        Label countLabel = new Label(String.valueOf(ballCount));
+        countLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
+
+        box.getChildren().addAll(ballImg, countLabel);
+
+        Button btn = new Button("", box);
+        btn.setDisable(ballCount <= 0);
+
+        btn.setOnAction(e -> {
+            // ยกเลิก highlight เดิม
+            if (selectedBtn[0] != null) selectedBtn[0].setStyle("");
+            // highlight ปุ่มที่เลือก
+            btn.setStyle("-fx-border-color: red; -fx-border-width: 3;");
+            selectedBtn[0] = btn;
+
+            // คำนวณ catchRate ใหม่
+            effectiveCatchRate[0] = Math.max(0, baseCatchRate - typeModifier);
+            catchRateLabel.setText("Catch rate after ball modifier: " + effectiveCatchRate[0]);
+
+            selectedBallType[0] = typeModifier;
+        });
+
+        return btn;
+    }
+
+    private void showCaughtOverlay(Player player, PokemonCard pokemonCard) {
+
+        VBox overlay = new VBox(15);
+        overlay.setAlignment(Pos.CENTER);
+        overlay.setStyle("-fx-background-color: rgba(0,0,0,0.85); -fx-padding: 25;");
+        overlay.setMaxWidth(800);
+
+        Label title = new Label("🎉 You caught " + pokemonCard.getName() + "!");
+        title.setStyle("-fx-text-fill: #00ff99; -fx-font-size: 24px; -fx-font-weight: bold;");
+
+        PokemonCardUI cardUI = new PokemonCardUI(pokemonCard);
+
+        Button confirmBtn = new Button("Confirm");
+        confirmBtn.setStyle("-fx-font-size: 18px; -fx-padding: 10 25 10 25;");
+
+        confirmBtn.setOnAction(e -> {
+            rootPane.getChildren().remove(overlay);
+
+            // ถ้าทีมไม่เต็ม → เพิ่มเข้าทีมทันที
+            if (player.getTeam().size() < player.getMaxPokemon()) {
+                player.addPokemon(pokemonCard);
+                if (endTurnCallback != null) endTurnCallback.accept(null);
+                return;
+            }
+        });
+
+        overlay.getChildren().addAll(title, cardUI, confirmBtn);
+
+        rootPane.getChildren().add(overlay);
+        StackPane.setAlignment(overlay, Pos.CENTER);
+    }
+
+    private void showBreakFreeOverlay(Player player, PokemonCard pokemonCard, int baseCatchRate) {
+
+        VBox overlay = new VBox(20);
+        overlay.setAlignment(Pos.CENTER);
+        overlay.setStyle("-fx-background-color: rgba(0,0,0,0.85); -fx-padding: 25;");
+        overlay.setMaxWidth(800);
+
+        Label title = new Label("The Pokémon broke free!");
+        title.setStyle("-fx-text-fill: orange; -fx-font-size: 22px; -fx-font-weight: bold;");
+
+        // แสดงการ์ดโปเกมอน
+        PokemonCardUI cardUI = new PokemonCardUI(pokemonCard);
+
+        HBox buttonBox = new HBox(20);
+        buttonBox.setAlignment(Pos.CENTER);
+
+        Button retryBtn = new Button("Try Again");
+        retryBtn.setStyle("-fx-font-size: 16px; -fx-padding: 10 20;");
+
+        Button releaseBtn = new Button("Let It Go");
+        releaseBtn.setStyle("-fx-font-size: 16px; -fx-padding: 10 20;");
+
+        // Try again → กลับไปเลือกบอลใหม่
+        retryBtn.setOnAction(e -> {
+            rootPane.getChildren().remove(overlay);
+            showBallSelectionOverlay(player, pokemonCard, baseCatchRate);
+        });
+
+        // ปล่อย → จบเทิร์นทันที
+        releaseBtn.setOnAction(e -> {
+            rootPane.getChildren().remove(overlay);
+            if (endTurnCallback != null) endTurnCallback.accept(null);
+        });
+
+        buttonBox.getChildren().addAll(retryBtn, releaseBtn);
+
+        overlay.getChildren().addAll(title, cardUI, buttonBox);
+
+        rootPane.getChildren().add(overlay);
+        StackPane.setAlignment(overlay, Pos.CENTER);
     }
 
     public int getCatchRate() {
