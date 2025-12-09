@@ -24,8 +24,8 @@ public class Player {
     private int position = 0;
     private int coin = 0;
     private int redBall = 4;
-    private int greatBall = 0;
-    private int hyperBall = 0;
+    private int greatBall = 4;
+    private int hyperBall = 4;
     private boolean badge1 = false;
     private boolean badge2 = false;
     private boolean skipTurn = false;
@@ -39,6 +39,11 @@ public class Player {
 
         if (profession == ProfessionType.TRAINER) {
             hand.setCapacity(6);
+            addPokemon(new Pikachu());
+            addPokemon(new Pikachu());
+            addPokemon(new Pikachu());
+            addPokemon(new Pikachu());
+            addPokemon(new Pikachu());
             addPokemon(new Pikachu());
             // Damage += 2
         }
