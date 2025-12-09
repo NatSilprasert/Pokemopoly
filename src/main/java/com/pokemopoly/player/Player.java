@@ -39,6 +39,7 @@ public class Player {
 
         if (profession == ProfessionType.TRAINER) {
             hand.setCapacity(6);
+            addPokemon(new Pikachu());
             // Damage += 2
         }
         else if (profession == ProfessionType.FISHER) {

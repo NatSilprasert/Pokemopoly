@@ -245,9 +245,9 @@ public class GrassTile extends Tile {
 
             // ถ้าทีมไม่เต็ม → เพิ่มเข้าทีมทันที
             if (player.getTeam().size() < player.getMaxPokemon()) {
+                System.out.println(pokemonCard.getName() + " is add to " + player.getName() + " team!");
                 player.addPokemon(pokemonCard);
                 if (endTurnCallback != null) endTurnCallback.accept(null);
-                return;
             }
         });
 
