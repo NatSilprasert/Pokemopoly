@@ -26,18 +26,24 @@ public class PokemonCardUI extends StackPane {
     // ถ้าไม่มีจะใช้ Monospaced เพื่อให้ดูเป็น Pixel
     private static final String PIXEL_FONT = "Pixelify Sans";
 
-    public PokemonCardUI(PokemonCard card, DeckManager deckManager) {
-        // 1. หาค่าสีจาก DeckManager
-        PokemonDeckColor deckColorEnum = deckManager.getDeckColorOf(card);
-        Color deckColor = getColorFromEnum(deckColorEnum);
+    public PokemonCardUI(PokemonCard card) {
 
         this.setPrefSize(CARD_WIDTH, CARD_HEIGHT);
         this.setMaxSize(CARD_WIDTH, CARD_HEIGHT);
 
         // --- LAYER 1: Border Background (สีตาม Deck) ---
         Rectangle borderRect = new Rectangle(CARD_WIDTH, CARD_HEIGHT);
-        borderRect.setFill(deckColor);
-        borderRect.setStroke(deckColor);
+
+        if (card.getDeckColor() != null) {
+            Color deckColor = getColorFromEnum(card.getDeckColor());
+            borderRect.setFill(deckColor);
+            borderRect.setStroke(deckColor);
+        } else {
+            // ถ้าไม่มี deck color ให้ใส่โปร่งใส หรือใช้ default สีเทา
+            borderRect.setFill(Color.TRANSPARENT);
+            borderRect.setStroke(Color.TRANSPARENT);
+        }
+
         borderRect.setStrokeWidth(0);
 
         // --- LAYER 2: Inner Content (พื้นหลังการ์ดสีครีม/เทาอ่อน) ---
