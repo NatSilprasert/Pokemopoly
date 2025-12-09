@@ -256,6 +256,12 @@ public class MainGameUI {
 
 
     public void showTurnOverlay(Player p) {
+        if (p.isSkipTurn()) {
+            nextTurn();
+            p.setSkipTurn(false);
+            return;
+        }
+
         VBox overlay = (VBox) ((StackPane) scene.getRoot()).getChildren().get(2);
 
         Text txt = (Text) overlay.getChildren().get(0);
@@ -273,6 +279,7 @@ public class MainGameUI {
         );
 
         overlay.setVisible(true);
+        updatePlayerColors();
     }
 
     private void hideTurnOverlay(VBox overlay) {
@@ -344,7 +351,10 @@ public class MainGameUI {
 
         Player next = game.getCurrentPlayer();
 
-        Platform.runLater(() -> showTurnOverlay(next));
+        Platform.runLater(() -> {
+            showTurnOverlay(next);
+            updatePlayerColors(); // <-- อัปเดตสีผู้เล่นตาม skipTurn
+        });
     }
 
     private void playIntroFade(Pane black, VBox turnOverlay) {
@@ -372,6 +382,19 @@ public class MainGameUI {
         delay.play();
     }
 
+    private void updatePlayerColors() {
+        for (int i = 0; i < game.getPlayers().size(); i++) {
+            Player p = game.getPlayers().get(i);
+            StackPane wrapper = (StackPane) playerLayer.getChildren().get(i);
+
+            if (p.isSkipTurn()) {
+                wrapper.setOpacity(0.5); // ตัวเทา
+            } else {
+                wrapper.setOpacity(1.0); // สีปกติ
+            }
+        }
+    }
+
     public void setUpBoard() {
         List<Tile> tiles = new ArrayList<>(Arrays.asList(
                 new StartTile("Start Tile", 0),
@@ -386,7 +409,7 @@ public class MainGameUI {
                 new GrassTile("Green Grass Tile", 9, GrassColor.GREEN, root, v -> nextTurn()),
                 new BattleTile("Gym 1", 10, root, v -> nextTurn()),
                 new GrassTile("Green Grass Tile", 11, GrassColor.BLUE, root, v -> nextTurn()),
-                new CaveTile("Cave Tile", 12),
+                new CaveTile("Cave Tile", 12, root, this::nextTurn),
                 new GrassTile("Green Grass Tile", 13, GrassColor.BLUE, root, v -> nextTurn()),
                 new GrassTile("Green Grass Tile", 14, GrassColor.BLUE, root, v -> nextTurn()),
                 new CityTile("City Tile", 15, root, v -> nextTurn()),
@@ -406,7 +429,7 @@ public class MainGameUI {
                 new GrassTile("Purple Grass Tile", 29, GrassColor.PURPLE, root, v -> nextTurn()),
                 new BattleTile("Gym 2", 30, root, v -> nextTurn()),
                 new GrassTile("Red Grass Tile", 31, GrassColor.RED, root, v -> nextTurn()),
-                new CaveTile("Cave Tile", 32),
+                new CaveTile("Cave Tile", 32, root, this::nextTurn),
                 new GrassTile("Red Grass Tile", 33, GrassColor.RED, root, v -> nextTurn()),
                 new GrassTile("Red Grass Tile", 34, GrassColor.RED, root, v -> nextTurn()),
                 new CityTile("City Tile", 35, root, v -> nextTurn()),
