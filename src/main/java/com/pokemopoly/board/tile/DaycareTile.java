@@ -1,6 +1,8 @@
+
 package com.pokemopoly.board.tile;
 
 import com.pokemopoly.Game;
+import com.pokemopoly.MusicManager;
 import com.pokemopoly.board.Tile;
 import com.pokemopoly.cards.PokemonCard;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
@@ -23,15 +25,19 @@ public class DaycareTile extends Tile {
 
     private final StackPane rootPane;
     private final Runnable endTurnCallback;
+    private final MusicManager musicManager;
 
-    public DaycareTile(String name, int index, StackPane rootPane, Runnable endTurnCallback) {
+    public DaycareTile(String name, int index, StackPane rootPane, Runnable endTurnCallback, MusicManager musicManager) {
         super(name, index);
         this.rootPane = rootPane;
         this.endTurnCallback = endTurnCallback;
+        this.musicManager = musicManager;
     }
 
     @Override
     public void onLand(Player player, Game game) {
+
+
         List<PokemonCard> evolvables = player.getTeam().stream()
                 .filter(p -> p instanceof Evolvable)
                 .toList();
@@ -41,6 +47,8 @@ public class DaycareTile extends Tile {
             if (endTurnCallback != null) endTurnCallback.run();
             return;
         }
+
+        musicManager.fadeOutCurrent(1, () -> musicManager.playMusicForScene("daycare"));
 
         VBox overlay = new VBox(25);
         overlay.setAlignment(Pos.CENTER);
@@ -119,6 +127,7 @@ public class DaycareTile extends Tile {
             ok.setOnAction(ev -> {
                 rootPane.getChildren().remove(overlay);
                 if (endTurnCallback != null) endTurnCallback.run();
+                musicManager.fadeOutCurrent(1, () -> musicManager.playWithFade("palletTown", true, 1.0));
             });
 
             overlay.getChildren().addAll(success, evoBox, ok);

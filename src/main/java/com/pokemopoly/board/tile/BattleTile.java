@@ -1,6 +1,8 @@
+
 package com.pokemopoly.board.tile;
 
 import com.pokemopoly.Game;
+import com.pokemopoly.MusicManager;
 import com.pokemopoly.board.Tile;
 import com.pokemopoly.cards.DeckManager;
 import com.pokemopoly.player.Player;
@@ -24,11 +26,13 @@ public class BattleTile extends Tile {
     private Player boss;
     private final StackPane rootPane;
     private final Consumer<Void> endTurnCallback;
+    private final MusicManager musicManager;
 
-    public BattleTile(String name, int index, StackPane rootPane, Consumer<Void> endTurnCallback) {
+    public BattleTile(String name, int index, StackPane rootPane, Consumer<Void> endTurnCallback, MusicManager musicManager) {
         super(name, index);
         this.rootPane = rootPane;
         this.endTurnCallback = endTurnCallback;
+        this.musicManager = musicManager;
 
         if (Objects.equals(name, "Gym 1")) {
             boss = new Player("Gym 1's Leader", ProfessionType.TRAINER);
@@ -44,10 +48,16 @@ public class BattleTile extends Tile {
     @Override
     public void onLand(Player player, Game game) {
 
+
+
+
         VBox overlay = new VBox(15);
         overlay.setAlignment(Pos.CENTER);
         overlay.setStyle("-fx-background-color: rgba(0,0,0,0.75); -fx-padding: 25;");
         overlay.setMaxWidth(800);
+
+        // fade out เพลงปัจจุบัน แล้วเล่นเพลง Battle
+        musicManager.fadeOutCurrent(1, () -> musicManager.playMusicForScene("battle"));
 
         Label title = new Label("You have entered the Gym!");
         title.setStyle("-fx-text-fill: white; -fx-font-size: 40px; -fx-font-weight: bold;");
@@ -69,6 +79,7 @@ public class BattleTile extends Tile {
         skipBtn.setOnAction(e -> {
             rootPane.getChildren().remove(overlay);
             if (endTurnCallback != null) endTurnCallback.accept(null);
+            musicManager.fadeOutCurrent(1, () -> musicManager.playWithFade("palletTown", true, 1.0));
         });
 
         overlay.getChildren().addAll(title, ask, fightBtn, skipBtn);
@@ -109,6 +120,7 @@ public class BattleTile extends Tile {
             // ✔ เรียก GUI BattleUI แทน battle.start()
             new BattleUI(game, rootPane, player, boss, () -> {
                 endTurnCallback.accept(null);
+                musicManager.fadeOutCurrent(1, () -> musicManager.playWithFade("palletTown", true, 1.0));
             }).start();
 
             // ลบหน้าดำทิ้ง (BattleUI มี fade-in ของตัวเอง)

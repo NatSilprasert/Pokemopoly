@@ -7,7 +7,7 @@ import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
 
 import java.util.List;
 
-public class MrMime extends PokemonCard {
+public class MrMime extends PokemonCard{
 
     public MrMime() {
         super("P122",

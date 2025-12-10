@@ -1,6 +1,8 @@
+
 package com.pokemopoly.board.tile;
 
 import com.pokemopoly.Game;
+import com.pokemopoly.MusicManager;
 import com.pokemopoly.board.Tile;
 import com.pokemopoly.player.Player;
 import javafx.geometry.Pos;
@@ -13,17 +15,21 @@ public class CaveTile extends Tile {
 
     private final StackPane rootPane;
     private final Runnable endTurnCallback;
+    private final MusicManager musicManager;
 
-    public CaveTile(String name, int index, StackPane rootPane, Runnable endTurnCallback) {
+    public CaveTile(String name, int index, StackPane rootPane, Runnable endTurnCallback, MusicManager musicManager) {
         super(name, index);
         this.rootPane = rootPane;
         this.endTurnCallback = endTurnCallback;
+        this.musicManager = musicManager;
     }
 
     @Override
     public void onLand(Player player, Game game) {
         System.out.println(player.getName() + " landed on " + name + " and must skip next turn!");
         player.setSkipTurn(true);
+
+        musicManager.fadeOutCurrent(1, () -> musicManager.playMusicForScene("cave"));
 
         // ------------------ Overlay UI ------------------
         VBox overlay = new VBox(15);
@@ -46,6 +52,7 @@ public class CaveTile extends Tile {
 
             // Reset player opacity หรือ effect ถ้าต้องการ
             if (endTurnCallback != null) endTurnCallback.run();
+            musicManager.fadeOutCurrent(1, () -> musicManager.playWithFade("palletTown", true, 1.0));
         });
 
         overlay.getChildren().addAll(title, message, ok);

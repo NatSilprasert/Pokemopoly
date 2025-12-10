@@ -1,3 +1,4 @@
+
 package com.pokemopoly.cards;
 
 import com.pokemopoly.player.Player;

@@ -1,6 +1,8 @@
+
 package com.pokemopoly.ui;
 
 import com.pokemopoly.Game;
+import com.pokemopoly.MusicManager;
 import com.pokemopoly.board.Board;
 import com.pokemopoly.player.Player;
 import com.pokemopoly.player.ProfessionType;
@@ -18,6 +20,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -45,6 +49,8 @@ public class MainGameUI {
 
     // Tile Position
     private final double[][] boardPositions = new double[40][2];
+
+    private final MusicManager musicManager;
 
     private void initBoardPositions() {
         // bottom row (0 → 9)
@@ -99,6 +105,7 @@ public class MainGameUI {
     public MainGameUI(Game game, Stage stage) {
         this.game = game;
         this.stage = stage;
+        this.musicManager = musicManager;
 
         Image boardImage = new Image(
                 getClass().getResource("/main_board.png").toExternalForm()
