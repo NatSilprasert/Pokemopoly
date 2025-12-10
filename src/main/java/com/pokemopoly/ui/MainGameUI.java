@@ -2,9 +2,6 @@ package com.pokemopoly.ui;
 
 import com.pokemopoly.Game;
 import com.pokemopoly.board.Board;
-import com.pokemopoly.board.GrassColor;
-import com.pokemopoly.board.Tile;
-import com.pokemopoly.board.tile.*;
 import com.pokemopoly.player.Player;
 import com.pokemopoly.player.ProfessionType;
 import javafx.animation.KeyFrame;
@@ -12,9 +9,12 @@ import javafx.animation.KeyValue;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -25,7 +25,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainGameUI {
@@ -35,15 +35,13 @@ public class MainGameUI {
     private final Scene scene;
 
     // Player icons layer
-    private StackPane root;
-    private Pane playerLayer = new Pane();
+    private final StackPane root;
+    private final Pane playerLayer = new Pane();
 
     // Border color
     private final Color[] playerColors = {
             Color.RED, Color.DODGERBLUE, Color.GOLD, Color.LIMEGREEN
     };
-    // Player Icon
-    private final List<ImageView> playerIcons = new ArrayList<>();
 
     // Tile Position
     private final double[][] boardPositions = new double[40][2];
@@ -98,11 +96,6 @@ public class MainGameUI {
         boardPositions[39] = new double[]{615, 460};
     }
 
-    private void startGame() {
-        Player first = game.getCurrentPlayer();
-        showTurnOverlay(first);
-    }
-
     public MainGameUI(Game game, Stage stage) {
         this.game = game;
         this.stage = stage;
@@ -148,15 +141,11 @@ public class MainGameUI {
         }
 
         // Setup basic requirement
-        setUpBoard();
+        game.setUpGame(root, this::nextTurn);
         initBoardPositions();
         initPlayerIcons();
 
         Platform.runLater(() -> playIntroFade(blackOverlay, turnOverlay));
-    }
-
-    public Scene getScene() {
-        return scene;
     }
 
     private void initPlayerIcons() {
@@ -189,7 +178,6 @@ public class MainGameUI {
             iconWrapper.setLayoutY(startY);
 
             playerLayer.getChildren().add(iconWrapper);
-            playerIcons.add(iv);
         }
     }
 
@@ -292,8 +280,6 @@ public class MainGameUI {
 
         diceUIHolder[0] = new RollDiceUI((n) -> {
 
-            n = 18;
-
             root.getChildren().remove(diceUIHolder[0].getView());
 
             Player currentPlayer = game.getCurrentPlayer();
@@ -340,7 +326,6 @@ public class MainGameUI {
             System.out.println("Moved to: " + wrapper.getLayoutX() + ", " + wrapper.getLayoutY());
             if (!currentPlayer.isDoNothing()) {
                 currentPlayer.setLastRoll(n);
-                game.checkAdditionalConditions(currentPlayer, n);
                 board.movePlayer(currentPlayer, n, game);
             }
 
@@ -351,11 +336,16 @@ public class MainGameUI {
     private void nextTurn() {
         game.nextPlayer();
 
+        if (game.isGameEnd()) {
+            Platform.runLater(this::showGameEndOverlay);
+            return;
+        }
+
         Player next = game.getCurrentPlayer();
 
         Platform.runLater(() -> {
             showTurnOverlay(next);
-            updatePlayerColors(); // <-- อัปเดตสีผู้เล่นตาม skipTurn
+            updatePlayerColors();
         });
     }
 
@@ -397,50 +387,78 @@ public class MainGameUI {
         }
     }
 
-    public void setUpBoard() {
-        List<Tile> tiles = new ArrayList<>(Arrays.asList(
-                new StartTile("Start Tile", 0, root, this::nextTurn),
-                new GrassTile("Green Grass Tile", 1, GrassColor.GREEN, root, v -> nextTurn()),
-                new EventTile("Event Tile", 2, root, v -> nextTurn()),
-                new GrassTile("Green Grass Tile", 3, GrassColor.GREEN, root, v -> nextTurn()),
-                new GrassTile("Green Grass Tile", 4, GrassColor.GREEN, root, v -> nextTurn()),
-                new CityTile("City Tile", 5, root, v -> nextTurn()),
-                new GrassTile("Green Grass Tile", 6, GrassColor.GREEN, root, v -> nextTurn()),
-                new GrassTile("Green Grass Tile", 7, GrassColor.GREEN, root, v -> nextTurn()),
-                new ItemTile("Item Tile", 8, root, v -> nextTurn()),
-                new GrassTile("Green Grass Tile", 9, GrassColor.GREEN, root, v -> nextTurn()),
-                new BattleTile("Gym 1", 10, root, v -> nextTurn()),
-                new GrassTile("Green Grass Tile", 11, GrassColor.BLUE, root, v -> nextTurn()),
-                new CaveTile("Cave Tile", 12, root, this::nextTurn),
-                new GrassTile("Green Grass Tile", 13, GrassColor.BLUE, root, v -> nextTurn()),
-                new GrassTile("Green Grass Tile", 14, GrassColor.BLUE, root, v -> nextTurn()),
-                new CityTile("City Tile", 15, root, v -> nextTurn()),
-                new GrassTile("Green Grass Tile", 16, GrassColor.BLUE, root, v -> nextTurn()),
-                new GrassTile("Green Grass Tile", 17, GrassColor.BLUE, root, v -> nextTurn()),
-                new DaycareTile("Daycare Tile", 18, root, this::nextTurn),
-                new GrassTile("Green Grass Tile", 19, GrassColor.BLUE, root, v -> nextTurn()),
-                new BattleTile("Villain", 20, root, v -> nextTurn()),
-                new GrassTile("Purple Grass Tile", 21, GrassColor.PURPLE, root, v -> nextTurn()),
-                new EventTile("Event Tile", 22, root, v -> nextTurn()),
-                new GrassTile("Purple Grass Tile", 23, GrassColor.PURPLE, root, v -> nextTurn()),
-                new GrassTile("Purple Grass Tile", 24, GrassColor.PURPLE, root, v -> nextTurn()),
-                new CityTile("City Tile", 25, root, v -> nextTurn()),
-                new GrassTile("Purple Grass Tile", 26, GrassColor.PURPLE, root, v -> nextTurn()),
-                new GrassTile("Purple Grass Tile", 27, GrassColor.PURPLE, root, v -> nextTurn()),
-                new ItemTile("Item Tile", 28, root, v -> nextTurn()),
-                new GrassTile("Purple Grass Tile", 29, GrassColor.PURPLE, root, v -> nextTurn()),
-                new BattleTile("Gym 2", 30, root, v -> nextTurn()),
-                new GrassTile("Red Grass Tile", 31, GrassColor.RED, root, v -> nextTurn()),
-                new CaveTile("Cave Tile", 32, root, this::nextTurn),
-                new GrassTile("Red Grass Tile", 33, GrassColor.RED, root, v -> nextTurn()),
-                new GrassTile("Red Grass Tile", 34, GrassColor.RED, root, v -> nextTurn()),
-                new CityTile("City Tile", 35, root, v -> nextTurn()),
-                new GrassTile("Red Grass Tile", 36, GrassColor.RED, root, v -> nextTurn()),
-                new GrassTile("Red Grass Tile", 37, GrassColor.RED, root, v -> nextTurn()),
-                new GrassTile("Red Grass Tile", 38, GrassColor.RED, root, v -> nextTurn()),
-                new GrassTile("Crown Grass Tile", 39, GrassColor.CROWN, root, v -> nextTurn())
-        ));
+    public void showGameEndOverlay() {
+        List<Player> players = new ArrayList<>(game.getPlayers());
+        // เรียงจากเหรียญมากไปน้อย
+        players.sort(Comparator.comparingInt(Player::getAllCoin).reversed());
 
-        game.setUpBoard(tiles);
+        VBox overlay = new VBox(20);
+        overlay.setAlignment(Pos.CENTER);
+        overlay.setStyle("-fx-background-color: rgba(0,0,0,0.9);");
+        overlay.setPadding(new Insets(30));
+
+        Label title = new Label(players.get(0).getName() + " is win!");
+        title.setFont(Font.font("Pixelify Sans", 48));
+        title.setTextFill(Color.GOLD);
+        overlay.getChildren().add(title);
+
+        VBox resultsBox = new VBox(10);
+        resultsBox.setAlignment(Pos.CENTER);
+
+        int rank = 1;
+        for (Player p : players) {
+            HBox row = new HBox(10);
+            row.setAlignment(Pos.CENTER);
+
+            Label rankLabel = new Label("#" + rank);
+            rankLabel.setFont(Font.font("Pixelify Sans", 32));
+            rankLabel.setTextFill(Color.WHITE);
+
+            Label nameLabel = new Label(p.getName());
+            nameLabel.setFont(Font.font("Pixelify Sans", 32));
+            nameLabel.setTextFill(rank == 1 ? Color.LIME : Color.WHITE); // ไฮไลท์ผู้ชนะ
+
+            Label coinLabel = new Label(p.getAllCoin() + " Coins");
+            coinLabel.setFont(Font.font("Pixelify Sans", 32));
+            coinLabel.setTextFill(Color.LIGHTGOLDENRODYELLOW);
+
+            row.getChildren().addAll(rankLabel, nameLabel, coinLabel);
+            resultsBox.getChildren().add(row);
+
+            rank++;
+        }
+
+        ScrollPane scrollPane = new ScrollPane(resultsBox);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
+        scrollPane.setPrefHeight(300);
+
+        HBox buttons = new HBox(20);
+        buttons.setAlignment(Pos.CENTER);
+
+        Button exitBtn = new Button("Exit Game");
+        exitBtn.setStyle("-fx-font-family: 'Pixelify Sans'; -fx-font-size: 20px; -fx-padding: 8 20;");
+        exitBtn.setOnAction(e -> Platform.exit());
+
+        Button newGameBtn = new Button("Start New Game");
+        newGameBtn.setStyle("-fx-font-family: 'Pixelify Sans'; -fx-font-size: 20px; -fx-padding: 8 20;");
+        newGameBtn.setOnAction(e -> {
+            root.getChildren().remove(overlay);
+
+            Game newGame = new Game();
+            NumberPlayerSelectUI setupUI = new NumberPlayerSelectUI(newGame, stage);
+            stage.setScene(setupUI.getScene());
+        });
+
+        buttons.getChildren().addAll(exitBtn, newGameBtn);
+
+        overlay.getChildren().addAll(scrollPane, buttons);
+
+        root.getChildren().add(overlay);
+        StackPane.setAlignment(overlay, Pos.CENTER);
+    }
+
+    public Scene getScene() {
+        return scene;
     }
 }

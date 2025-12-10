@@ -6,10 +6,6 @@ import com.pokemopoly.cards.TypeEffectiveness;
 import com.pokemopoly.cards.pokemon.interfaces.BattleAbility;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
 import com.pokemopoly.player.Player;
-import com.pokemopoly.player.ProfessionType;
-
-import java.util.List;
-import java.util.Objects;
 
 public class Battle {
 

@@ -36,16 +36,6 @@ public class Player {
 
         if (profession == ProfessionType.TRAINER) {
             addPokemon(new Pikachu());
-            addPokemon(new Magikarp());
-            addPokemon(new Rattata());
-            addPokemon(new Diglett());
-            addPokemon(new Ekans());
-            addPokemon(new Abra());
-
-            hand.add(new Bicycle());
-            hand.add(new Bicycle());
-            hand.add(new Bicycle());
-            hand.add(new Bicycle());
         }
         else if (profession == ProfessionType.FISHER) {
             addPokemon(new Magikarp());
@@ -189,5 +179,18 @@ public class Player {
 
     public void setDoNothing(boolean doNothing) {
         this.doNothing = doNothing;
+    }
+
+    public int getAllCoin() {
+        int total = coin;
+
+        for (PokemonCard p : team) {
+            total += p.getPrice();
+        }
+
+        if (badge1) total += 7;
+        if (badge2) total += 7;
+
+        return total;
     }
 }

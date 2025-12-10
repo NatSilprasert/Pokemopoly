@@ -8,15 +8,12 @@ import com.pokemopoly.cards.*;
 import com.pokemopoly.cards.event.*;
 import com.pokemopoly.cards.items.*;
 import com.pokemopoly.cards.pokemon.*;
-import com.pokemopoly.cards.pokemon.interfaces.PreRollAbility;
 import com.pokemopoly.player.Player;
-import com.pokemopoly.player.ProfessionType;
 import javafx.scene.layout.StackPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public class Game {
     private Board board;
@@ -25,13 +22,71 @@ public class Game {
     private int playerCount;
     private int turn = 0;
 
+    // JavaFX
+    private StackPane root;
+    private Runnable nextTurnCallback;
+
     public Game() {
-        // setup
         this.players = new ArrayList<>();
         setUpDeckManager();
     }
 
-    public void setUpBoard(List<Tile> tiles) {
+    public void setUpGame(StackPane root, Runnable nextTurnCallback) {
+        this.root = root;
+        this.nextTurnCallback = nextTurnCallback;
+
+        setUpBoard();
+        setUpDeckManager();
+    }
+
+    public boolean isGameEnd() {
+        return turn >= 50 * playerCount;
+    }
+
+    public void setUpBoard() {
+        List<Tile> tiles = new ArrayList<>(Arrays.asList(
+                new StartTile("Start Tile", 0, root, nextTurnCallback),
+                new GrassTile("Green Grass Tile", 1, GrassColor.GREEN, root, v -> nextTurnCallback.run()),
+                new EventTile("Event Tile", 2, root, v -> nextTurnCallback.run()),
+                new GrassTile("Green Grass Tile", 3, GrassColor.GREEN, root, v -> nextTurnCallback.run()),
+                new GrassTile("Green Grass Tile", 4, GrassColor.GREEN, root, v -> nextTurnCallback.run()),
+                new CityTile("City Tile", 5, root, v -> nextTurnCallback.run()),
+                new GrassTile("Green Grass Tile", 6, GrassColor.GREEN, root, v -> nextTurnCallback.run()),
+                new GrassTile("Green Grass Tile", 7, GrassColor.GREEN, root, v -> nextTurnCallback.run()),
+                new ItemTile("Item Tile", 8, root, v -> nextTurnCallback.run()),
+                new GrassTile("Green Grass Tile", 9, GrassColor.GREEN, root, v -> nextTurnCallback.run()),
+                new BattleTile("Gym 1", 10, root, v -> nextTurnCallback.run()),
+                new GrassTile("Green Grass Tile", 11, GrassColor.BLUE, root, v -> nextTurnCallback.run()),
+                new CaveTile("Cave Tile", 12, root, nextTurnCallback),
+                new GrassTile("Green Grass Tile", 13, GrassColor.BLUE, root, v -> nextTurnCallback.run()),
+                new GrassTile("Green Grass Tile", 14, GrassColor.BLUE, root, v -> nextTurnCallback.run()),
+                new CityTile("City Tile", 15, root, v -> nextTurnCallback.run()),
+                new GrassTile("Green Grass Tile", 16, GrassColor.BLUE, root, v -> nextTurnCallback.run()),
+                new GrassTile("Green Grass Tile", 17, GrassColor.BLUE, root, v -> nextTurnCallback.run()),
+                new DaycareTile("Daycare Tile", 18, root, nextTurnCallback),
+                new GrassTile("Green Grass Tile", 19, GrassColor.BLUE, root, v -> nextTurnCallback.run()),
+                new BattleTile("Villain", 20, root, v -> nextTurnCallback.run()),
+                new GrassTile("Purple Grass Tile", 21, GrassColor.PURPLE, root, v -> nextTurnCallback.run()),
+                new EventTile("Event Tile", 22, root, v -> nextTurnCallback.run()),
+                new GrassTile("Purple Grass Tile", 23, GrassColor.PURPLE, root, v -> nextTurnCallback.run()),
+                new GrassTile("Purple Grass Tile", 24, GrassColor.PURPLE, root, v -> nextTurnCallback.run()),
+                new CityTile("City Tile", 25, root, v -> nextTurnCallback.run()),
+                new GrassTile("Purple Grass Tile", 26, GrassColor.PURPLE, root, v -> nextTurnCallback.run()),
+                new GrassTile("Purple Grass Tile", 27, GrassColor.PURPLE, root, v -> nextTurnCallback.run()),
+                new ItemTile("Item Tile", 28, root, v -> nextTurnCallback.run()),
+                new GrassTile("Purple Grass Tile", 29, GrassColor.PURPLE, root, v -> nextTurnCallback.run()),
+                new BattleTile("Gym 2", 30, root, v -> nextTurnCallback.run()),
+                new GrassTile("Red Grass Tile", 31, GrassColor.RED, root, v -> nextTurnCallback.run()),
+                new CaveTile("Cave Tile", 32, root, nextTurnCallback),
+                new GrassTile("Red Grass Tile", 33, GrassColor.RED, root, v -> nextTurnCallback.run()),
+                new GrassTile("Red Grass Tile", 34, GrassColor.RED, root, v -> nextTurnCallback.run()),
+                new CityTile("City Tile", 35, root, v -> nextTurnCallback.run()),
+                new GrassTile("Red Grass Tile", 36, GrassColor.RED, root, v -> nextTurnCallback.run()),
+                new GrassTile("Red Grass Tile", 37, GrassColor.RED, root, v -> nextTurnCallback.run()),
+                new GrassTile("Red Grass Tile", 38, GrassColor.RED, root, v -> nextTurnCallback.run()),
+                new GrassTile("Crown Grass Tile", 39, GrassColor.CROWN, root, v -> nextTurnCallback.run())
+        ));
+
         this.board = new Board(tiles);
     }
 
@@ -41,122 +96,6 @@ public class Game {
 
     public DeckManager getDeckManager() {
         return deckManager;
-    }
-
-    public void start() {
-        System.out.println("Starting game setup...");
-        setupPlayers();
-        setUpDeckManager();
-
-        System.out.println("--- Game Start ---");
-
-        while (turn <= players.size() * 10) {
-            Player currentPlayer = players.get(turn % players.size());
-
-            if (currentPlayer.isSkipTurn()) {
-                System.out.println("💤 " + currentPlayer.getName() + " is asleep and skips this turn!");
-                currentPlayer.setSkipTurn(false); // wake up after skipping one turn
-                turn++;
-                continue;
-            } //Edit 10/23/68
-
-            System.out.println("\n🎲 It's " + currentPlayer.getName() + "'s turn!");
-
-            // 🔥 Burn damage phase
-            for (PokemonCard pokemon : currentPlayer.getTeam()) {
-                if (pokemon.isBurned() && pokemon.isAlive()) {
-                    pokemon.setHp(pokemon.getHp() - 2);
-                    System.out.println("🔥 " + pokemon.getName() + " is burned and takes 2 damage! (HP: "
-                            + pokemon.getHp() + "/" + pokemon.getMaxHp() + ")");
-                }
-            } //Edit 10/23/68
-
-            Scanner scanner = new Scanner(System.in);
-
-            // use ability
-            System.out.println("Select ability to use:");
-            System.out.println("1. Pokemon ability");
-            System.out.println("2. Items ability");
-            System.out.println("3. Not use");
-
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // consume newline
-
-            if (choice == 1) {
-                if (!currentPlayer.getTeam().isEmpty()) {
-                    boolean check = false;
-                    for (int i = 0; i < currentPlayer.getTeam().size(); i++) {
-                        if (currentPlayer.getTeam().get(i) instanceof PreRollAbility) {
-                            System.out.println(i+1 + ". " + currentPlayer.getTeam().get(i).getName());
-                            check = true;
-                        }
-                    }
-
-                    if (!check) {
-                        System.out.println("No such ability!");
-                    }
-                    else {
-                        int pokemonChoice = scanner.nextInt();
-                        scanner.nextLine();
-
-                        PokemonCard selected = currentPlayer.getTeam().get(pokemonChoice - 1);
-
-                        if (selected instanceof PreRollAbility) {
-                            PreRollAbility abilityPokemon = (PreRollAbility) selected;
-                            abilityPokemon.usePreRollPassive(this);
-                        }
-                    }
-                }
-                else {
-                    System.out.println("No pokemon in team.");
-                }
-
-            } else if (choice == 2) {
-                if (!currentPlayer.getHand().getItems().isEmpty()) {
-                    for (int i = 0; i < currentPlayer.getHand().getItems().size(); i++) {
-                        System.out.println(i+1 + ". " + currentPlayer.getHand().getItems().get(i).getName());
-                    }
-                    int itemChoice = scanner.nextInt();
-                    scanner.nextLine();
-
-                    currentPlayer.getHand().getItems().get(itemChoice - 1).activate(this);
-                }
-                else {
-                    System.out.println("No item.");
-                }
-
-            } else if (choice == 3) {
-                System.out.println(currentPlayer.getName() + " not use ability.");
-            }
-
-            // roll dice
-            if (!getCurrentPlayer().isDoNothing()) {
-                int n = rollDice();
-                currentPlayer.setLastRoll(n);
-                System.out.println(currentPlayer.getName() + " rolled a " + n + "!");
-
-                checkAdditionalConditions(currentPlayer, n);
-
-                board.movePlayer(currentPlayer, n, this);
-            }
-
-            currentPlayer.setDoNothing(false);
-            turn++;
-        }
-    }
-
-    public void checkAdditionalConditions(Player currentPlayer, int n) {
-        // Check if walk pass daycare
-//        if (currentPlayer.getPosition() < 18 && currentPlayer.getPosition() + n >= 18) {
-//            DaycareTile daycareTile = (DaycareTile) board.getTileAt(18);
-//            daycareTile.walkPass(currentPlayer, this);
-//        }
-//
-//        // Check if walk pass start tile
-//        if (currentPlayer.getPosition() + n >= 40) {
-//            StartTile startTile = (StartTile) board.getTileAt(0);
-//            startTile.walkPass(currentPlayer, this);
-//        }
     }
 
     private void setUpDeckManager() {
@@ -307,31 +246,6 @@ public class Game {
         deckManager.shuffleAll();
     }
 
-    private void setupPlayers() {
-        Scanner input = new Scanner(System.in);
-        System.out.println("Enter number of players: ");
-        int n = input.nextInt();
-        input.nextLine();
-
-        for (int i = 0; i < n; i++) {
-            System.out.println("Enter player " + (i + 1) + " name: ");
-            String name = input.nextLine();
-
-            System.out.println("Choose profession: 1) Trainer 2) Fisher 3) Rocket 4) Scientist");
-            int choice = input.nextInt();
-            input.nextLine();
-            ProfessionType type = switch (choice) {
-                case 2 -> ProfessionType.FISHER;
-                case 3 -> ProfessionType.ROCKET;
-                case 4 -> ProfessionType.SCIENTIST;
-                default -> ProfessionType.TRAINER;
-            };
-
-            players.add(new Player(name, type));
-        }
-
-    }
-
     public int getTurn() {
         return turn;
     }
@@ -341,7 +255,7 @@ public class Game {
     }
 
     public void nextPlayer() {
-        turn = (turn + 1) % players.size();
+        turn += 1;
     }
 
     public List<Player> getPlayers() {
@@ -368,29 +282,4 @@ public class Game {
         return board;
     }
 
-    public ItemCard createItemById(String id) {
-        if (id == null) return null;
-
-        switch (id.toLowerCase()) {
-            case "bicycle": return new Bicycle();
-            case "ejectbutton": return new EjectButton();
-            case "expshare": return new EXPShare();
-            case "fullheal": return new FullHeal();
-            case "hm02fly": return new HM02Fly();
-            case "maxpotion": return new MaxPotion();
-            case "max_repel": return new MaxRepel();
-            case "pokedex": return new Pokedex();
-            case "potion": return new Potion();
-            case "rarecandy": return new RareCandy();
-            case "repel": return new Repel();
-            case "revive": return new Revive();
-            case "snowball": return new Snowball();
-            case "superpotion": return new SuperPotion();
-            case "superrepel": return new SuperRepel();
-            case "trainpass": return new TrainPass();
-        }
-
-        System.err.println("Unknown item id: " + id);
-        return null;
-    }
 }
