@@ -3,6 +3,7 @@ package com.pokemopoly.cards.items;
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.ItemCard;
 import com.pokemopoly.player.Player;
+import com.pokemopoly.ui.MainGameUI;
 
 import java.util.List;
 import java.util.Scanner;
@@ -10,43 +11,23 @@ import java.util.Scanner;
 public class EjectButton extends ItemCard {
     public EjectButton() {
         super("eject_button", "Eject Button",
-                "Choose 1 player to move backward 3 tiles.");
+                "Move backward 1 tile");
     }
 
     @Override
-    public void activate(Game game) {
-        Scanner scanner = new Scanner(System.in);
-        List<Player> players = game.getPlayers();
+    public void activate(Game game, MainGameUI gameUI) {
+        Player player = game.getCurrentPlayer();
+        int currentPos = player.getPosition();
+        int boardSize = 40;
 
-        System.out.println("🔵 Eject Button Activated!");
-        System.out.println("Choose a player to move backward 3 tiles:");
+        int targetPos = (currentPos - 1 + boardSize) % boardSize;
+        int moveSteps = (targetPos - currentPos + boardSize) % boardSize;
 
-        // List all players
-        for (int i = 0; i < players.size(); i++) {
-            Player p = players.get(i);
-            System.out.println((i + 1) + ". " + p.getName() +
-                    " (Position: " + p.getPosition() + ")");
-        }
+        System.out.println("✨ " + player.getName() + " used Eject Button!");
+        System.out.println("Moving backward from " + currentPos + " → " + targetPos);
 
-        int choice = -1;
-        while (choice < 1 || choice > players.size()) {
-            System.out.print("Select player (1-" + players.size() + "): ");
-            choice = scanner.nextInt();
-        }
-
-        Player target = players.get(choice - 1);
-
-        System.out.println("➡️ " + target.getName() + " will move backward 3 tiles!");
-
-        int newPos = target.getPosition() - 3;
-
-        // Wrap-around logic if goes before tile 0
-        if (newPos < 0) {
-            newPos += 40; // board size
-        }
-
-        target.setPosition(newPos);
-        System.out.println("⬅️ " + target.getName() +
-                " is now at tile " + newPos + ".");
+        gameUI.movePlayerIcon(player, moveSteps, game.getBoard());
     }
+
+    @Override public boolean isAsync() { return true; }
 }

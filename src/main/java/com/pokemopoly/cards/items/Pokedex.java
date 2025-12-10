@@ -3,49 +3,30 @@ package com.pokemopoly.cards.items;
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.ItemCard;
 import com.pokemopoly.player.Player;
+import com.pokemopoly.ui.MainGameUI;
+import com.pokemopoly.board.Board;
 
-import java.util.Scanner;
+import java.util.List;
 
 public class Pokedex extends ItemCard {
     public Pokedex() {
-        super("pokedex", "Pokedex", "Look at all item cards in another player's hand.");
+        super("pokedex", "Pokedex", "Move to crown tile.");
     }
 
     @Override
-    public void activate(Game game) {
+    public void activate(Game game, MainGameUI gameUI) {
+        Player player = game.getCurrentPlayer();
 
-        Scanner scanner = new Scanner(System.in);
+        System.out.println("🔎 " + player.getName() + " used Pokedex!");
 
-        System.out.println("📘 Pokedex activated!");
-        System.out.println("Choose a player to inspect their items:");
+        int targetPos = 39;
+        int currentPos = player.getPosition();
+        int moveSteps = (targetPos - currentPos + 40) % 40;
 
-        // list all players
-        for (int i = 0; i < game.getPlayers().size(); i++) {
-            Player p = game.getPlayers().get(i);
-            System.out.println((i + 1) + ". " + p.getName());
-        }
+        System.out.println("Moving " + player.getName() + " to Daycare (tile " + targetPos + ")");
 
-        int choice;
-        while (true) {
-            System.out.print("Select player number: ");
-            choice = scanner.nextInt() - 1;
-            if (choice >= 0 && choice < game.getPlayers().size()) break;
-            System.out.println("Invalid choice! Try again.");
-        }
-
-        Player target = game.getPlayers().get(choice);
-
-        System.out.println("\n🔍 Viewing items in " + target.getName() + "'s hand:");
-
-        if (target.getHand().getItems().isEmpty()) {
-            System.out.println("(No items)");
-            return;
-        }
-
-        target.getHand().getItems().forEach(item ->
-                System.out.println("- " + item.getName() + " : " + item.getDescription())
-        );
-
-        System.out.println("📘 End of Pokedex view.");
+        gameUI.movePlayerIcon(player, moveSteps, game.getBoard());
     }
+
+    @Override public boolean isAsync() { return true; }
 }

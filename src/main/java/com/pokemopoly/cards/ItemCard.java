@@ -1,6 +1,7 @@
 package com.pokemopoly.cards;
 
 import com.pokemopoly.Game;
+import com.pokemopoly.ui.MainGameUI;
 
 public abstract class ItemCard implements Card {
     private final String id;
@@ -17,6 +18,10 @@ public abstract class ItemCard implements Card {
         return id;
     }
 
+    public boolean isAsync() {
+        return false;
+    }
+
     public String getName() {
         return name;
     }
@@ -25,6 +30,6 @@ public abstract class ItemCard implements Card {
         return description;
     }
 
-    abstract public void activate(Game game);
+    abstract public void activate(Game game, MainGameUI gameUI);
 
 }

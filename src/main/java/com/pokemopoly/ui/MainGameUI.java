@@ -3,8 +3,10 @@ package com.pokemopoly.ui;
 import com.pokemopoly.Game;
 import com.pokemopoly.MusicManager;
 import com.pokemopoly.board.Board;
+import com.pokemopoly.cards.ItemCard;
 import com.pokemopoly.player.Player;
 import com.pokemopoly.player.ProfessionType;
+import com.pokemopoly.ui.cards.ItemCardUI;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.PauseTransition;
@@ -211,25 +213,15 @@ public class MainGameUI {
         turnText.setFill(Color.WHITE);
         turnText.setStyle("-fx-font-size: 42px;");
 
-        Button btnPokemon = new Button("Use Pokemon Skill");
-        Button btnItem = new Button("Use Item Skill");
-        Button btnSkip = new Button("Do Nothing");
+        Button btnItem = new Button("Use item");
+        Button btnSkip = new Button("Roll a dice");
 
-        btnPokemon.setPrefWidth(220);
         btnItem.setPrefWidth(220);
         btnSkip.setPrefWidth(220);
 
-        // Game logic
-        btnPokemon.setOnAction(e -> {
-            // TODO
-            hideTurnOverlay(box);
-            startDiceRoll();
-        });
-
         btnItem.setOnAction(e -> {
-            // TODO
             hideTurnOverlay(box);
-            startDiceRoll();
+            showPlayerItemOverlay();
         });
 
         btnSkip.setOnAction(e -> {
@@ -237,7 +229,7 @@ public class MainGameUI {
             startDiceRoll();
         });
 
-        box.getChildren().addAll(turnText, btnPokemon, btnItem, btnSkip);
+        box.getChildren().addAll(turnText, btnItem, btnSkip);
         box.setVisible(false);
 
         return box;
@@ -267,6 +259,16 @@ public class MainGameUI {
                         + (int)(c.getBlue()*255) + ", 0.55);"
         );
 
+        Button btnItem = (Button) overlay.getChildren().get(1);
+
+        if (p.getHand().getItems().isEmpty()) {
+            btnItem.setDisable(true);
+            btnItem.setText("No items");
+        } else {
+            btnItem.setDisable(false);
+            btnItem.setText("Use item");
+        }
+
         overlay.setVisible(true);
         updatePlayerColors();
     }
@@ -280,6 +282,8 @@ public class MainGameUI {
         final RollDiceUI[] diceUIHolder = new RollDiceUI[1];
 
         diceUIHolder[0] = new RollDiceUI((n) -> {
+
+            n = 10;
 
             root.getChildren().remove(diceUIHolder[0].getView());
 
@@ -325,12 +329,14 @@ public class MainGameUI {
 
         timeline.setOnFinished(e -> {
             System.out.println("Moved to: " + wrapper.getLayoutX() + ", " + wrapper.getLayoutY());
-            if (!currentPlayer.isDoNothing()) {
-                currentPlayer.setLastRoll(n);
-                board.movePlayer(currentPlayer, n, game);
-            }
 
-            currentPlayer.setDoNothing(false);
+            currentPlayer.setLastRoll(n);
+            board.movePlayer(currentPlayer, n, game);
+
+            if (currentPlayer.isDoNothing()) {
+                currentPlayer.setDoNothing(false);
+                nextTurn();
+            }
         });
     }
 
@@ -345,6 +351,7 @@ public class MainGameUI {
         Player next = game.getCurrentPlayer();
 
         Platform.runLater(() -> {
+            System.out.println("currentPlayer: " + next.getName());
             showTurnOverlay(next);
             updatePlayerColors();
         });
@@ -381,9 +388,9 @@ public class MainGameUI {
             StackPane wrapper = (StackPane) playerLayer.getChildren().get(i);
 
             if (p.isSkipTurn()) {
-                wrapper.setOpacity(0.5); // ตัวเทา
+                wrapper.setOpacity(0.5);
             } else {
-                wrapper.setOpacity(1.0); // สีปกติ
+                wrapper.setOpacity(1.0);
             }
         }
     }
@@ -416,7 +423,7 @@ public class MainGameUI {
 
             Label nameLabel = new Label(p.getName());
             nameLabel.setFont(Font.font("Pixelify Sans", 32));
-            nameLabel.setTextFill(rank == 1 ? Color.LIME : Color.WHITE); // ไฮไลท์ผู้ชนะ
+            nameLabel.setTextFill(rank == 1 ? Color.LIME : Color.WHITE); // Highlight winner
 
             Label coinLabel = new Label(p.getAllCoin() + " Coins");
             coinLabel.setFont(Font.font("Pixelify Sans", 32));
@@ -463,5 +470,81 @@ public class MainGameUI {
 
     public Scene getScene() {
         return scene;
+    }
+
+    private void showPlayerItemOverlay() {
+        Player player = game.getCurrentPlayer();
+        List<ItemCard> items = player.getHand().getItems();
+
+        VBox overlay = new VBox(10);
+        overlay.setAlignment(Pos.CENTER);
+        overlay.setStyle("-fx-background-color: rgba(0,0,0,0.75); -fx-padding: 20;");
+        overlay.setMaxWidth(800);
+
+        Label title = new Label(player.getName() + "'s Items");
+        title.setStyle("-fx-text-fill: white; -fx-font-size: 20px;");
+        overlay.getChildren().add(title);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setAlignment(Pos.CENTER);
+
+        overlay.getChildren().add(grid);
+
+        HBox btnBox = new HBox(10);
+        btnBox.setAlignment(Pos.CENTER);
+
+        Button cancelBtn = new Button("Cancel");
+        cancelBtn.setOnAction(e -> {
+            root.getChildren().remove(overlay);
+            showTurnOverlay(player);
+        });
+
+        final int[] selectedIdx = {-1}; // ตัวแปรเก็บไอเทมที่เลือก
+        List<ItemCardUI> cardUIs = new ArrayList<>();
+
+        Button useBtn = new Button("Use Selected Item");
+        useBtn.setDisable(true); // เริ่มต้นปิดปุ่ม
+        useBtn.setOnAction(e -> {
+            if (selectedIdx[0] != -1) {
+                ItemCard selectedItem = items.get(selectedIdx[0]);
+
+                player.removeItem(selectedItem);
+                System.out.println(player.getName() + " used " + selectedItem.getName());
+
+                root.getChildren().remove(overlay);
+
+                if (selectedItem.isAsync()) {
+                    selectedItem.activate(game, this);
+                } else {
+                    selectedItem.activate(game, this);
+                    nextTurn();
+                }
+            }
+        });
+
+        for (int i = 0; i < items.size(); i++) {
+            ItemCard item = items.get(i);
+            ItemCardUI cardUI = new ItemCardUI(item);
+            cardUI.setSize(2);
+
+            int idx = i;
+            cardUI.setOnMouseClicked(e -> {
+                grid.getChildren().forEach(node -> node.setStyle("")); // reset border
+                cardUI.setStyle("-fx-border-color: red; -fx-border-width: 2;");
+                selectedIdx[0] = idx;
+                useBtn.setDisable(false); // enable ปุ่ม
+            });
+
+            grid.add(cardUI, i % 4, i / 4);
+            cardUIs.add(cardUI);
+        }
+
+        btnBox.getChildren().addAll(cancelBtn, useBtn);
+        overlay.getChildren().add(btnBox);
+
+        root.getChildren().add(overlay);
+        StackPane.setAlignment(overlay, Pos.CENTER);
     }
 }

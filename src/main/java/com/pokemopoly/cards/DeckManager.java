@@ -84,6 +84,26 @@ public class DeckManager {
         return crownPokemonDeck;
     }
 
+    public boolean isBlueEmpty() {
+        return bluePokemonDeck.isEmpty();
+    }
+
+    public boolean isGreenEmpty() {
+        return greenPokemonDeck.isEmpty();
+    }
+
+    public boolean isPurpleEmpty() {
+        return purplePokemonDeck.isEmpty();
+    }
+
+    public boolean isRedEmpty() {
+        return redPokemonDeck.isEmpty();
+    }
+
+    public boolean isCrownEmpty() {
+        return crownPokemonDeck.isEmpty();
+    }
+
     public void shuffleAll() {
         itemDeck.shuffle();
         eventDeck.shuffle();
@@ -100,6 +120,6 @@ public class DeckManager {
         if (purplePokemonDeck.contains(card)) return PokemonDeckColor.PURPLE;
         if (redPokemonDeck.contains(card)) return PokemonDeckColor.RED;
         if (crownPokemonDeck.contains(card)) return PokemonDeckColor.CROWN;
-        return null; // ไม่เจอ
+        return null;
     }
 }

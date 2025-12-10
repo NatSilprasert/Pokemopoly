@@ -71,18 +71,43 @@ public class BattleTile extends Tile {
         Button skipBtn = new Button("Skip");
         skipBtn.setStyle("-fx-font-size: 16px; -fx-padding: 10 25;");
 
+// 🔴 ข้อความแจ้งเตือนสีแดง
+        Label errorLabel = new Label("");
+        errorLabel.setStyle("-fx-text-fill: #ff4c4c; -fx-font-size: 14px; -fx-font-weight: bold;");
+
+// ปุ่ม Fight
         fightBtn.setOnAction(e -> {
+            var team = player.getTeam();
+
+            // ❌ ไม่มีโปเกมอนเลย
+            if (team.isEmpty()) {
+                errorLabel.setText("You have no Pokémon to battle!");
+                return;
+            }
+
+            // 🔍 ตรวจว่ามีตัวไหนยังมี HP > 0
+            boolean hasAlive = team.stream().anyMatch(p -> p.isAlive() && p.getHp() > 0);
+
+            // ❌ ทุกตัว HP = 0
+            if (!hasAlive) {
+                errorLabel.setText("All your Pokémon have fainted!");
+                return;
+            }
+
+            // ✅ มีตัวที่สู้ได้ → เริ่มสู้
             rootPane.getChildren().remove(overlay);
             startBattleWithFade(player, game);
         });
 
+// ปุ่ม Skip
         skipBtn.setOnAction(e -> {
             rootPane.getChildren().remove(overlay);
             if (endTurnCallback != null) endTurnCallback.accept(null);
             musicManager.fadeOutCurrent(1, () -> musicManager.playWithFade("palletTown", true, 1.0));
         });
 
-        overlay.getChildren().addAll(title, ask, fightBtn, skipBtn);
+// เพิ่มลง overlay
+        overlay.getChildren().addAll(title, ask, fightBtn, skipBtn, errorLabel);
         rootPane.getChildren().add(overlay);
         StackPane.setAlignment(overlay, Pos.CENTER);
     }
