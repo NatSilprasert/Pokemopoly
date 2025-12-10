@@ -1,9 +1,8 @@
-package com.pokemopoly;
+package com.pokemopoly.ui;
 
+import com.pokemopoly.Game;
 import com.pokemopoly.cards.ItemCard;
 import com.pokemopoly.player.Player;
-import com.pokemopoly.ui.MainGameUI;
-import com.pokemopoly.ui.cards.ItemCardUI;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -21,7 +20,7 @@ import javafx.scene.text.FontWeight;
 
 import java.util.Objects;
 
-public class Shop extends HBox {
+public class ShopUI extends HBox {
 
     private final Player player;
 
@@ -57,7 +56,7 @@ public class Shop extends HBox {
         }
     }
 
-    public Shop(Player player) {
+    public ShopUI(Player player) {
         this.player = player;
 
         this.setPadding(new Insets(10));

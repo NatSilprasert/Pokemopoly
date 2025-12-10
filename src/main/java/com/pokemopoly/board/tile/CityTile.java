@@ -2,6 +2,7 @@ package com.pokemopoly.board.tile;
 
 import com.pokemopoly.Game;
 import com.pokemopoly.MusicManager;
+import com.pokemopoly.ui.ShopUI;
 import com.pokemopoly.board.Tile;
 import com.pokemopoly.player.Player;
 import javafx.geometry.Pos;
@@ -45,7 +46,7 @@ public class CityTile extends Tile {
         label.setStyle("-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;");
 
         HBox shopUI = new HBox();
-        shopUI.getChildren().add(new com.pokemopoly.Shop(player));
+        shopUI.getChildren().add(new ShopUI(player));
         shopUI.setAlignment(Pos.CENTER);
 
         Button exitBtn = new Button("EXIT SHOP");
