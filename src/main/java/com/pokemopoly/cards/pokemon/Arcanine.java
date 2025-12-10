@@ -18,9 +18,9 @@ public class Arcanine extends PokemonCard {
                 List.of(PokemonType.FIRE));
     }
 
-    //@Override
-    //public void useBattlePassive(Battle battle) {
-     //   PokemonCard opponentPokemon = battle.getOpponentPokemon(this);
-       // opponentPokemon.setPower(opponentPokemon.getPower() - 2);
-    //}
+//    @Override
+//    public void useBattlePassive(Battle battle) {
+//        PokemonCard opponentPokemon = battle.getOpponentPokemon(this);
+//        opponentPokemon.setPower(opponentPokemon.getPower() - 2);
+//    }
 }
