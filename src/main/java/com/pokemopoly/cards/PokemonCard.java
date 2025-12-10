@@ -18,8 +18,6 @@ public abstract class PokemonCard {
     private int hp;
     private int power;
 
-    private boolean burned = false;
-    private boolean paralyzed = false;
     private boolean isAlive = true;
 
     public PokemonCard(String id, String name, String description, int hp, int power, int price, List<PokemonType> types) {
@@ -84,6 +82,10 @@ public abstract class PokemonCard {
 
     public void setAlive(boolean alive) {
         isAlive = alive;
+    }
+
+    public Player getOwner() {
+        return owner;
     }
 
     public void setOwner(Player owner) {

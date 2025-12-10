@@ -1,0 +1,198 @@
+@startuml
+class com.pokemopoly.ui.ShopUI {
+- Player player
+- VBox summaryBox
+- Label playerCoinLabel
+- ShopItemData selectedItem
+- void addItemToGrid(GridPane,ShopItemData,int,int,String)
+- void clearSummary()
+- void updateSummary()
+- void styleButton(Button,Color)
+- boolean performPurchase(ShopItemData)
+}
+
+
+class com.pokemopoly.ui.ShopUI$ShopItemData {
+~ String id
+~ String name
+~ int price
+~ String type
+~ String description
+}
+
+class com.pokemopoly.ui.ShopUI$SimpleItemCard {
++ void activate(Game,MainGameUI)
+}
+
+class com.pokemopoly.ui.RollDiceUI {
+- VBox root
+- Timeline diceAnimation
+- int currentFace
+- ImageView diceView
+- DiceResultCallback callback
+- boolean isBot
+- void autoRoll(Label)
++ VBox getView()
+- Image loadDice(int)
+}
+
+
+interface com.pokemopoly.ui.RollDiceUI$DiceResultCallback {
+~ void onResult(int)
+}
+
+class com.pokemopoly.ui.BattleUI {
+- Game game
+- StackPane rootPane
+- Player player
+- Player bot
+- Runnable onEnd
+- StackPane battleContainer
+- Label playerHPLabel
+- Label botHPLabel
+- VBox playerBox
+- VBox enemyBox
+- PokemonCard playerPokemon
+- PokemonCard botPokemon
++ void start()
+- void buildBattleUI()
+- Label makeLabel(String,int,Color)
+- void startPlayerRoll(Label,Button)
+- void startBotRoll(Label,Button,int)
+- void resolveTurn(int,int,Label,Button)
+- void playShake(Region)
+- void showEndVictory(boolean)
+- void playFadeOutAndFinish()
+- void showPokemonSelection()
+- String baseSelectStyle(boolean)
+- VBox buildPokemonSelectCard(PokemonCard,boolean)
+- Image getPokemonImage(PokemonCard)
+- void updateHPLabels()
+- void playFadeIn()
++ boolean attack(Player,Player,PokemonCard,PokemonCard)
+}
+
+
+class com.pokemopoly.ui.cards.EventCardUI {
+- {static} int CARD_WIDTH
+- {static} int CARD_HEIGHT
+- {static} Color BG_COLOR
+- {static} Color IMG_PLACEHOLDER_COLOR
+- {static} Color BORDER_COLOR
+- {static} int BORDER_THICKNESS
+- EventCard card
+- {static} String PIXEL_FONT
+- void initComponents()
+}
+
+
+class com.pokemopoly.ui.NumberPlayerSelectUI {
+- Scene scene
+- int selectedPlayers
+- MusicManager musicManager
+- Button createSquareButton(String)
+- void select(Button,Button,Button,int)
+- String defaultStyle()
++ Scene getScene()
+}
+
+
+class com.pokemopoly.ui.cards.PokemonCardUI {
+- double CARD_WIDTH
+- double CARD_HEIGHT
+- {static} String PIXEL_FONT
+- Color getColorFromEnum(PokemonDeckColor)
++ void setSize(int)
+- Insets scaleInsets(Insets,int)
+}
+
+
+class com.pokemopoly.ui.PlayerSetupUI {
+- Scene scene
+- Game game
+- Stage stage
+- int totalPlayers
+- MusicManager musicManager
+- int currentIndex
+- ProfessionType selectedProfession
+- boolean hasName
+- java.util.List<VBox> professionCards
+- Label stepLabel
+- TextField nameField
+- Button confirmButton
+- StackPane rootContainer
++ Scene getScene()
+- VBox createProfessionCard(ProfessionType,String,String)
+- HBox createProfessionSelector()
+- void selectProfession(ProfessionType,VBox)
+- void validateForm()
+- void handleConfirm()
+- void resetForm()
+- void startTransitionToMainUI()
+}
+
+
+class com.pokemopoly.ui.MainGameUI {
+- Game game
+- Stage stage
+- Scene scene
+- StackPane root
+- Pane playerLayer
+- Color[] playerColors
+- double[][] boardPositions
+- void initBoardPositions()
+- void initPlayerIcons()
+- String getIconForProfession(ProfessionType)
+- String toWebColor(Color)
+- VBox createTurnOverlay()
++ void showTurnOverlay(Player)
+- void hideTurnOverlay(VBox)
+- void startDiceRoll()
++ void movePlayerIcon(Player,int,Board)
+- void nextTurn()
+- void playIntroFade(Pane,VBox)
+- void updatePlayerColors()
++ void showGameEndOverlay()
++ Scene getScene()
+- void showPlayerItemOverlay()
+}
+
+
+class com.pokemopoly.ui.cards.ItemCardUI {
+- int CARD_WIDTH
+- int CARD_HEIGHT
+- {static} Color BG_COLOR
+- {static} Color IMG_PLACEHOLDER_COLOR
+- {static} Color BORDER_COLOR
+- {static} int BORDER_THICKNESS
+- ItemCard card
+- {static} String PIXEL_FONT
+- void initComponents()
++ void setSize(int)
+}
+
+
+class com.pokemopoly.ui.MusicManager {
+- MediaPlayer currentPlayer
+- Map<String,Media> mediaLibrary
++ void addMusic(String,String)
++ void play(String,boolean)
++ void stopCurrent()
++ void fadeOutCurrent(double,Runnable)
++ void playWithFade(String,boolean,double)
++ MediaPlayer getCurrentPlayer()
++ void playMusicForScene(String)
+}
+
+
+
+
+com.pokemopoly.ui.HBox <|-- com.pokemopoly.ui.ShopUI
+com.pokemopoly.ui.ShopUI +.. com.pokemopoly.ui.ShopUI$ShopItemData
+com.pokemopoly.ui.ShopUI +.. com.pokemopoly.ui.ShopUI$SimpleItemCard
+com.pokemopoly.ui.ItemCard <|-- com.pokemopoly.ui.ShopUI$SimpleItemCard
+com.pokemopoly.ui.RollDiceUI +.. com.pokemopoly.ui.RollDiceUI$DiceResultCallback
+com.pokemopoly.ui.cards.VBox <|-- com.pokemopoly.ui.cards.EventCardUI
+com.pokemopoly.ui.cards.StackPane <|-- com.pokemopoly.ui.cards.PokemonCardUI
+com.pokemopoly.ui.cards.VBox <|-- com.pokemopoly.ui.cards.ItemCardUI
+@enduml

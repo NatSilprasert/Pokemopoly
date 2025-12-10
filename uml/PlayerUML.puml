@@ -1,0 +1,70 @@
+@startuml
+class com.pokemopoly.player.Player {
+- String name
+- ProfessionType profession
+- Hand hand
+- List<PokemonCard> team
+- boolean doNothing
+- int MAX_POKEMON
+- int position
+- int coin
+- int redBall
+- int greatBall
+- int hyperBall
+- boolean badge1
+- boolean badge2
+- boolean skipTurn
++ boolean isTeamFull()
++ void addPokemon(PokemonCard)
++ void setPokemon(int,PokemonCard)
++ String getName()
++ void setName(String)
++ ProfessionType getProfession()
++ void setProfession(ProfessionType)
++ int getPosition()
++ void setPosition(int)
++ void setTeam(List<PokemonCard>)
++ int getCoin()
++ void setCoin(int)
++ List<PokemonCard> getTeam()
++ Hand getHand()
++ int getMaxPokemon()
++ boolean getBadges1()
++ void setBadges1()
++ boolean getBadges2()
++ void setBadges2()
++ int getRedBall()
++ void setRedBall(int)
++ int getGreatBall()
++ void setGreatBall(int)
++ int getHyperBall()
++ void setHyperBall(int)
++ boolean isSkipTurn()
++ void setSkipTurn(boolean)
++ boolean isDoNothing()
++ void setDoNothing(boolean)
++ int getAllCoin()
+}
+
+
+enum com.pokemopoly.player.ProfessionType {
++  TRAINER
++  FISHER
++  ROCKET
++  SCIENTIST
+}
+
+class com.pokemopoly.player.Hand {
+- List<ItemCard> items
+- int capacity
++ boolean add(ItemCard)
++ void setItem(int,ItemCard)
++ void clearItems()
++ boolean remove(ItemCard)
++ List<ItemCard> getItems()
++ int getCapacity()
++ boolean isFull()
+}
+
+
+@enduml

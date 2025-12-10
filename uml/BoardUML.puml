@@ -1,0 +1,125 @@
+@startuml
+class com.pokemopoly.board.tile.StartTile {
+- StackPane rootPane
+- Runnable endTurnCallback
++ void onLand(Player,Game)
++ void walkPass(Player,Game,Runnable)
+- void showSellPokemonUI(Player,Game,Runnable)
+- VBox buildPokemonCard(PokemonCard,boolean)
+- String baseCardStyle(boolean)
+- Label makeLabel(String,int,Color)
+- Image getImage(PokemonCard)
+}
+
+
+class com.pokemopoly.board.tile.DaycareTile {
+- StackPane rootPane
+- Runnable endTurnCallback
+- MusicManager musicManager
++ void onLand(Player,Game)
+- VBox buildPokemonCard(PokemonCard,boolean)
+- String baseCardStyle(boolean)
+- Label makeLabel(String,int,Color)
+- Image getImage(PokemonCard)
+}
+
+
+class com.pokemopoly.board.tile.EventTile {
+- StackPane rootPane
+- Consumer<Void> endTurnCallback
++ void onLand(Player,Game)
+}
+
+
+class com.pokemopoly.board.tile.ItemTile {
+- StackPane rootPane
+- Consumer<Void> endTurnCallback
++ void onLand(Player,Game)
+- void showFullHandOverlay(Player,ItemCard)
+}
+
+
+abstract class com.pokemopoly.board.Tile {
+# String name
+# int index
+# List<Player> playersOnLand
++ String getName()
++ int getIndex()
++ {abstract}void onLand(Player,Game)
++ void moveIn(Player,Game)
+}
+
+
+enum com.pokemopoly.board.GrassColor {
++  GREEN
++  BLUE
++  PURPLE
++  RED
++  CROWN
+- int catchRate
++ int getCatchRate()
+}
+
+
+class com.pokemopoly.board.tile.CityTile {
+- StackPane rootPane
+- Consumer<Void> endTurnCallback
+- MusicManager musicManager
++ void onLand(Player,Game)
+- void showShopOverlay(Player,Game)
+}
+
+
+class com.pokemopoly.board.tile.GrassTile {
+- StackPane rootPane
+- Consumer<Void> endTurnCallback
+- GrassColor color
+- int catchRate
++ void onLand(Player,Game)
+- void showCatchOverlay(Player,PokemonCard)
+- void showBallSelectionOverlay(Player,PokemonCard,int)
+- Button createBallSelectionButton(Player,String,int,HBox,Label,int[],int[],Button[],int)
+- void showCaughtOverlay(Player,PokemonCard)
+- void showBreakFreeOverlay(Player,PokemonCard,int)
++ int getCatchRate()
++ GrassColor getColor()
+}
+
+
+class com.pokemopoly.board.tile.CaveTile {
+- StackPane rootPane
+- Runnable endTurnCallback
+- MusicManager musicManager
++ void onLand(Player,Game)
+}
+
+
+class com.pokemopoly.board.tile.BattleTile {
+- Player boss
+- StackPane rootPane
+- Consumer<Void> endTurnCallback
+- MusicManager musicManager
++ void onLand(Player,Game)
+- void startBattleWithFade(Player,Game)
+}
+
+
+class com.pokemopoly.board.Board {
+- List<Tile> tiles
++ Tile getTileAt(int)
++ void movePlayer(Player,int,Game)
++ int getSize()
+}
+
+
+
+
+com.pokemopoly.board.Tile <|-- com.pokemopoly.board.tile.StartTile
+com.pokemopoly.board.Tile <|-- com.pokemopoly.board.tile.DaycareTile
+com.pokemopoly.board.Tile <|-- com.pokemopoly.board.tile.EventTile
+com.pokemopoly.board.Tile <|-- com.pokemopoly.board.tile.ItemTile
+com.pokemopoly.board.Tile <|-- com.pokemopoly.board.tile.CityTile
+com.pokemopoly.board.Tile <|-- com.pokemopoly.board.tile.GrassTile
+com.pokemopoly.board.Tile <|-- com.pokemopoly.board.tile.CaveTile
+com.pokemopoly.board.Tile <|-- com.pokemopoly.board.tile.BattleTile
+@enduml

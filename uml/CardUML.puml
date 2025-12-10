@@ -1,0 +1,143 @@
+@startuml
+enum com.pokemopoly.cards.PokemonType {
++  NORMAL
++  FIRE
++  WATER
++  GRASS
++  ELECTRIC
++  ICE
++  FIGHTING
++  POISON
++  GROUND
++  FLYING
++  PSYCHIC
++  BUG
++  ROCK
++  GHOST
++  DRAGON
+}
+
+class com.pokemopoly.cards.TypeEffectiveness {
+- {static} Map<PokemonType,List<PokemonType>> superEffective
+- {static} Map<PokemonType,List<PokemonType>> notEffective
++ {static} List<PokemonType> getSuperEffective(PokemonType)
++ {static} List<PokemonType> getNotEffective(PokemonType)
+}
+
+
+abstract class com.pokemopoly.cards.ItemCard {
+- String id
+- String name
+- String description
++ String getId()
++ boolean isAsync()
++ String getName()
++ String getDescription()
++ {abstract}void activate(Game,MainGameUI)
+}
+
+
+class com.pokemopoly.cards.DeckManager {
+- Deck<ItemCard> itemDeck
+- Deck<EventCard> eventDeck
+- Deck<PokemonCard> bluePokemonDeck
+- Deck<PokemonCard> greenPokemonDeck
+- Deck<PokemonCard> purplePokemonDeck
+- Deck<PokemonCard> redPokemonDeck
+- Deck<PokemonCard> crownPokemonDeck
++ ItemCard drawItem()
++ EventCard drawEvent()
++ PokemonCard drawBluePokemon()
++ PokemonCard drawGreenPokemon()
++ PokemonCard drawPurplePokemon()
++ PokemonCard drawRedPokemon()
++ PokemonCard drawCrownPokemon()
++ Deck<ItemCard> getItemDeck()
++ Deck<EventCard> getEventDeck()
++ Deck<PokemonCard> getBluePokemonDeck()
++ Deck<PokemonCard> getGreenPokemonDeck()
++ Deck<PokemonCard> getPurplePokemonDeck()
++ Deck<PokemonCard> getRedPokemonDeck()
++ Deck<PokemonCard> getCrownPokemonDeck()
++ boolean isBlueEmpty()
++ boolean isGreenEmpty()
++ boolean isPurpleEmpty()
++ boolean isRedEmpty()
++ boolean isCrownEmpty()
++ void shuffleAll()
++ PokemonDeckColor getDeckColorOf(PokemonCard)
+}
+
+
+interface com.pokemopoly.cards.pokemon.interfaces.Evolvable {
++ PokemonCard evolve()
+}
+
+class com.pokemopoly.cards.Deck {
+- List<T> cards
++ void addCard(List<T>)
++ void shuffle()
++ T draw()
++ boolean isEmpty()
++ int size()
++ boolean contains(T)
+}
+
+
+abstract class com.pokemopoly.cards.PokemonCard {
+- String id
+- String name
+- String description
+- List<PokemonType> types
+- Player owner
+- int maxHp
+- int maxPower
+- int price
+- PokemonDeckColor deckColor
+- int hp
+- int power
+- boolean isAlive
++ String getName()
++ String getDescription()
++ List<PokemonType> getTypes()
++ int getHp()
++ int getMaxHp()
++ void setMaxHp(int)
++ int getPower()
++ void setPower(int)
++ int getMaxPower()
++ void setMaxPower(int)
++ int getPrice()
++ boolean isAlive()
++ void setAlive(boolean)
++ Player getOwner()
++ void setOwner(Player)
++ void setHp(int)
++ PokemonDeckColor getDeckColor()
++ void setDeckColor(PokemonDeckColor)
+}
+
+
+abstract class com.pokemopoly.cards.EventCard {
+- String id
+- String name
+- String description
++ String getId()
++ String getName()
++ String getDescription()
++ {abstract}void activate(Game)
+}
+
+
+enum com.pokemopoly.cards.PokemonDeckColor {
++  BLUE
++  GREEN
++  PURPLE
++  RED
++  CROWN
+- String colorHex
++ String getColorHex()
+}
+
+
+@enduml
