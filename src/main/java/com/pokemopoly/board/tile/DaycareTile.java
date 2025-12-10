@@ -68,8 +68,8 @@ public class DaycareTile extends Tile {
 
         for (PokemonCard card : evolvables) {
             VBox cardUI = buildPokemonCard(card, shrink);
-            int col = index % 3; // 2 columns ถ้า shrink
-            int row = shrink ? index / 3 : index;
+            int col = index % 3;
+            int row = shrink ? 2 : 1;
             grid.add(cardUI, col, row);
             index++;
 

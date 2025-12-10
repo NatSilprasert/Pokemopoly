@@ -4,6 +4,7 @@ import com.pokemopoly.Game;
 import com.pokemopoly.cards.ItemCard;
 import com.pokemopoly.cards.PokemonCard;
 import com.pokemopoly.cards.pokemon.interfaces.Evolvable;
+import com.pokemopoly.ui.MainGameUI;
 
 import java.util.List;
 import java.util.Scanner;
@@ -16,7 +17,7 @@ public class EXPShare extends ItemCard {
     }
 
     @Override
-    public void activate(Game game) {
+    public void activate(Game game, MainGameUI gameUI) {
 
         List<PokemonCard> team = game.getCurrentPlayer().getTeam();
 

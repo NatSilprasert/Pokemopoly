@@ -1,11 +1,10 @@
 package com.pokemopoly.cards.items;
 
 import com.pokemopoly.Game;
-import com.pokemopoly.MusicManager;
 import com.pokemopoly.board.Board;
-import com.pokemopoly.board.tile.CityTile;
 import com.pokemopoly.cards.ItemCard;
 import com.pokemopoly.player.Player;
+import com.pokemopoly.ui.MainGameUI;
 
 public class TrainPass extends ItemCard {
     public TrainPass() {
@@ -14,37 +13,29 @@ public class TrainPass extends ItemCard {
     }
 
     @Override
-    public void activate(Game game) {
+    public void activate(Game game, MainGameUI gameUI) {
         Player player = game.getCurrentPlayer();
         Board board = game.getBoard();
 
+        System.out.println("✨ " + player.getName() + " used Pokedex!");
+
         int currentPos = player.getPosition();
-        int boardSize = board.getSize();
+        int[] shopTiles = new int[]{5, 15, 25, 35};
 
-        Integer targetPos = null;
+        int nearestShop = shopTiles[0];
+        int minDistance = (nearestShop - currentPos + 40) % 40;
 
-        // Search forward for next CityTile
-        for (int i = 1; i < boardSize; i++) {
-            int nextPos = (currentPos + i) % boardSize;
-
-            if (board.getTileAt(nextPos) instanceof CityTile) {
-                targetPos = nextPos;
-                break;
+        for (int shop : shopTiles) {
+            int distance = (shop - currentPos + 40) % 40;
+            if (distance < minDistance) {
+                minDistance = distance;
+                nearestShop = shop;
             }
         }
 
-        if (targetPos == null) {
-            System.out.println("⚠ No city tile found! (Should not happen)");
-            return;
-        }
-
-        System.out.println("🚆 Train Pass activated!");
-        System.out.println(player.getName() + " travels to the nearest city at tile " + targetPos);
-
-        // Move player directly
-        player.setPosition(targetPos);
-
-        // Trigger tile effect
-        board.getTileAt(targetPos).onLand(player, game);
+        System.out.println("Moving " + player.getName() + " to nearest shop at tile " + nearestShop);
+        gameUI.movePlayerIcon(player, minDistance, board);
     }
+
+    @Override public boolean isAsync() { return true; }
 }

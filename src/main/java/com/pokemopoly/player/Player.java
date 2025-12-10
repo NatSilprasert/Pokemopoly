@@ -5,7 +5,7 @@ import com.pokemopoly.board.Board;
 import com.pokemopoly.cards.ItemCard;
 import com.pokemopoly.cards.PokemonCard;
 import com.pokemopoly.cards.PokemonType;
-import com.pokemopoly.cards.items.Bicycle;
+import com.pokemopoly.cards.items.*;
 import com.pokemopoly.cards.pokemon.*;
 
 import java.util.ArrayList;
@@ -36,16 +36,40 @@ public class Player {
         hand = new Hand(4);
 
         if (profession == ProfessionType.TRAINER) {
+
+            addPokemon(new Magikarp());
             addPokemon(new Pikachu());
+
+            hand.add(new RareCandy());
+            hand.add(new EjectButton());
+            hand.add(new EXPShare());
+            hand.add(new FullHeal());
         }
         else if (profession == ProfessionType.FISHER) {
             addPokemon(new Magikarp());
+            addPokemon(new Pikachu());
+            addPokemon(new Pikachu());
+
+
+            hand.add(new RareCandy());
+            hand.add(new MaxRepel());
+            hand.add(new Pokedex());
+            hand.add(new Potion());
         }
         else if (profession == ProfessionType.ROCKET) {
             addPokemon(new Rattata());
+
+            hand.add(new RareCandy());
+            hand.add(new Repel());
+            hand.add(new Revive());
+            hand.add(new Snowball());
         }
         else if (profession == ProfessionType.SCIENTIST) {
             addPokemon(new Ditto());
+
+            hand.add(new SuperPotion());
+            hand.add(new SuperRepel());
+            hand.add(new TrainPass());
         }
     }
 
@@ -193,5 +217,9 @@ public class Player {
         if (badge2) total += 7;
 
         return total;
+    }
+
+    public void removeItem(ItemCard selectedItem) {
+        hand.remove(selectedItem);
     }
 }

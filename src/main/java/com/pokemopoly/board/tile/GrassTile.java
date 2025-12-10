@@ -33,20 +33,55 @@ public class GrassTile extends Tile {
     }
 
     public void onLand(Player player, Game game) {
-        if (player.isTeamFull() & endTurnCallback != null) {
+        if (player.isTeamFull() && endTurnCallback != null) {
             endTurnCallback.accept(null);
             return;
         }
 
         DeckManager deckManager = game.getDeckManager();
-        PokemonCard pokemonCard;
+        PokemonCard pokemonCard = null;
 
         switch (catchRate) {
-            case 3 -> pokemonCard = deckManager.drawBluePokemon();
-            case 4 -> pokemonCard = deckManager.drawPurplePokemon();
-            case 5 -> pokemonCard = deckManager.drawRedPokemon();
-            case 6 -> pokemonCard = deckManager.drawCrownPokemon();
-            default -> pokemonCard = deckManager.drawGreenPokemon();
+            case 3 -> {
+                if (deckManager.isBlueEmpty()) {
+                    System.out.println("Blue deck is empty! Skipping catch.");
+                    endTurnCallback.accept(null);
+                    return;
+                }
+                pokemonCard = deckManager.drawBluePokemon();
+            }
+            case 4 -> {
+                if (deckManager.isPurpleEmpty()) {
+                    System.out.println("Purple deck is empty! Skipping catch.");
+                    endTurnCallback.accept(null);
+                    return;
+                }
+                pokemonCard = deckManager.drawPurplePokemon();
+            }
+            case 5 -> {
+                if (deckManager.isRedEmpty()) {
+                    System.out.println("Red deck is empty! Skipping catch.");
+                    endTurnCallback.accept(null);
+                    return;
+                }
+                pokemonCard = deckManager.drawRedPokemon();
+            }
+            case 6 -> {
+                if (deckManager.isCrownEmpty()) {
+                    System.out.println("Crown deck is empty! Skipping catch.");
+                    endTurnCallback.accept(null);
+                    return;
+                }
+                pokemonCard = deckManager.drawCrownPokemon();
+            }
+            default -> {
+                if (deckManager.isGreenEmpty()) {
+                    System.out.println("Green deck is empty! Skipping catch.");
+                    endTurnCallback.accept(null);
+                    return;
+                }
+                pokemonCard = deckManager.drawGreenPokemon();
+            }
         }
 
         showCatchOverlay(player, pokemonCard, game);

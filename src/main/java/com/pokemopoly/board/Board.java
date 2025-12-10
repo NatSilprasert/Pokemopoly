@@ -26,7 +26,7 @@ public class Board {
         int finalPos = newPos;
 
         // เช็คว่าเดินผ่าน StartTile
-        boolean passedStart = oldPos + steps > tiles.size();
+        boolean passedStart = (oldPos + steps > tiles.size() && steps != 39);
         if (passedStart) {
             Tile startTile = getTileAt(0);
             if (startTile instanceof StartTile start) {

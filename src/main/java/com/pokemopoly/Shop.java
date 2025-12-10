@@ -2,6 +2,7 @@ package com.pokemopoly;
 
 import com.pokemopoly.cards.ItemCard;
 import com.pokemopoly.player.Player;
+import com.pokemopoly.ui.MainGameUI;
 import com.pokemopoly.ui.cards.ItemCardUI;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -55,7 +56,7 @@ public class Shop extends HBox {
         }
 
         @Override
-        public void activate(Game game) {
+        public void activate(Game game, MainGameUI gameUI) {
             // Logic for item activation would go here
             System.out.println("Used " + getName());
         }
