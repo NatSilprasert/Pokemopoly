@@ -1,3 +1,4 @@
+
 package com.pokemopoly.board.tile;
 
 import com.pokemopoly.Game;
@@ -14,8 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class GrassTile extends Tile {
@@ -31,12 +30,6 @@ public class GrassTile extends Tile {
         this.catchRate = color.getCatchRate();
         this.rootPane = rootPane;
         this.endTurnCallback = endTurnCallback;
-    }
-
-    @Override
-    public void moveIn(Player player, Game game) {
-        onLand(player, game);
-        playersOnLand.add(player);
     }
 
     public void onLand(Player player, Game game) {
@@ -245,9 +238,9 @@ public class GrassTile extends Tile {
 
             // ถ้าทีมไม่เต็ม → เพิ่มเข้าทีมทันที
             if (player.getTeam().size() < player.getMaxPokemon()) {
+                System.out.println(pokemonCard.getName() + " is add to " + player.getName() + " team!");
                 player.addPokemon(pokemonCard);
                 if (endTurnCallback != null) endTurnCallback.accept(null);
-                return;
             }
         });
 

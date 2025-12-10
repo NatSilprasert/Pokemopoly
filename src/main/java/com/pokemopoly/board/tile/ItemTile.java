@@ -1,3 +1,4 @@
+
 package com.pokemopoly.board.tile;
 
 import com.pokemopoly.Game;
@@ -121,7 +122,7 @@ public class ItemTile extends Tile {
             if (selectedIdxObj != null) {
                 int selectedIdx = (int) selectedIdxObj;
 
-                System.out.println(player.getHand().getItems().get(selectedIdx) + " has been discarded!");
+                System.out.println(player.getHand().getItems().get(selectedIdx).getName() + " has been discarded!");
                 System.out.println(newItem.getName() + " has been added to the hand!");
 
                 hand.setItem(selectedIdx, newItem);

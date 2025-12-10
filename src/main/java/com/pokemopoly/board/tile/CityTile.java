@@ -1,3 +1,4 @@
+
 package com.pokemopoly.board.tile;
 
 import com.pokemopoly.Game;

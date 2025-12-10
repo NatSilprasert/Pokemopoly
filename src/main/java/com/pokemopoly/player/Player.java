@@ -1,3 +1,5 @@
+
+
 package com.pokemopoly.player;
 
 import com.pokemopoly.board.Board;
@@ -5,10 +7,7 @@ import com.pokemopoly.cards.ItemCard;
 import com.pokemopoly.cards.PokemonCard;
 import com.pokemopoly.cards.PokemonType;
 import com.pokemopoly.cards.items.Bicycle;
-import com.pokemopoly.cards.pokemon.Ditto;
-import com.pokemopoly.cards.pokemon.Magikarp;
-import com.pokemopoly.cards.pokemon.Pikachu;
-import com.pokemopoly.cards.pokemon.Rattata;
+import com.pokemopoly.cards.pokemon.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,23 +37,16 @@ public class Player {
         hand = new Hand(4);
 
         if (profession == ProfessionType.TRAINER) {
-            hand.setCapacity(6);
-            // Damage += 2
+            addPokemon(new Pikachu());
         }
         else if (profession == ProfessionType.FISHER) {
             addPokemon(new Magikarp());
-            // HP water += 3
-            // Damage water += 3
         }
         else if (profession == ProfessionType.ROCKET) {
             addPokemon(new Rattata());
-            // Steal other player's pokemon if win the battle
-            // Steal other player's pokemon if walk land on daycare center
         }
         else if (profession == ProfessionType.SCIENTIST) {
             addPokemon(new Ditto());
-            // Damage += 1
-            // HP += 1
         }
     }
 
@@ -64,18 +56,6 @@ public class Player {
 
     public void addPokemon(PokemonCard pokemon) {
         if (!isTeamFull()) {
-            if (profession == ProfessionType.TRAINER) {
-                pokemon.setPower(pokemon.getPower() + 2);
-            }
-            if (profession == ProfessionType.SCIENTIST) {
-                pokemon.setPower(pokemon.getPower() + 1);
-                pokemon.setHp(pokemon.getHp() + 1);
-            }
-            if (profession == ProfessionType.FISHER && pokemon.getTypes().contains(PokemonType.WATER)) {
-                pokemon.setPower(pokemon.getPower() + 3);
-                pokemon.setHp(pokemon.getHp() + 3);
-            }
-
             pokemon.setOwner(this);
             team.add(pokemon);
         }
@@ -84,6 +64,10 @@ public class Player {
 
     public void removePokemon(PokemonCard pokemon) {
         team.remove(pokemon);
+    }
+
+    public void setPokemon(int idx, PokemonCard card) {
+        team.set(idx, card);
     }
 
     public String getName() {
@@ -197,5 +181,18 @@ public class Player {
 
     public void setDoNothing(boolean doNothing) {
         this.doNothing = doNothing;
+    }
+
+    public int getAllCoin() {
+        int total = coin;
+
+        for (PokemonCard p : team) {
+            total += p.getPrice();
+        }
+
+        if (badge1) total += 7;
+        if (badge2) total += 7;
+
+        return total;
     }
 }
