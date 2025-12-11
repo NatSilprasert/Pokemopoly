@@ -3,6 +3,7 @@ package com.pokemopoly.ui;
 import com.pokemopoly.Game;
 import com.pokemopoly.cards.ItemCard;
 import com.pokemopoly.player.Player;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -19,6 +20,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 import java.util.Objects;
+
+// IMPORT ITEM CARDS
+import com.pokemopoly.cards.items.*;
 
 public class ShopUI extends HBox {
 
@@ -45,23 +49,12 @@ public class ShopUI extends HBox {
         }
     }
 
-    private static class SimpleItemCard extends ItemCard {
-        public SimpleItemCard(String id, String name, String description) {
-            super(id, name, description);
-        }
-
-        @Override
-        public void activate(Game game, MainGameUI gameUI) {
-            System.out.println("Used " + getName());
-        }
-    }
-
     public ShopUI(Player player) {
         this.player = player;
 
         this.setPadding(new Insets(10));
         this.setSpacing(10);
-        this.setStyle("-fx-background-color: #2b2b2b;"); // Dark background like the game board
+        this.setStyle("-fx-background-color: #2b2b2b;");
         this.setPrefSize(500, 500);
 
         VBox leftPane = new VBox(7.5);
@@ -120,13 +113,13 @@ public class ShopUI extends HBox {
         addItemToGrid(itemGrid, new ShopItemData("greatball", "Greatball", 2, "BALL", "Catch rate 1.5x"), 1, 0, "/shop/greatball.png");
         addItemToGrid(itemGrid, new ShopItemData("ultraball", "UltraBall", 3, "BALL", "Catch rate 2x"), 2, 0, "/shop/ultraball.png");
 
-        addItemToGrid(itemGrid, new ShopItemData("potion", "Potion", 1, "ITEM", "Restore 3 HP to one Pokémon in your team."), 0, 1, "/item/potion.png");
-        addItemToGrid(itemGrid, new ShopItemData("superpotion", "Super Potion", 2, "ITEM", "Restore 5 HP to one Pokémon in your team."), 1, 1, "/item/superpotion.png");
-        addItemToGrid(itemGrid, new ShopItemData("repel", "Repel", 1, "ITEM", "Move forward 2 tiles. You cannot roll dice or catch Pokémon this turn."), 2, 1, "/item/repel.png");
+        addItemToGrid(itemGrid, new ShopItemData("potion", "Potion", 1, "ITEM", "Restore 3 HP to one Pokémon."), 0, 1, "/item/potion.png");
+        addItemToGrid(itemGrid, new ShopItemData("superpotion", "Super Potion", 2, "ITEM", "Restore 5 HP to one Pokémon."), 1, 1, "/item/superpotion.png");
+        addItemToGrid(itemGrid, new ShopItemData("repel", "Repel", 1, "ITEM", "Move forward 2 tiles."), 2, 1, "/item/repel.png");
 
-        addItemToGrid(itemGrid, new ShopItemData("superrepel", "Super Repel", 2, "ITEM", "Move forward 4 tiles. You cannot roll dice or catch Pokémon this turn."), 0, 2, "/item/superrepel.png");
-        addItemToGrid(itemGrid, new ShopItemData("fullheal", "Full Heal", 2, "ITEM", "Cures all abnormal status conditions from one Pokémon in your team."), 1, 2, "/item/fullheal.png");
-        addItemToGrid(itemGrid, new ShopItemData("rarecandy", "Rare Candy", 5, "ITEM", "Choose 1 Pokémon to evolve!"), 2, 2, "/item/rarecandy.png");
+        addItemToGrid(itemGrid, new ShopItemData("superrepel", "Super Repel", 2, "ITEM", "Move forward 4 tiles."), 0, 2, "/item/superrepel.png");
+        addItemToGrid(itemGrid, new ShopItemData("fullheal", "Full Heal", 2, "ITEM", "Cures all abnormal status."), 1, 2, "/item/fullheal.png");
+        addItemToGrid(itemGrid, new ShopItemData("rarecandy", "Rare Candy", 5, "ITEM", "Evolve 1 Pokémon."), 2, 2, "/item/rarecandy.png");
 
         addItemToGrid(itemGrid, new ShopItemData("bicycle", "Bicycle", 5, "ITEM", "Roll Twice."), 0, 3, "/item/bicycle.png");
 
@@ -154,8 +147,7 @@ public class ShopUI extends HBox {
         ImageView imgView = new ImageView();
         try {
             imgView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath))));
-        } catch (Exception e) {
-        }
+        } catch (Exception ignored) {}
         imgView.setFitWidth(40);
         imgView.setFitHeight(40);
         imgView.setPreserveRatio(true);
@@ -195,6 +187,30 @@ public class ShopUI extends HBox {
         selectedItem = null;
     }
 
+    // -----------------------------------------
+    // FACTORY: CREATE REAL ITEMCARD FROM ID
+    // -----------------------------------------
+    private ItemCard createRealItem(String id) {
+        return switch (id) {
+            case "potion" -> new Potion();
+            case "superpotion" -> new SuperPotion();
+            case "fullheal" -> new FullHeal();
+            case "repel" -> new Repel();
+            case "superrepel" -> new SuperRepel();
+            case "rarecandy" -> new RareCandy();
+            case "bicycle" -> new Bicycle();
+            case "ejectbutton" -> new EjectButton();
+            case "expshare" -> new EXPShare();
+            case "maxpotion" -> new MaxPotion();
+            case "maxrepel" -> new MaxRepel();
+            case "pokedex" -> new Pokedex();
+            case "revive" -> new Revive();
+            case "snowball" -> new Snowball();
+            case "trainpass" -> new TrainPass();
+            default -> null;
+        };
+    }
+
     private void updateSummary() {
         summaryBox.getChildren().clear();
 
@@ -202,8 +218,6 @@ public class ShopUI extends HBox {
             clearSummary();
             return;
         }
-
-        SimpleItemCard displayCard = new SimpleItemCard(selectedItem.id, selectedItem.name, selectedItem.description);
 
         Node previewNode;
         String imagePath;
@@ -217,9 +231,7 @@ public class ShopUI extends HBox {
             ImageView img = new ImageView();
             try {
                 img.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath))));
-            } catch (Exception e) {
-                System.err.println("Failed to load Item image from: " + imagePath);
-            }
+            } catch (Exception ignored) {}
 
             img.setFitWidth(50);
             img.setPreserveRatio(true);
@@ -227,27 +239,24 @@ public class ShopUI extends HBox {
             name.setTextFill(Color.WHITE);
             name.setFont(Font.font("Monospaced", FontWeight.BOLD, 16));
 
-            Label desc = new Label(displayCard.getDescription());
+            Label desc = new Label(selectedItem.description);
             desc.setTextFill(Color.WHITE);
             desc.setFont(Font.font("Monospaced", FontWeight.NORMAL, 12));
             desc.setWrapText(true);
             desc.setMaxWidth(140);
-            desc.setStyle("-fx-text-alignment: center;");
-            desc.setAlignment(Pos.CENTER);
 
             VBox descriptionBox = new VBox(desc);
             descriptionBox.setStyle(
                     "-fx-border-color: white;" +
                             "-fx-border-width: 2;" +
-                            "-fx-padding: 8;" +
-                            "-fx-background-color: transparent;"
+                            "-fx-padding: 8;"
             );
             descriptionBox.setAlignment(Pos.CENTER);
 
             itemPreview.getChildren().addAll(img, name, descriptionBox);
             previewNode = itemPreview;
-        } else {
 
+        } else {
             imagePath = "/shop/" + selectedItem.id + ".png";
 
             VBox ballPreview = new VBox(5);
@@ -256,9 +265,7 @@ public class ShopUI extends HBox {
             ImageView img = new ImageView();
             try {
                 img.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath))));
-            } catch (Exception e) {
-                System.err.println("Failed to load Ball image from: " + imagePath);
-            }
+            } catch (Exception ignored) {}
 
             img.setFitWidth(50);
             img.setPreserveRatio(true);
@@ -287,7 +294,6 @@ public class ShopUI extends HBox {
 
         Label statusLabel = new Label();
         statusLabel.setFont(Font.font("Monospaced", 12));
-        statusLabel.setWrapText(true);
 
         buyBtn.setOnAction(e -> {
             if (player.getCoin() >= selectedItem.price) {
@@ -299,7 +305,6 @@ public class ShopUI extends HBox {
 
                     if (player.getCoin() < selectedItem.price) {
                         buyBtn.setDisable(true);
-                        buyBtn.setStyle("-fx-background-color: gray; -fx-text-fill: white;");
                     }
                 } else {
                     statusLabel.setTextFill(Color.ORANGE);
@@ -315,7 +320,6 @@ public class ShopUI extends HBox {
 
         if (player.getCoin() < selectedItem.price) {
             buyBtn.setDisable(true);
-            buyBtn.setStyle("-fx-background-color: gray; -fx-text-fill: white;");
             statusLabel.setTextFill(Color.RED);
             statusLabel.setText("Insufficient Funds");
         }
@@ -329,11 +333,17 @@ public class ShopUI extends HBox {
 
     private void styleButton(Button btn, Color color) {
         String hex = String.format("#%02x%02x%02x",
-                (int)(color.getRed()*255), (int)(color.getGreen()*255), (int)(color.getBlue()*255));
-        btn.setStyle("-fx-background-color: " + hex + "; -fx-text-fill: white; -fx-font-family: 'Monospaced'; -fx-font-weight: bold;");
+                (int)(color.getRed() * 255),
+                (int)(color.getGreen() * 255),
+                (int)(color.getBlue() * 255)
+        );
+        btn.setStyle("-fx-background-color: " + hex + "; -fx-text-fill: white; -fx-font-weight: bold;");
         btn.setCursor(Cursor.HAND);
     }
 
+    // -----------------------------------------
+    // PERFORM PURCHASE (NOW USES REAL ITEMCARD)
+    // -----------------------------------------
     private boolean performPurchase(ShopItemData item) {
         if (player.getCoin() < item.price) return false;
 
@@ -355,8 +365,14 @@ public class ShopUI extends HBox {
                     break;
             }
         } else {
-            SimpleItemCard newCard = new SimpleItemCard(item.id, item.name, item.description);
-            purchased = player.getHand().add(newCard);
+            ItemCard realItem = createRealItem(item.id);
+
+            if (realItem == null) {
+                System.err.println("Unknown item ID: " + item.id);
+                return false;
+            }
+
+            purchased = player.getHand().add(realItem);
         }
 
         if (purchased) {
@@ -366,6 +382,4 @@ public class ShopUI extends HBox {
 
         return purchased;
     }
-
-
 }
