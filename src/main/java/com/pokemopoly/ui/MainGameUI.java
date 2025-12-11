@@ -328,7 +328,7 @@ public class MainGameUI {
         Player next = game.getCurrentPlayer();
 
         Platform.runLater(() -> {
-            System.out.println("Turn: " + game.getTurn());
+            System.out.println("Turn: " + game.getTurn() + " / " + game.getPlayers().size() * 50);
             System.out.println("currentPlayer: " + next.getName());
             showTurnOverlay(next);
             updatePlayerColors();
